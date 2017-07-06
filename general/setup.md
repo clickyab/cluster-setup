@@ -1,0 +1,3 @@
+# Pre requirement
+
+TODO : write all pre requirement for a single node here. things like firewall settings and ulimit and ...
