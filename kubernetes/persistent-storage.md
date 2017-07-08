@@ -1,5 +1,5 @@
 # Setup persistent storage for kubernetes
-
+### DO NOT USE THIS - SEE THE CEPHFS VERSION ###
 ## Pre requirement
 
 Make sure all nodes has required package: 
@@ -11,7 +11,7 @@ apt install ceph-fs-common ceph-common
 Setup the pool for it, this is needed only once : 
 
 ```bash
-ceph osd pool create test 64 64 
+ceph osd pool create kubernetes 64 64 
 ```
 
 Make sure cluster secret is available as a secret in cluster. 

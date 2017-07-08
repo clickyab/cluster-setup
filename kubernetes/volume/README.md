@@ -1,1 +1,0 @@
-All volume for our cluster is available here. 

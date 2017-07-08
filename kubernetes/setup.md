@@ -116,10 +116,10 @@ NOTE : If the node is already done, go to add new node section.
 
 make sure the node is clean and the requirements are installed. See general/setup.md (TODO: make links) if any step failed or there is an old cluster available, call `kubead reset` to reset the old installation.
 
-start the kubeadm, since we need to use flannel, the secound argument is mandatory, the first one is not if there is only one interface (if omitted the interface with gateway is used)
+start the kubeadm (the pod-network is required for flannel only):
 
 ````
-kubeadm init --apiserver-advertise-address=51.255.68.21 --pod-network-cidr=10.244.0.0/16
+kubeadm init --pod-network-cidr=10.11.0.0/16
 ````
 NOTE : the output is important. pipe it into a file and store it afterward in `pass` storage. setup the `kubectl` command in another user (not root) in the same machine and all machine needed to access to it.
 
@@ -150,18 +150,18 @@ kube-system   kube-scheduler-bd-1.clickyab.ae            1/1       Running   0  
 
 TODO : Currently we use flannel, make a compare with other and choose the best
 
-apply all files in flannel folder :
+apply all files in calico folder :
 
 NOTE: Make sure you are in repository root
 
 ```
-kubectl apply -f kubernetes/flannel
+$ kubectl apply -f kubernetes/flannel/flannel-setup.yaml
 ```
 
 make sure the dns pod is active and ready :
 
 ```
-kubectl get pods --all-namespaces
+$ kubectl get pods --all-namespaces
 NAMESPACE     NAME                                       READY     STATUS    RESTARTS   AGE
 kube-system   etcd-bd-1.clickyab.ae                      1/1       Running   0          17m
 kube-system   kube-apiserver-bd-1.clickyab.ae            1/1       Running   0          18m
@@ -178,7 +178,7 @@ kube-system   kube-scheduler-bd-1.clickyab.ae            1/1       Running   0  
 Use the yaml file in dashboard
 
 ```
-kubectl apply -f kubernetes/dashboard
+$ kubectl apply -f kubernetes/dashboard/kube-dashboard.yml
 ```
 confirm that the pod is alive, with `kubectl get pods --all-namespaces`
 
@@ -187,7 +187,7 @@ confirm that the pod is alive, with `kubectl get pods --all-namespaces`
 NOTE : This is very experimental, and may change
 
 ```
-kubectl apply -f kubernetes/ingress
+$ kubectl apply -f kubernetes/ingress/ingress-setup.yml
 ```
 
 confirm all ingress service/controllers are ready. 
@@ -197,13 +197,13 @@ confirm all ingress service/controllers are ready.
 Check for the file from the first node installation. some thing like this :
 
 ```
-kubeadm join --token <token> <master-ip>:6443
+$ kubeadm join --token <token> <master-ip>:6443
 ```
 
 The state should updated after a minute or so.
 
 ```
-kubectl get nodes
+$ kubectl get nodes
 NAME                  STATUS    AGE       VERSION
 bd-1.clickyab.ae      Ready     13m       v1.7.0
 redis-2.clickyab.ae   Ready     12m       v1.7.0
