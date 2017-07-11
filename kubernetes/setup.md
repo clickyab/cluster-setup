@@ -210,3 +210,28 @@ redis-2.clickyab.ae   Ready     12m       v1.7.0
 redis-3.clickyab.ae   Ready     11m       v1.7.0
 ```
 
+## Private docker registry
+
+Since we use private docker registry we need to handle this for kubelet. 
+first login into private registry : 
+
+```bash 
+docker login registry.clickyab.ae
+```
+
+But the problem is the the systemass (sorry , I mean systemd) can not use the $HOME variable
+ and the config is not available for kubelete process we need to add some env to docker :
+ 
+```bash 
+EDITOR=mycooleditor # Use your editor 
+systemctl edit kubelet 
+```
+
+Must open an empty file put this in it (assume you login with root user ): 
+
+```
+[Service]
+Environment=HOME=/root
+```
+
+then `systemctl restart  kubelet`
