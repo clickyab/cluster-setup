@@ -73,3 +73,8 @@ mv /tmp/limits.conf.new /etc/security/limits.conf
 echo "session required pam_limits.so" >> /etc/pam.d/common-session
 ```
 
+## decrease swappiness option:
+```
+sysctl vm.swappiness=1
+echo -e "# Edited by vahit to decrease swap usageemacs /etc/sysctl.d/10-swappiness.conf\nvm.swappiness = 1" > /etc/sysctl.d/10-swappiness.conf # for next reboots
+```
