@@ -24,7 +24,14 @@ spec:
       containers:
       - name: gad-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.260
+        image: registry.clickyab.ae/clickyab/gad:master.268
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9001
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         command: [ "/app/bin/server"]
         envFrom:
         - configMapRef:
@@ -32,7 +39,6 @@ spec:
         ports:
         - name: gad-web
           containerPort: 9001
-          hostPort: 9001
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -55,7 +61,7 @@ spec:
       containers:
       - name: gad-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.260
+        image: registry.clickyab.ae/clickyab/gad:master.268
         command: [ "/app/bin/impworker"]
         envFrom:
         - configMapRef:
@@ -82,7 +88,7 @@ spec:
       containers:
       - name: gad-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.260
+        image: registry.clickyab.ae/clickyab/gad:master.268
         command: [ "/app/bin/clickworker"]
         envFrom:
         - configMapRef:
@@ -109,7 +115,7 @@ spec:
       containers:
       - name: gad-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.260
+        image: registry.clickyab.ae/clickyab/gad:master.268
         command: [ "/app/bin/warnworker"]
         envFrom:
         - configMapRef:
