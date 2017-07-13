@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: console
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: console-master
+  namespace: console
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: console
+        proc: webserver
+        k8s-app: console-dev-webserver
+        lang: php
+    spec:
+      containers:
+      - name: console-master
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/console:master.3268
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 9003
+#            scheme: HTTP
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 5
+        command: [ "bash","/app/runapp.sh"]
+        envFrom:
+        - configMapRef:
+            name: console-dev-config
+        ports:
+        - name: dev-web
+          containerPort: 9003

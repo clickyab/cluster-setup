@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dev-service
+  namespace: console
+  labels:
+    k8s-app: dev-web-service
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "ConsoleDevService"
+spec:
+  selector:
+    k8s-app: console-dev-webserver
+  ports:
+  - name: dev
+    port: 9003
+    protocol: TCP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dev-ingress
+  namespace: console
+spec:
+  rules:
+  - host: dev.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: dev-service
+          servicePort: 9003
