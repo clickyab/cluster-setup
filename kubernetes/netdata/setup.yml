@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: monitoring-agent
+  namespace: monitoring
+  labels:
+    tier: monitoring
+    app: monitoring-agent
+    version: v1
+spec:
+  template:
+    metadata:
+      labels:
+        name: monitoring
+    spec:
+      # Filter to specific nodes:
+      # nodeSelector:
+      #  app: newrelic
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+        - resources:
+            requests:
+              cpu: 0.15
+          securityContext:
+            privileged: true
+          image: titpetric/netdata
+          name: netdata
+          volumeMounts:
+#            - name: netdata-config
+#              mountPath: /etc/netdata
+#              readOnly: true
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: run
+              mountPath: /var/run/docker.sock
+            - name: sys
+              mountPath: /host/sys
+      volumes:
+#        - name: netdata-config
+#          secret:
+#            secretName: netdata-config
+        - name: proc
+          hostPath:
+              path: /proc
+        - name: run
+          hostPath:
+              path: /var/run/docker.sock
+        - name: sys
+          hostPath:
+              path: /sys
