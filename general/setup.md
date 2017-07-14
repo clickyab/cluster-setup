@@ -10,17 +10,17 @@ echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
 Run bellow commands onw after the others:
 ```
 apt-get update
-apt-get upgarde
+apt-get upgrade
 ```
 
-## Remove unused kernel files:
+## Remove unused packages and kernel files:
 ```
-apt-get autoremove --pure
+apt-get autoremove --purge
 ```
 
 ## Update GRUB:
 ```
-update-grab
+update-grub
 ```
 
 ## Set hostname:
@@ -34,9 +34,9 @@ echo "<hostname>" >> /etc/hostname
 ```
 
 ## Add manually hostname to cloudflare
-## Change hostname manually in OVH panele.
+## Change hostname manually in OVH panel.
 
-## Install needed pkgs:
+## Install needed packegs:
 ```
 apt-get update
 apt-get install emacs24-nox ufw htop ntp iotop
@@ -59,11 +59,11 @@ ip link up dev <interface name>
 ```
 ### Transfer network settings to /etc/network/interfaces for next restarts!
 ```
-echo "auto <interface name>
+auto <interface name>
 iface <interface name> inet static
     address <ip address>
     netmask 255.255.255.0
-    broadcast 192.168.100.255"
+    broadcast 192.168.100.255
 ```
 
 ## Set __open file limit__ to 1024000:
@@ -76,5 +76,5 @@ echo "session required pam_limits.so" >> /etc/pam.d/common-session
 ## decrease swappiness option:
 ```
 sysctl vm.swappiness=1
-echo -e "# Edited by vahit to decrease swap usageemacs /etc/sysctl.d/10-swappiness.conf\nvm.swappiness = 1" > /etc/sysctl.d/10-swappiness.conf # for next reboots
+echo -e "# Edited by vahit to decrease swap usage\nvm.swappiness = 1" > /etc/sysctl.d/10-swappiness.conf # for next reboots
 ```
