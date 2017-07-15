@@ -238,8 +238,10 @@ spec:
   type: NodePort
   ports:
   - name: http
-    port: 8080
-    nodePort: 30080
+    port: 80
+    # This is not possible in the normal kubeadm installation. make sure the api server is running with
+    # --service-node-port-range=1-32767
+    nodePort: 80
     targetPort: 80
     protocol: TCP
   selector:

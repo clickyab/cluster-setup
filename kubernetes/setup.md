@@ -129,6 +129,12 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+*NOTE*: Since we are not on any cloud provider with good load balancer (Fsck you OVH with this idiotic load balancer!), we need to 
+allow NodePort services on lower range port. 
+Edit `/etc/kubernetes/manifests/kube-apiserver.yaml` and add `--service-node-port-range=1-32767` to arguments there and restart 
+the `kubelet` service. 
+
+
 make sure cluster is up.
 ```
 $ kubectl get nodes
