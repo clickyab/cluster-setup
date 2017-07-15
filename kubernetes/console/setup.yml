@@ -26,17 +26,29 @@ spec:
       - name: console-master
         # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/console:master.3268
-#        livenessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 9003
-#            scheme: HTTP
-#          initialDelaySeconds: 30
-#          timeoutSeconds: 5
-        command: [ "bash","/app/runapp.sh"]
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9003
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
         - configMapRef:
             name: console-dev-config
         ports:
         - name: dev-web
           containerPort: 9003
+        volumeMounts:
+        - name: statics
+          mountPath: /app/public/static
+      volumes:
+      - name: statics
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/legacy/statics"

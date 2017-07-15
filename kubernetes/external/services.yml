@@ -1,0 +1,8 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-write
+  namespace: external
+spec:
+  type: ExternalName
+  externalName: 192.168.100.11
