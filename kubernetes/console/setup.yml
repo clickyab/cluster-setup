@@ -19,8 +19,9 @@ spec:
         # Label is used as selector in the service.
         app: console
         proc: webserver
-        k8s-app: console-dev-webserver
+        k8s-app: console-master-webserver
         lang: php
+        branch: master
     spec:
       containers:
       - name: console-master
@@ -36,10 +37,61 @@ spec:
         command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
         - configMapRef:
-            name: console-dev-config
+            name: console-master-config
         ports:
-        - name: dev-web
+        - name: master-web
           containerPort: 9003
+        volumeMounts:
+        - name: statics
+          mountPath: /app/public/static
+      volumes:
+      - name: statics
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/legacy/statics"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: console-deploy
+  namespace: console
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: console
+        proc: webserver
+        k8s-app: console-deploy-webserver
+        lang: php
+        branch: deploy
+    spec:
+      containers:
+      - name: console-deploy
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/console:deploy.3268
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9004
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        command: [ "/bin/herokuish", "procfile","start", "web"]
+        envFrom:
+        - configMapRef:
+            name: console-deploy-config
+        ports:
+        - name: deploy-web
+          containerPort: 9004
         volumeMounts:
         - name: statics
           mountPath: /app/public/static
