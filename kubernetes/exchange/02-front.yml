@@ -1,0 +1,33 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: octopus-console
+  namespace: octopus
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: octopus
+        proc: web
+        k8s-app: octopus-front
+    spec:
+      containers:
+      - name: octopus-console-master
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/octopus-console:master.30
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 9002
+#            scheme: HTTP
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 5
+        ports:
+        - name: octoconsole
+          containerPort: 80

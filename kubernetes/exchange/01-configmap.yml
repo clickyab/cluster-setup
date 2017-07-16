@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: octopus
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: octopus-config
+  namespace: octopus
+data:
+  EXC_OCTOPUS_HOST_NAME: 'exchange.clickyab.com'
+  EXC_SERVICES_AMQP_DSN: 'amqp://third:wor9Or4O@rabbitmq-master.external:5672/third'
+  EXC_SERVICES_AMQP_EXCHANGE: 'third'
+  EXC_SERVICES_BROKER_PROVIDER: 'rabbitmq'
+  EXC_SERVICES_MYSQL_MAX_CONNECTION: '100'
+  EXC_SERVICES_MYSQL_RDSN: 'third-readonly:w7dfXthmwBOBw1PUW5cINg3vfJxD95lrusKjuAqsCHZZsLySqszEgqmGm5OOUZI4@tcp(mysql-read-1.external:3306)/octopus?charset=utf8&parseTime=true'
+  EXC_SERVICES_MYSQL_WDSN: 'third:2yh5yJL9sXJ8Zznenjg3nWOu3wmFTM4xiDT9zdD85DxecmZlEaush3pKmcahU76L@tcp(mysql-write.external:3306)/octopus?charset=utf8&parseTime=true'
+  EXC_SERVICES_REDIS_ADDRESS: 'redis-master.external:2222'
+  EXC_SERVICES_REDIS_DB: '5'
+  EXC_SERVICES_REDIS_PASSWORD: 'bita123'
+  EXC_SERVICES_SLACK_ACTIVE: 'true'
+  EXC_SERVICES_SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+  RABBITMQ_URL: 'amqp://third:wor9Or4O@rabbitmq-master.external:5672/third'
+  PORT: '9002'
