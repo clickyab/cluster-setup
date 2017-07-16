@@ -40,14 +40,14 @@ metadata:
   namespace: console
 spec:
   rules:
-  - host: dev.clickyab.ae
+  - host: dev.clickyab.com
     http:
       paths:
       - path: /
         backend:
           serviceName: master-service
           servicePort: 9003
-  - host: console.clickyab.ae
+  - host: console.clickyab.com
     http:
       paths:
       - path: /

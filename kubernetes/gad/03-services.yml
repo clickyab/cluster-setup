@@ -23,7 +23,21 @@ metadata:
   namespace: gad
 spec:
   rules:
-  - host: gad.clickyab.ae
+  - host: v.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-service
+          servicePort: 9001
+  - host: native.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-service
+          servicePort: 9001
+  - host: e.clickyab.com
     http:
       paths:
       - path: /

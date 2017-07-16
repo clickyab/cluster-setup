@@ -19,15 +19,14 @@ spec:
     spec:
       containers:
       - name: octopus-console-master
-        # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/octopus-console:master.30
-#        livenessProbe:
-#          httpGet:
-#            path: /healthz
-#            port: 9002
-#            scheme: HTTP
-#          initialDelaySeconds: 30
-#          timeoutSeconds: 5
+        image: registry.clickyab.ae/clickyab/octopus-console:master.33
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
         ports:
         - name: octoconsole
           containerPort: 80
