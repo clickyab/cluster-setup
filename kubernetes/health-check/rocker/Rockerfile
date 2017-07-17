@@ -15,7 +15,7 @@ RUN  cd /tmp/ \
   && rm -rf /tmp/* \
   && chmod a+x /docker-gc \
   && chmod a+x /entrypoint.sh \
-  && dnf -y install procps-ng && dnf clean all
+  && dnf -y install procps-ng findutils && dnf clean all
 
 ENTRYPOINT ["/entrypoint.sh"]
 
