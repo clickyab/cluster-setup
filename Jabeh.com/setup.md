@@ -72,7 +72,7 @@ ln -s /etc/nginx/sites-avialable/jabeh.com /etc/nginx/sites-enabled/jabeh.com
 ```
 restart nginx service:
 ```bash
-# systemctl nginx restart
+systemctl nginx restart
 ```
 
 ## Install php-fpm:
@@ -85,9 +85,9 @@ the easiest way is use as default way which is declared in `/etc/php/7.0/fpm/poo
 cat /etc/php/7.0/fpm/pool.d/www.conf | grep -v "^;\|^$"
 ```
 Then edit `/etc/nginx/sites-available/jabeh.com` file again and enter the socket file absolut path to `fastcgi_pass` variabel in `location` block.
-restart `nginx` serice again.
+restart `nginx` service again.
 ```bash
-systemctl restatr nginx
+systemctl restart nginx
 ```
 ## Install Jabeh.com dependencies:
 ```
