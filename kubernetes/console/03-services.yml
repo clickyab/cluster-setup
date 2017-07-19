@@ -33,11 +33,31 @@ spec:
     port: 9004
     protocol: TCP
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: statics-webserver
+  namespace: console
+  labels:
+    k8s-app: statics
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "ConsoleStaticsService"
+spec:
+  selector:
+    k8s-app: statics-webserver
+  ports:
+  - name: deploy
+    port: 9000
+    targetPort: 80
+    protocol: TCP
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: console-ingress
   namespace: console
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 8m
 spec:
   rules:
   - host: dev.clickyab.com
@@ -54,3 +74,10 @@ spec:
         backend:
           serviceName: deploy-service
           servicePort: 9004
+  - host: static.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: statics-webserver
+          servicePort: 9000

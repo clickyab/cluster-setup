@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: landings
+  labels:
+    app: wordpress
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        k8s-app: landing-wordpress
+        tier: frontend
+    spec:
+      containers:
+      - image: wordpress:4.7.3-apache
+        name: wordpress
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/landings/wp"

@@ -20,7 +20,6 @@ spec:
     spec:
       containers:
       - name: console-master
-        # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/console:master.3268
         livenessProbe:
           httpGet:
@@ -44,6 +43,7 @@ spec:
         cephfs:
           monitors:
             - 192.168.10.1:6789
+            - 192.168.10.6:6789
           user: admin
           secretRef:
             name: ceph-secret
@@ -71,7 +71,6 @@ spec:
     spec:
       containers:
       - name: console-deploy
-        # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/console:deploy.3268
         livenessProbe:
           httpGet:
@@ -95,6 +94,52 @@ spec:
         cephfs:
           monitors:
             - 192.168.10.1:6789
+            - 192.168.10.6:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/legacy/statics"
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: statics
+  namespace: console
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: nginx
+        proc: webserver
+        k8s-app: statics-webserver
+    spec:
+      containers:
+      - name: statics
+        image: nginx:alpine
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - name: statics
+          containerPort: 80
+        volumeMounts:
+        - name: statics
+          mountPath: /usr/share/nginx/html
+          readOnly: true
+      volumes:
+      - name: statics
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
           user: admin
           secretRef:
             name: ceph-secret

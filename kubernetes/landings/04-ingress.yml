@@ -1,0 +1,15 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: landings-ingress
+  namespace: landings
+spec:
+  rules:
+  - host: blog.clickyab.ae
+    http:
+      paths:
+      - path: /blog
+        backend:
+          serviceName: wordpress-service
+          servicePort: 9000

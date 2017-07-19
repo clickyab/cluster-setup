@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: phpmyadmin
+  namespace: global
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: phpmyadmin
+        k8s-app: tools-phpmyadmin
+        lang: php
+    spec:
+      containers:
+      - name: phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        env:
+        - name: PMA_ARBITRARY
+          value: "1"
+        ports:
+        - name: phpmyadmin-web
+          containerPort: 80
