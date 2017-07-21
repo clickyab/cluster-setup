@@ -20,3 +20,6 @@ data:
   MYSQL_READ_PASSWORD: gX^Zmp90jOJp91$GwPujOTl2POQdlI
   MYSQL_READ_HOST_PATTERN: mysql-read-%d.external
   MYSQL_READ_PORT: "3306"
+  REDIS_HOST: redis-master.external
+  REDIS_PORT: "2222"
+  REDIS_PASSWORD: "bita123"
