@@ -78,3 +78,10 @@ echo "session required pam_limits.so" >> /etc/pam.d/common-session
 sysctl vm.swappiness=1
 echo -e "# Edited by vahit to decrease swap usage\nvm.swappiness = 1" > /etc/sysctl.d/10-swappiness.conf # for next reboots
 ```
+
+## drop memory caches everyday once:
+```bash
+echo "sync && echo 3 > /proc/sys/vm/drop_caches" > /etc/cron.daily/drop_caches
+chmod +x /etc/cron.daily/drop_caches
+echo "@daily /etc/cron.daily/drop_caches" > /var/spool/cron/crontabs/root
+```
