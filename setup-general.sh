@@ -44,7 +44,7 @@ add-apt-repository \
    $(lsb_release -cs) \
    stable"
 apt-get update
-apt-get install -y docker-ce kubelet kubeadm nginx
+apt-get install -y docker-ce kubelet kubeadm
 fi;
 
 apt-get autoremove --purge
@@ -75,6 +75,9 @@ echo "session required pam_limits.so" >> /etc/pam.d/common-session
 
 sysctl vm.swappiness=1
 echo -e "# Set swappiness in /etc/sysctl.d/10-swappiness.conf\nvm.swappiness = 1" > /etc/sysctl.d/10-swappiness.conf # for next reboots
+
+random_min=$(( $RANDOM % 60 ))
+echo "${random_min} * * * * ntpdate 192.168.10.1" >> /var/spool/cron/crontabs/root
 
 echo 'sync && echo 3 > /proc/sys/vm/drop_caches' > /etc/cron.daily/drop_caches
 chmod +x /etc/cron.daily/drop_caches
