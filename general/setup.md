@@ -83,5 +83,6 @@ echo -e "# Edited by vahit to decrease swap usage\nvm.swappiness = 1" > /etc/sys
 ```bash
 echo "sync && echo 3 > /proc/sys/vm/drop_caches" > /etc/cron.daily/drop_caches
 chmod +x /etc/cron.daily/drop_caches
-echo "@daily /etc/cron.daily/drop_caches" > /var/spool/cron/crontabs/root
+echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches >> /var/spool/cron/crontabs/root
 ```
+

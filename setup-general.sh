@@ -78,4 +78,4 @@ echo -e "# Set swappiness in /etc/sysctl.d/10-swappiness.conf\nvm.swappiness = 1
 
 echo 'sync && echo 3 > /proc/sys/vm/drop_caches' > /etc/cron.daily/drop_caches
 chmod +x /etc/cron.daily/drop_caches
-echo "@daily /etc/cron.daily/drop_caches" >> /var/spool/cron/crontabs/root
+echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches" >> /var/spool/cron/crontabs/root
