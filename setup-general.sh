@@ -79,3 +79,6 @@ echo -e "# Set swappiness in /etc/sysctl.d/10-swappiness.conf\nvm.swappiness = 1
 random_min=$(( $RANDOM % 60 ))
 echo "${random_min} * * * * ntpdate 192.168.10.1" >> /var/spool/cron/crontabs/root
 
+echo 'sync && echo 3 > /proc/sys/vm/drop_caches' > /etc/cron.daily/drop_caches
+chmod +x /etc/cron.daily/drop_caches
+echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches" >> /var/spool/cron/crontabs/root
