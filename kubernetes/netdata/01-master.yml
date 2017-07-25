@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: netdata-master
+  namespace: monitoring
+spec:
+  hostPID: true
+  hostIPC: true
+  hostNetwork: true
+  # I want to force this one on master.
+  tolerations:
+  - key: node-role.kubernetes.io/master
+    operator: Exists
+    effect: NoSchedule
+  containers:
+  - name: netdata
+    image: fzerorubigd/netdata
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    envFrom:
+    - configMapRef:
+        name: netdata-master-cfg
+    volumeMounts:
+      - name: proc
+        mountPath: /host/proc
+        readOnly: true
+      - name: run
+        mountPath: /var/run/docker.sock
+      - name: sys
+        mountPath: /host/sys
+      - name: cache
+        mountPath: /var/cache/netdata
+  volumes:
+    - name: proc
+      hostPath:
+        path: /proc
+    - name: run
+      hostPath:
+        path: /var/run/docker.sock
+    - name: sys
+      hostPath:
+        path: /sys
+    - name: cache
+      hostPath:
+        path: /global/netdata/cache
+  nodeSelector:
+    netdata: master-node

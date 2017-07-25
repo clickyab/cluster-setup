@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: netdata-master-cfg
+  namespace: monitoring
+data:
+  ND_1: "netdata.conf|global/memory mode = save"
+  # The ip of the first node is hardcoded here. be careful!
+  ND_2: "netdata.conf|global/bind to = 127.0.0.1:19999 192.168.10.1:19999"
+  ND_3: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/enabled = yes"
+  ND_4: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/history = 3600"
+  ND_5: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/memory mode = save"
+  ND_6: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/health enabled = yes"
+  ND_7: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/postpone alarms on connect seconds = 60"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: netdata-slave-cfg
+  namespace: monitoring
+data:
+  ND_1: "netdata.conf|global/memory mode = ram"
+  ND_2: "netdata.conf|web/mode = none"
+  ND_3: "stream.conf|stream/enabled = yes"
+  ND_4: "stream.conf|stream/destination = netdata-master.monitoring:19999"
+  ND_5: "stream.conf|stream/api key = 3a9757fe-5308-40c0-98b1-0a3d1b16b62e"
+  ND_6: "stream.conf|stream/timeout seconds = 60"
+  ND_7: "stream.conf|stream/buffer size bytes = 1048576"
+  ND_8: "stream.conf|stream/reconnect delay seconds = 5"
+  ND_9: "stream.conf|stream/initial clock resync iterations = 60"
