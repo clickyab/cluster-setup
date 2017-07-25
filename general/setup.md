@@ -83,11 +83,11 @@ echo -e "# Edited by vahit to decrease swap usage\nvm.swappiness = 1" > /etc/sys
 ```bash
 echo "sync && echo 3 > /proc/sys/vm/drop_caches" > /etc/cron.daily/drop_caches
 chmod +x /etc/cron.daily/drop_caches
-echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches >> /var/spool/cron/crontabs/root
+echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches" >> /var/spool/cron/crontabs/root
 ```
 
 ## sync date and time hourly 
-###from `kube-0 (192.168.10.1)` node, we use as **randomly** minute!!
+### from `kube-0 (192.168.10.1)` node, we use as **randomly** minute!!
 ```bash
 random_min=$(( $RANDOM % 60 ))
 echo -e "## sync time and date from kube-0 node\n${random_min} * * * * ntpdate 192.168.10.1" >> /var/spool/cron/crontabs/root

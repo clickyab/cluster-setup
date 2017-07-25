@@ -45,6 +45,12 @@ apt-get install -y kubelet kubeadm
 
 TODO: update instruction with the propert version
 
+# Attention!!
+Besure forward policy of iptables is **ACCCEPT**:
+```bash
+iptables --policy FORWARD ACCEPT
+```
+
 ## Setup the first node
 
 NOTE : If the node is already done, go to add new node section.

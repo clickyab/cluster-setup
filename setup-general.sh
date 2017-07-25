@@ -27,6 +27,10 @@ read dummy
 echo -e "Disable IPv6 on apt\n"
 echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
 
+iptables -F
+iptables -X
+iptables --policy FORWARD ACCEPT
+
 echo -e "Update system"
 apt-get update
 apt-get upgrade
