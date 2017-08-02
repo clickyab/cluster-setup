@@ -73,6 +73,11 @@ mv /tmp/limits.conf.new /etc/security/limits.conf
 echo "session required pam_limits.so" >> /etc/pam.d/common-session
 ```
 
+## If you run a service via **systemd** set *sotf limit* on it's service file:
+```bash
+echo -e "[Service]\nLimitNOFILE=1024000\n" > /etc/systemd/system/<service-name>.service
+```
+
 ## decrease swappiness option:
 ```
 sysctl vm.swappiness=1
