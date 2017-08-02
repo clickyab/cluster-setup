@@ -75,7 +75,7 @@ echo "session required pam_limits.so" >> /etc/pam.d/common-session
 
 ## If you run a service via **systemd** set *sotf limit* on it's service file:
 ```bash
-echo -e "[Service]\nLimitNOFILE=1024000\n" > /etc/systemd/system/<service-name>.service
+echo -e "[Service]\nLimitNOFILE=1024000\n" > /etc/systemd/system/<service-name>.service.d/override.conf
 ```
 
 ## decrease swappiness option:
