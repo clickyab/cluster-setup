@@ -93,3 +93,11 @@ random_min=$(( $RANDOM % 60 ))
 echo -e "## sync time and date from kube-0 node\n${random_min} * * * * ntpdate 192.168.10.1" >> /var/spool/cron/crontabs/root
 ```
 
+## disable auto-update packages:
+to this, change `/APT::Periodic::Update-Package-Lists "1"` line to `/APT::Periodic::Update-Package-Lists "0"` in `/etc/apt/apt.conf.d/10periodic` file. You can use from bellow commands:
+```bash
+cat /etc/apt/apt.conf.d/10periodic | sed 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/g' > /tmp/10periodic
+mv /tmp/10periodic /etc/apt/apt.conf.d/10periodic
+```
+
+
