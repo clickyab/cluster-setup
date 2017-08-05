@@ -86,3 +86,6 @@ echo "${random_min} * * * * ntpdate 192.168.10.1" >> /var/spool/cron/crontabs/ro
 echo 'sync && echo 3 > /proc/sys/vm/drop_caches' > /etc/cron.daily/drop_caches
 chmod +x /etc/cron.daily/drop_caches
 echo -e "## Run daily scripts on 00:00\n0 0 * * * /etc/cron.daily/drop_caches" >> /var/spool/cron/crontabs/root
+
+cat /etc/apt/apt.conf.d/10periodic | sed 's/APT::Periodic::Update-Package-Lists "1";/APT::Periodic::Update-Package-Lists "0";/g' > /tmp/10periodic
+mv /tmp/10periodic /etc/apt/apt.conf.d/10periodic
