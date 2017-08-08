@@ -18,9 +18,21 @@ spec:
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true
-    envFrom:
-    - configMapRef:
-        name: netdata-master-cfg
+    env:
+    - name: ND_1
+      value: "netdata.conf|global/memory mode = save"
+    - name: ND_2
+      value: "netdata.conf|global/bind to = 127.0.0.1:19999 192.168.10.1:19999"
+    - name: ND_3
+      value: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/enabled = yes"
+    - name: ND_4
+      value: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/history = 3600"
+    - name: ND_5
+      value: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/memory mode = save"
+    - name: ND_6
+      value: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/health enabled = yes"
+    - name: ND_7
+      value: "stream.conf|3a9757fe-5308-40c0-98b1-0a3d1b16b62e/postpone alarms on connect seconds = 60"
     volumeMounts:
       - name: proc
         mountPath: /host/proc
@@ -31,6 +43,8 @@ spec:
         mountPath: /host/sys
       - name: cache
         mountPath: /var/cache/netdata
+      - name: health
+        mountPath: /etc/netdata/health.d
   volumes:
     - name: proc
       hostPath:
@@ -44,5 +58,8 @@ spec:
     - name: cache
       hostPath:
         path: /global/netdata/cache
+    - name: health
+      hostPath:
+        path: /global/netdata/helth.d
   nodeSelector:
     netdata: master-node

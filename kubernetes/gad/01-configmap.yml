@@ -10,20 +10,24 @@ metadata:
   name: gad-config
   namespace: gad
 data:
-  GAD_AMQP_DSN: amqp://cy:eeTheej2@rabbitmq-master:5672/
+  GAD_AMQP_DSN: amqp://gad:eeTheej2@192.168.110.1:5672/gad
   GAD_CLICKYAB_ACCEPTED_DEMANDS: clickyab:clickyab:30708
   GAD_CLICKYAB_UNDER_FLOOR: 'true'
   GAD_DEVEL_MODE: 'false'
   GAD_MYSQL_DATABASE: clickyab
   GAD_MYSQL_MAX_CONNECTION: '10'
   GAD_MYSQL_MAX_IDLE_CONNECTION: '3'
-  GAD_MYSQL_RDSN: clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(mysql-write.external:3306)/clickyab?charset=utf8&parseTime=true
-  GAD_MYSQL_WDSN: clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(mysql-read-2.external:3306)/clickyab?charset=utf8&parseTime=true
+  GAD_MYSQL_RDSN: clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true
+  GAD_MYSQL_WDSN: clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true
   GAD_PROFILE: disable
   GAD_PROTO: http
-  GAD_REDIS_ADDRESS: redis-master:2222
+  GAD_REDIS_ADDRESS: 192.168.120.1:2222
   GAD_REDIS_DATABASE: '7'
   GAD_REDIS_PASSWORD: bita123
   GAD_REDIS_SIZE: '250'
   GAD_SITE: a.clickyab.com
+  GAD_CLICKYAB_AD_CTR_EFFECT: "70"
+  GAD_CLICKYAB_SLOT_CTR_EFFECT: "30"
   PORT: '9001'
+  GAD_CLICKYAB_FAKE_SUPPLIER: adro
+

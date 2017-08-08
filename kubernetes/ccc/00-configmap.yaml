@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ccc
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crab-master-config
+  namespace: ccc
+data:
+  TIMEZONE: 'Asia/Tehran'
+  TZ: 'Asia/Tehran'
+  PORT: "8090"
+  URL: "http://staging.crab.clickyab.ae/api/misc/swagger/index.json"
+  CRB_SERVICES_MYSQL_REPLICATION_STATUS: "true"
+  CRB_SERVICES_MYSQL_WDSN: "ccc_full:yMeiCnCuAxXoXoeP5BPKG62mdcnSXkpy7m2MJYeysWLn7sjC14bsRGLMQYVI5rUa@tcp(192.168.100.11:3306)/ccc-staging?charset=utf8&parseTime=true"
+  CRB_SERVICES_MYSQL_RDSN: "ccc_read:vCc0U1s0KyblNfoWUoByqAAaa1hNlJyyjIWvhWtuYbphn4sLEf2j4HqbHXNjz1uV@tcp(192.168.100.12:3306)/ccc-staging?charset=utf8&parseTime=true,ccc_read:vCc0U1s0KyblNfoWUoByqAAaa1hNlJyyjIWvhWtuYbphn4sLEf2j4HqbHXNjz1uV@tcp(192.168.100.13:3306)/ccc-staging?charset=utf8&parseTime=true"
+  CRB_SERVICES_REDIS_ADDRESS: "192.168.120.1:2222"
+  CRB_SERVICES_REDIS_PASSWORD: "bita123"
+  CRB_SERVICES_REDIS_DB: "11"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ceph-secret
+  namespace: ccc
+data:
+  key: QVFERE9HZFpXaXI2T1JBQTFxcGVRQlJ3ZCtPRVIrdmdpenpzV1E9PQ==

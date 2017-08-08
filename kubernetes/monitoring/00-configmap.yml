@@ -33,3 +33,14 @@ data:
   ND_7: "stream.conf|stream/buffer size bytes = 1048576"
   ND_8: "stream.conf|stream/reconnect delay seconds = 5"
   ND_9: "stream.conf|stream/initial clock resync iterations = 60"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slave-mon-config
+  namespace: monitoring
+data:
+  SM_SERVICES_MYSQL_RDSN: "clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.12:3306)/clickyab?charset=utf8&parseTime=true,clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true"
+  SM_SERVICES_MYSQL_WDSN: "clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true"
+  SM_SERVICES_MYSQL_REPLICATION_STATUS: "true"
+  SM_SERVICES_MYSQL_REPLICATION_DELAY: "30"

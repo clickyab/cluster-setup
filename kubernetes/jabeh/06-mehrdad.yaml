@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deployment-manager-binding
+  namespace: jabeh
+subjects:
+- kind: User
+  name: mehrdad
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: jabeh-team
+  apiGroup: ""

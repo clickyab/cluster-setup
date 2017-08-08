@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql-slave-monitor
+  labels:
+    k8s-app: mysql-slave-monitor
+  namespace: monitoring
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: mysql-slave-monitor
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: mysql-slave-monitor
+        image: registry.clickyab.ae/clickyab/cluster-tools:master.12
+        command: [ "/app/bin/slavemonitor"]
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        envFrom:
+        - configMapRef:
+            name: slave-mon-config
+        resources:
+          limits:
+            cpu: 100m
+            memory: 30Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi

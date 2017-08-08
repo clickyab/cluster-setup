@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: crab-master
+  namespace: ccc
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: crab
+        proc: webserver
+        k8s-app: crab-master-webserver
+        lang: go
+        branch: master
+    spec:
+      containers:
+      - name: crab-master
+        image: registry.clickyab.ae/clickyab/crab:master.12
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8090
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        envFrom:
+        - configMapRef:
+            name: crab-master-config
+        ports:
+        - name: master-web
+          containerPort: 8090
+        volumeMounts:
+        - name: statics
+          mountPath: /statics
+      volumes:
+      - name: statics
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/ccc"

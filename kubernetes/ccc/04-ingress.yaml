@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: crab-master-ingress
+  namespace: ccc
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 5m
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: staging.crab.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: crab-master-service
+          servicePort: 8090
+      - path: /swagger
+        backend:
+          serviceName: crab-swagger-service
+          servicePort: 80

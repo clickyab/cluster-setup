@@ -11,12 +11,32 @@ metadata:
     ingress.kubernetes.io/auth-secret: basic-auth
     # message to display with an appropiate context why the authentication is required
     ingress.kubernetes.io/auth-realm: "Authentication Required"
+    ingress.kubernetes.io/enable-cors: "true"
 spec:
   rules:
   - host: monitoring.clickyab.ae
     http:
       paths:
+      - path: /slavemon
+        backend:
+          serviceName: mysql-slave-monitor
+          servicePort: 8090
       - path: /
         backend:
           serviceName: netdata-master
           servicePort: 19999
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: slavemon-ingress
+  namespace: monitoring
+spec:
+  rules:
+  - host: mscheck.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: slavemon-service
+          servicePort: 8090
