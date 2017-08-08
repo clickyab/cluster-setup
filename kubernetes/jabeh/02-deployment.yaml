@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: jabeh-master
-        image: registry.clickyab.ae/clickyab/jabeh:master.55
+        image: registry.clickyab.ae/clickyab/jabeh:master.62
         livenessProbe:
           httpGet:
             path: /healthz
@@ -45,6 +45,14 @@ spec:
           mountPath: /tmp/thumbnails
         - name: cachevideo
           mountPath: /tmp/videos
+      - name: jabeh-cdn
+        image: nginx:1-alpine
+        volumeMounts:
+        - name: cdn
+          mountPath: /usr/share/nginx/html
+        ports:
+        - name: master-cdn
+          containerPort: 80
       volumes:
       - name: cdn
         cephfs:

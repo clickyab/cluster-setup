@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: console-ingress
+  name: jabeh-ingress
   namespace: jabeh
   annotations:
     ingress.kubernetes.io/proxy-body-size: 32m
@@ -15,3 +15,10 @@ spec:
         backend:
           serviceName: jabeh-master-service
           servicePort: 9000
+  - host: fr.cdn.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-master-service
+          servicePort: 80
