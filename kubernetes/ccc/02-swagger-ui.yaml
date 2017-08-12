@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: crab-swagger
+  name: chameleon-master
   namespace: ccc
 spec:
   strategy:
@@ -10,12 +10,12 @@ spec:
   template:
     metadata:
       labels:
-        k8s-app: crab-swagger-webserver
+        k8s-app: chameleon-master-webserver
         lang: js
     spec:
       containers:
-      - name: swagger-master
-        image: fzerorubigd/swagger-ui:latest
+      - name: chameleon-master
+        image: registry.clickyab.ae/clickyab/chameleon:master.21
         envFrom:
         - configMapRef:
             name: crab-master-config

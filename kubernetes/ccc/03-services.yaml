@@ -19,15 +19,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: crab-swagger-service
+  name: chameleon-master-service
   namespace: ccc
   labels:
-    k8s-app: crab-swagger-service
+    k8s-app: chameleon-master-service
     kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "CrabSwaggerService"
+    kubernetes.io/name: "ChameleonMasterService"
 spec:
   selector:
-    k8s-app: crab-swagger-webserver
+    k8s-app: chameleon-master-webserver
   ports:
   - name: mster
     port: 80
