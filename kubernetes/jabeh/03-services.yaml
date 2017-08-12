@@ -15,6 +15,20 @@ spec:
   - name: mster
     port: 9000
     protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jabeh-cdn-master-service
+  namespace: jabeh
+  labels:
+    k8s-app: jabeh-cdn-service
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "JabehCDNMasterService"
+spec:
+  selector:
+    k8s-app: jabeh-master-cdn
+  ports:
   - name: cdn
     port: 80
     protocol: TCP

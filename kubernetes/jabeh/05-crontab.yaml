@@ -1,0 +1,19 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: jabeh-crontab
+  namespace: jabeh
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 6
+  failedJobsHistoryLimit: 12
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: jabeh-cron
+            image: registry.clickyab.ae/clickyab/jabeh:master.71
+            command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
+          restartPolicy: Never

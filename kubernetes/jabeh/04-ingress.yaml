@@ -20,5 +20,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: jabeh-master-service
+          serviceName: jabeh-cdn-master-service
           servicePort: 80
