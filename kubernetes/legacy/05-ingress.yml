@@ -12,10 +12,10 @@ spec:
         backend:
           serviceName: front-legecy-service
           servicePort: 9000
-  - host: app.clickyab.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: front-legecy-service
-          servicePort: 9000
+#  - host: app.clickyab.com
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: front-legecy-service
+#          servicePort: 9000

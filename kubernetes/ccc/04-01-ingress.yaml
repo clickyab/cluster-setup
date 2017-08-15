@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: testing
+  namespace: ccc
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 5m
+spec:
+  rules:
+  - host: testing.ccc.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: testing
+          servicePort: 9000

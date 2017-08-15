@@ -14,6 +14,12 @@ spec:
         spec:
           containers:
           - name: jabeh-cron
-            image: registry.clickyab.ae/clickyab/jabeh:master.71
+            image: registry.clickyab.ae/clickyab/jabeh:master.72
             command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
+            resources:
+              limits:
+                cpu: 1000m
+            envFrom:
+            - configMapRef:
+                name: jabeh-master-config
           restartPolicy: Never
