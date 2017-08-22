@@ -31,10 +31,9 @@ done
 # define needed functions.
 function backup() {
     # check mysql server status.
-    msg=$(ps ax | grep -i $mysqld | grep -v grep)
+    msg=$(ps ax | grep -i $mysqld | grep -v "grep" 2>&1)
     if [ -z $msg ]; then
         echo "[×] MySQL service is NOT RUNNING." >> $logfile
-        subject_prefix="[FAIL]"
         return 1
     else
         echo "[✓] MySQL service is RUNNING." >> $logfile
@@ -62,7 +61,6 @@ function backup() {
         msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
-            subject_prefix="[FAIL]"
             return 1
         else
             echo "[✓] Innobackupex command successfully completed." >> $logfile
@@ -71,7 +69,6 @@ function backup() {
         msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 --databases=$database $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
-            subject_prefix="[FAIL]"
             return 1
         else
             echo "[✓] Innobackupex command successfully completed." >> $logfile
@@ -82,7 +79,6 @@ function backup() {
     msg=$(innobackupex --apply-log $lbackup_dir 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] An Error occured in preparing backup file." >> $logfile
-        subject_prefix="[FAIL]"
         return 1
     else
         echo "[✓] successfully prepare the backup." >> $logfile
@@ -95,19 +91,18 @@ function transfer() {
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in transfering backup files via rsync." >> $logfile
         echo "    $msg" >> $logfile
-        subject_prefix="[FAIL]"
     else
         echo "[✓] backup files successfully transfered." >> $logfile
     fi
 }
 
 function send_report() {
-    if [ $1 == "fail" ]; then
+    if [ $backup_status == "fail" ]; then
         subject="[FAIL] DB Backup Process Failed."
         echo -e "DataBase backing up proccess failed.\nTo find this problem reason, please check an attachment." >> /tmp/mail-body-$(date +"%Y%m%d").txt
         EMAIL="backup <no-replay@clickyab.com>" mutt -s ${subject} -a $logfile -- sysadmin@clickyab.com
     fi
-    if [ $1 == "success" ]; then
+    if [ $backup_status == "success" ]; then
         subject="[SUCCESS] DB Backup Process Complete Successfully."
         echo -e "DataBase backing up proccess complete successfully.\nTo find this process details, please check an attachment." >> /tmp/mail-body-$(date +"%Y%m%d").txt
         EMAIL="backup <no-replay@clickyab.com>" mutt -s ${subject} -a $logfile -- sysadmin@clickyab.com
@@ -139,14 +134,14 @@ echo "Taking backup proccess is Start at $(date +"%F") ..." > $logfile
 msg=$(backup 2>&1)
 if [[ $? -ne 0 ]]; then
     bacup_ststus="fail"
-    send_report $backup_status
+    send_report
     exit 0
 else
     backup_status="success"
-    msg=$(transfer)
+    msg=$(transfer 2>&1)
     if [[ $? -ne 0 ]]; then
         backup_status="fail"
-        send_report $backup_status
+        send_report
         exit 0
     else
         remove_old
