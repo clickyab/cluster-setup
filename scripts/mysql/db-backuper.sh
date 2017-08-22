@@ -87,7 +87,7 @@ function backup() {
 }
 
 function transfer() {
-    msg=(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir root@88.198.13.41:$rbackup_dir 2>&1)
+    msg=$(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir root@88.198.13.41:$rbackup_dir 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in transfering backup files via rsync." >> $logfile
         echo "    $msg" >> $logfile
