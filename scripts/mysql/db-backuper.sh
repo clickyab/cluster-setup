@@ -133,7 +133,7 @@ echo "Taking backup proccess is Start at $(date +"%F") ..." > $logfile
 
 msg=$(backup 2>&1)
 if [[ $? -ne 0 ]]; then
-    backup_ststus="fail"
+    backup_status="fail"
     send_report
     exit 0
 else
