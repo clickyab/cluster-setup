@@ -6,6 +6,12 @@ metadata:
   namespace: jabeh
   annotations:
     ingress.kubernetes.io/proxy-body-size: 32m
+    # type of authentication
+    ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    ingress.kubernetes.io/auth-secret: basic-auth
+    # message to display with an appropiate context why the authentication is required
+    ingress.kubernetes.io/auth-realm: "Authentication Required"
 spec:
   rules:
   - host: staging.jabeh.com
@@ -15,6 +21,23 @@ spec:
         backend:
           serviceName: jabeh-master-service
           servicePort: 9000
+  - host: beanstalk.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-benstalkd-console-service
+          servicePort: 2080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jabeh-cdn-ingress
+  namespace: jabeh
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 32m
+spec:
+  rules:
   - host: fr.cdn.jabeh.com
     http:
       paths:

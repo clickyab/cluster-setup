@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: front-ingress
   namespace: legacy
+  annotations:
+    ingress.kubernetes.io/use-gzip: "false"
 spec:
   rules:
   - host: a.clickyab.com

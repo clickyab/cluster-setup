@@ -32,3 +32,18 @@ spec:
   - name: cdn
     port: 80
     protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jabeh-benstalkd-console-service
+  namespace: jabeh
+  labels:
+    k8s-app: jabeh-benstalkd-console-service
+spec:
+  selector:
+    k8s-app: jabeh-benstalkd-console
+  ports:
+  - name: cdn
+    port: 2080
+    protocol: TCP

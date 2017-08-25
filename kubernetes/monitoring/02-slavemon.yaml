@@ -17,13 +17,13 @@ spec:
       - name: mysql-slave-monitor
         image: registry.clickyab.ae/clickyab/cluster-tools:master.12
         command: [ "/app/bin/slavemonitor"]
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8090
-            scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
+#        livenessProbe:
+#          httpGet:
+#            path: /healthz
+#            port: 8090
+#            scheme: HTTP
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 5
         envFrom:
         - configMapRef:
             name: slave-mon-config
