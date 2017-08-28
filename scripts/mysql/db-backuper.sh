@@ -8,12 +8,11 @@ password="123456"
 database=""                          # in default backup from all of databases.
 rbackup_dir="/backup2/mysql"         # upload backedup files in this directory.
 lbackup_dir="/root/mysql"            # use as this directory to backup.
-logfile="/var/log/mysql-backup-$(date +\"%Y%m%d\").log"
+logfile="/var/log/mysql-backup-$(date +%Y%m%d).log"
 tmpfile="/tmp/mysql-backup-$(echo $$).log"
-mysqld=$(which mysqld)
 
 # initialize variables with new values.
-while getopts ":h:u:p:d:r:" opt; do
+while getopts ":h:u:p:d:r:l:" opt; do
     case $opt in
         h) hostname=$OPTARG;;
         u) username=$OPTARG;;
@@ -31,29 +30,28 @@ done
 # define needed functions.
 function backup() {
     # check mysql server status.
-    msg=$(ps ax | grep -i $mysqld | grep -v "grep" 2>&1)
-    if [ -z $msg ]; then
+    msg=$(pidof mysqld 2>&1)
+    if [[ -z $msg ]]; then
         echo "[×] MySQL service is NOT RUNNING." >> $logfile
+        echo "    $msg" >> $logfile
         return 1
     else
         echo "[✓] MySQL service is RUNNING." >> $logfile
     fi
 
     # create backup directory
-    msg=$(mkdir $lbackup_dir 2>&1)
-    if [[ $? -ne 0 ]]; then
-        echo "[×] We have a problem in creating local backup directory." >> $logfile
-        echo "    Use as default directory '${lbackup_dir}'" >> $logfile
-        lbackup_dir="/root/mysql"
+    if [[ ! -d $lbackup_dir ]]; then
         msg=$(mkdir $lbackup_dir 2>&1)
         if [[ $? -ne 0 ]]; then
-            echo "[×] We have a problem in creating default backup directory." >> $logfile
-            return 1
+            echo "[×] We have a problem in creating local backup directory." >> $logfile
+            echo "    $msg" >> $logfile
+            echo "    Use as default directory '${lbackup_dir}'" >> $logfile
+            lbackup_dir="/root/mysql"
         else
-            echo "[✓] Create defalt backup directory successfully."
+            echo "[✓] Create local backup directory successfully." >> $logfile
         fi
     else
-        echo "[✓] Create local backup directory successfully."
+        echo "[✓] $lbackup_dir exists." >> $logfile
     fi
 
     # taking full backup
@@ -61,6 +59,7 @@ function backup() {
         msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
+            echo "    $msg" >> $logfile
             return 1
         else
             echo "[✓] Innobackupex command successfully completed." >> $logfile
@@ -69,6 +68,7 @@ function backup() {
         msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 --databases=$database $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
+            echo "    $msg" >> $logfile
             return 1
         else
             echo "[✓] Innobackupex command successfully completed." >> $logfile
@@ -76,9 +76,10 @@ function backup() {
     fi
 
     # prepare the backup
-    msg=$(innobackupex --apply-log $lbackup_dir 2>&1)
+    msg=$(innobackupex --apply-log $lbackup_dir/$(date +"%F")* 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] An Error occured in preparing backup file." >> $logfile
+        echo "    $msg" >> $logfile
         return 1
     else
         echo "[✓] successfully prepare the backup." >> $logfile
@@ -87,7 +88,7 @@ function backup() {
 }
 
 function transfer() {
-    msg=$(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir root@88.198.13.41:$rbackup_dir 2>&1)
+    msg=$(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir/* root@88.198.13.41:$rbackup_dir/ 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in transfering backup files via rsync." >> $logfile
         echo "    $msg" >> $logfile
@@ -98,14 +99,14 @@ function transfer() {
 
 function send_report() {
     if [ $backup_status == "fail" ]; then
-        subject="[FAIL] DB Backup Process Failed."
-        echo -e "DataBase backing up proccess failed.\nTo find this problem reason, please check an attachment." >> /tmp/mail-body-$(date +"%Y%m%d").txt
-        EMAIL="backup <no-replay@clickyab.com>" mutt -s ${subject} -a $logfile -- sysadmin@clickyab.com
+        subject="[FAILED] DB Backup Process Failed."
+        echo -e "DataBase backing up process failed.\nTo find this problem reason, please check an attachment." > /tmp/mail-body-$(date +"%Y%m%d").txt
+        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -a $logfile -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
     fi
     if [ $backup_status == "success" ]; then
         subject="[SUCCESS] DB Backup Process Complete Successfully."
-        echo -e "DataBase backing up proccess complete successfully.\nTo find this process details, please check an attachment." >> /tmp/mail-body-$(date +"%Y%m%d").txt
-        EMAIL="backup <no-replay@clickyab.com>" mutt -s ${subject} -a $logfile -- sysadmin@clickyab.com
+        echo -e "DataBase backing up process complete successfully.\nTo find this process details, please check an attachment." > /tmp/mail-body-$(date +"%Y%m%d").txt
+        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -a $logfile -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
     fi
 }
 
@@ -119,7 +120,7 @@ function remove_old(){
         echo "[✓] backup files successfully removed." >> $logfile
     fi
     # remove old remote backup directory
-    msg$(ssh root@88.198.13.41 -p 6570 rm -r $rbackup_dir/$(date --date="3 days ago" +"%y%m%d")* 2>&1)
+    msg=$(ssh root@88.198.13.41 -p 6570 rm -r $rbackup_dir/$(date --date="3 days ago" +"%F")* 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in removing old remote backup files." >> $logfile
         echo "    $msg" >> $logfile
@@ -129,7 +130,7 @@ function remove_old(){
 }
 
 # main of script.
-echo "Taking backup proccess is Start at $(date +"%F") ..." > $logfile
+echo "Taking backup process is Start at $(date +"%F") ..." > $logfile
 
 msg=$(backup 2>&1)
 if [[ $? -ne 0 ]]; then
@@ -145,7 +146,7 @@ else
         exit 0
     else
         remove_old
-        send_report $backup_status
+        send_report
     fi
 fi
 
