@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana-service
+  namespace: monitoring
+  labels:
+    k8s-app: kibana-service
+spec:
+  selector:
+    k8s-app: kibana-monitoring
+  ports:
+  - name: kibana
+    port: 5601
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fluentd
+  namespace: monitoring
+  labels:
+    k8s-app: fluentd-service
+spec:
+  selector:
+    k8s-app: fluentd-logging
+  ports:
+  - name: logger
+    port: 24224
+    protocol: TCP

@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: jabeh-ingress
+  name: jabeh-develop-ingress
   namespace: jabeh
   annotations:
     ingress.kubernetes.io/proxy-body-size: 32m
@@ -14,13 +14,13 @@ metadata:
     ingress.kubernetes.io/auth-realm: "Authentication Required"
 spec:
   rules:
-  - host: staging.jabeh.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: jabeh-master-service
-          servicePort: 9000
+#  - host: staging.jabeh.com
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: jabeh-master-service
+#          servicePort: 9000
   - host: beanstalk.clickyab.ae
     http:
       paths:
@@ -32,13 +32,52 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: jabeh-cdn-ingress
+  name: jabeh-ingress
   namespace: jabeh
   annotations:
     ingress.kubernetes.io/proxy-body-size: 32m
 spec:
   rules:
+  - host: jabeh.com
+    http:
+      paths:
+      - path: /upload
+        backend:
+          serviceName: jabeh-master-service
+          servicePort: 9000
+  - host: jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-master-service
+          servicePort: 9000
+  - host: www.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-master-service
+          servicePort: 9000
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jabeh-cdn-ingress
+  namespace: jabeh
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 32m
+    ingress.kubernetes.io/enable-cors: "true"
+spec:
+  rules:
   - host: fr.cdn.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+  - host: cdn.jabeh.com
     http:
       paths:
       - path: /

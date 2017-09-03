@@ -44,3 +44,14 @@ data:
   SM_SERVICES_MYSQL_WDSN: "clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true"
   SM_SERVICES_MYSQL_REPLICATION_STATUS: "true"
   SM_SERVICES_MYSQL_REPLICATION_DELAY: "30"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+  namespace: monitoring
+data:
+  SERVER_NAME: kibana.clickyab.ae
+  ELASTICSEARCH_URL: http://192.168.110.1:9200
+  ELASTICSEARCH_USERNAME: elastic
+  ELASTICSEARCH_PASSWORD: Iumi5thidieLa6ee

@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
           - name: jabeh-cron
-            image: registry.clickyab.ae/clickyab/jabeh:master.72
+            image: registry.clickyab.ae/clickyab/jabeh:master.134
             command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
             resources:
               limits:
@@ -24,3 +24,36 @@ spec:
             - configMapRef:
                 name: jabeh-master-config
           restartPolicy: Never
+---
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: jabeh-crontab-daily
+  namespace: jabeh
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          containers:
+          - command:
+            - /app/.heroku/php/bin/php
+            - /app/artisan
+            - count:perchannel
+            envFrom:
+            - configMapRef:
+                name: jabeh-master-config
+            image: registry.clickyab.ae/clickyab/jabeh:master.134
+            imagePullPolicy: IfNotPresent
+            name: jabeh-cron-daily
+            resources:
+              limits:
+                cpu: "1"
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+  schedule: 10 12 * * *
+  successfulJobsHistoryLimit: 6
+  suspend: false

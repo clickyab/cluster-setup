@@ -6,6 +6,9 @@ metadata:
   namespace: jabeh
 spec:
   strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
     type: RollingUpdate
   replicas: 1
   template:

@@ -18,15 +18,37 @@ metadata:
   name: jabeh-master-config
   namespace: jabeh
 data:
+  APP_URL: http://jabeh.com
+  BEANSTALK_HOST: 192.168.110.1
+  BEANSTALKD_PORT_11300_TCP_ADDR: 192.168.110.1
+  CACHE_DRIVER: redis
+  CONVERTED_VIDEO_FULL_PATH: /temp/convert
+  CONVERTED_VIDEO_RELATED_PATH: /cdn/converted
+  DB_DATABASE: jabeh
+  DB_HOST: 192.168.100.11
+  DB_PASSWORD: nVNxKceOfa6E6h9
+  DB_PORT: "3306"
+  DB_USERNAME: jabeh
+  ELASTIC_HOST: 192.168.120.1
+  ELASTIC_PORT: "9200"
+  HostName: jabeh.com
+  LockUserPanel: "false"
+  MAIL_PASSWORD: sendg78u9i0o@789
+  MAIL_USER: clickyab
+  MAIL_USERNAME: clickyab
+  MAIN_VIDEO_FULL_PATH: /cdn
+  MDIR_MODE: "775"
   PORT: "9000"
   QUEUE_DRIVER: beanstalkd
-  REDIS_HOST: "192.168.120.1"
-  REDIS_PORT: "6379"
-  DB_HOST: "192.168.100.11"
-  DB_PORT: "3306"
-  DB_DATABASE: jabeh2
-  DB_USERNAME: jabeh2
-  DB_PASSWORD: mkonhX3WChVssk9
-  BEANSTALK_HOST: "192.168.120.1"
-  ELASTIC_HOST: "192.168.120.1"
-  ELASTIC_PORT: "9200"
+  REDIS_HOST: 192.168.120.1
+  SESSION_DOMAIN: jabeh.com
+  SESSION_DRIVER: redis
+  THUMBNAILS_FULL_PATH: /cdn/images
+  THUMBNAILS_GENERATE_DIR: /tmp/thumbnails
+  THUMBNAILS_RELATED_PATH: /thumbnails
+  VIDEO_CHUNK_DIR: /chunks
+  VIDEO_UPLOAD_DIR: /cdn
+  VIDEO_UPLOAD_RELATED_PATH: /cdn
+  DEBUG: "false"
+  SLACK_SEND_ALL_ERROR: "false"
+  WEB_CONCURRENCY: "32"
