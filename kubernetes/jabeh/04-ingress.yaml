@@ -41,13 +41,6 @@ spec:
   - host: jabeh.com
     http:
       paths:
-      - path: /upload
-        backend:
-          serviceName: jabeh-master-service
-          servicePort: 9000
-  - host: jabeh.com
-    http:
-      paths:
       - path: /
         backend:
           serviceName: jabeh-master-service
@@ -58,6 +51,55 @@ spec:
       - path: /
         backend:
           serviceName: jabeh-master-service
+          servicePort: 9000
+---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: jabeh-upload-ingress
+#  namespace: jabeh
+#  annotations:
+#    ingress.kubernetes.io/proxy-body-size: 32m
+#    ingress.kubernetes.io/enable-cors: "true"
+#spec:
+#  rules:
+#  - host: upload.jabeh.com
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: jabeh-master-service
+#          servicePort: 9000
+#---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mantis-cdn-ingress
+  namespace: jabeh
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 32m
+spec:
+  rules:
+  - host: fr.cdn.jabeh.com
+    http:
+      paths:
+      - path: /hls
+        backend:
+          serviceName: mantis-hls-master-service
+          servicePort: 9000
+  - host: ir.cdn.jabeh.com
+    http:
+      paths:
+      - path: /hls
+        backend:
+          serviceName: mantis-hls-master-service
+          servicePort: 9000
+  - host: cdn.jabeh.com
+    http:
+      paths:
+      - path: /hls
+        backend:
+          serviceName: mantis-hls-master-service
           servicePort: 9000
 ---
 apiVersion: extensions/v1beta1
@@ -71,6 +113,13 @@ metadata:
 spec:
   rules:
   - host: fr.cdn.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+  - host: ir.cdn.jabeh.com
     http:
       paths:
       - path: /

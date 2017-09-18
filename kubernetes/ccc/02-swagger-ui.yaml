@@ -15,7 +15,21 @@ spec:
     spec:
       containers:
       - name: chameleon-master
-        image: registry.clickyab.ae/clickyab/chameleon:master.21
+        image: registry.clickyab.ae/clickyab/chameleon:master.124
         envFrom:
         - configMapRef:
             name: crab-master-config
+        volumeMounts:
+        - name: statics
+          mountPath: /usr/share/nginx/html/uploads
+      volumes:
+      - name: statics
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/ccc/uploads"

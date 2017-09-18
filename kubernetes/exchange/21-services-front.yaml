@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: octopus-front
+  namespace: octopus
+  labels:
+    k8s-app: octopus-web-service
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "OctopusService"
+spec:
+  selector:
+    k8s-app: octopus-front
+  ports:
+  - name: octoconsole
+    port: 9005
+    targetPort: 80
+    protocol: TCP

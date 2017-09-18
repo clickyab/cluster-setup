@@ -1,9 +1,8 @@
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: octopus-console
+  name: octopus-aggregator
   namespace: octopus
 spec:
   strategy:
@@ -14,19 +13,24 @@ spec:
       labels:
         # Label is used as selector in the service.
         app: octopus
-        proc: web
-        k8s-app: octopus-front
+        proc: worker
+        spec: aggregator
     spec:
       containers:
-      - name: octopus-console-master
-        image: registry.clickyab.ae/clickyab/octopus-console:master.43
+      - name: octopus-master
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/octopus:master.dev
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 80
+            port: 9002
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 5
+        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"aggregator"]
+        envFrom:
+        - configMapRef:
+            name: octopus-config
         ports:
-        - name: octoconsole
-          containerPort: 80
+        - name: web-health
+          containerPort: 9002

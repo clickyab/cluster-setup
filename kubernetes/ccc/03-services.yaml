@@ -15,6 +15,9 @@ spec:
   - name: mster
     port: 8090
     protocol: TCP
+  - name: mailhog
+    port: 8025
+    protocol: TCP
 ---
 apiVersion: v1
 kind: Service

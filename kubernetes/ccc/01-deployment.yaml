@@ -19,8 +19,13 @@ spec:
         branch: master
     spec:
       containers:
+      - name: mailhog
+        image: mailhog/mailhog
+        ports:
+        - name: master-web
+          containerPort: 8025
       - name: crab-master
-        image: registry.clickyab.ae/clickyab/crab:master.12
+        image: registry.clickyab.ae/clickyab/crab:master.58
         livenessProbe:
           httpGet:
             path: /healthz

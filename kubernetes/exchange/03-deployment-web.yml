@@ -1,32 +1,35 @@
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: octopus-console
+  name: octopus-web
   namespace: octopus
 spec:
   strategy:
     type: RollingUpdate
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
         # Label is used as selector in the service.
         app: octopus
         proc: web
-        k8s-app: octopus-front
+        k8s-app: octopus-web
     spec:
       containers:
-      - name: octopus-console-master
-        image: registry.clickyab.ae/clickyab/octopus-console:master.43
+      - name: octopus-master
+        image: registry.clickyab.ae/clickyab/octopus:master.199
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 80
+            port: 9002
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 5
+        command: [ "bash","/app/bin/runoctupos.sh"]
+        envFrom:
+        - configMapRef:
+            name: octopus-config
         ports:
-        - name: octoconsole
-          containerPort: 80
+        - name: octopus-web
+          containerPort: 9002
