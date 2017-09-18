@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ceph-dashboard
+  namespace: monitoring
+  labels:
+    k8s-app: ceph-dashboard
+    namespace: monitoring
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: ceph-dashboard
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: ceph-dash
+          image: crapworks/ceph-dash
+          envFrom:
+            - configMapRef:
+                name: ceph-dash-config
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
