@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: jabeh-bc
-        image: schickling/beanstalkd-console
+        image: agaveapi/beanstalkd-console
         envFrom:
         - configMapRef:
             name: jabeh-master-config

@@ -44,8 +44,8 @@ spec:
   selector:
     k8s-app: jabeh-benstalkd-console
   ports:
-  - name: cdn
-    port: 2080
+  - name: bst
+    port: 80
     protocol: TCP
 ---
 apiVersion: v1

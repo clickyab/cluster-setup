@@ -27,7 +27,7 @@ spec:
       - path: /
         backend:
           serviceName: jabeh-benstalkd-console-service
-          servicePort: 2080
+          servicePort: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
