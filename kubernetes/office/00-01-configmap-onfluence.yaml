@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: confluence-configmap
+  namespace: office
+  labels:
+    name: confluence
+    namespace: office
+    k8s-app: confluence
