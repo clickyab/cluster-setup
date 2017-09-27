@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: confluence-service
+  namespace: office
+  labels:
+    k8s-app: confluence
+spec:
+  selector:
+    k8s-app: confluence
+  ports:
+    - name: confluence
+      port: 8090
+      protocol: TCP
+  selector:
+    app: confluence
