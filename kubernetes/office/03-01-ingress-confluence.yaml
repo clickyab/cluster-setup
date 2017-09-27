@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: confluence-ingress
+  namespace: office
+  # annotations:
+  #   # type of authentication
+  #   ingress.kubernetes.io/auth-type: basic
+  #   # name of the secret that contains the user/password definitions
+  #   ingress.kubernetes.io/auth-secret: basic-auth
+  #   # message to display with an appropiate context why the authentication is required
+  #   ingress.kubernetes.io/auth-realm: "Authentication Required"
+  #   ingress.kubernetes.io/enable-cors: "true"
+spec:
+  rules:
+    - host: docs.3rdad.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: confluence-service
+            servicePort: 8090
+
