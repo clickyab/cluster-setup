@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cloud-monitor
+  labels:
+    k8s-app: cloud-monitor
+  namespace: monitoring
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: cloud-monitor
+        category: monitoring
+    spec:
+      terminationGracePeriodSeconds: 60
+      serviceAccount: cloud-monitor
+      serviceAccountName: cloud-monitor
+      containers:
+      - name: cloud-monitor
+        image: registry.clickyab.ae/clickyab/cluster-tools:master.12
+        command: [ "/app/bin/nodemon"]
+        # livenessProbe:
+        #   httpGet:
+        #     path: /api/healthz
+        #     port: 8090
+        #     scheme: HTTP
+        #   initialDelaySeconds: 30
+        #   timeoutSeconds: 5
+        envFrom:
+        - configMapRef:
+            name: cloud-monitor
+        # volumeMounts:
+        #   - name: cert
+        #     mountPath: /etc/ssl/certs/ca-certificates.crt
+        #     readOnly: true
+        # resources:
+        #   limits:
+        #     cpu: 100m
+        #     memory: 30Mi
+        #   requests:
+        #     cpu: 10m
+        #     memory: 20Mi
+      # volumes:
+      #   - name: cert
+      #     hostPath:
+      #       path: /etc/ssl/certs/ca-certificates.crt

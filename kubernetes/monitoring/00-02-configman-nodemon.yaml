@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloud-monitor
+  namespace: monitoring
+data:
+  NM_CMON_MODULES_CLOUDFLARE_MAIL: "pooya@rajamand.com"
+  NM_CMON_MODULES_CLOUDFLARE_KEY: "aa2726211d532955af00f4bae22562439c8c6"
+  NM_CMON_MODULES_DOMAIN_BLACKLIST: "jabeh.com,ir.cdn.jabeh.com,cdn.jabeh.com,fr.cdn.jabeh.com,www.jabeh.com"
+  NM_CMON_MODULES_NODE_BLACKLIST: "kube-0.clickyab.ae"
+
