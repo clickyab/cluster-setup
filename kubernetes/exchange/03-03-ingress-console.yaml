@@ -1,0 +1,15 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: octopus-ingress
+  namespace: octopus
+spec:
+  rules:
+  - host: exchange.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: octopus-front
+          servicePort: 9005

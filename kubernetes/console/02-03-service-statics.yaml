@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: statics-webserver
+  namespace: console
+  labels:
+    k8s-app: statics
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "ConsoleStaticsService"
+spec:
+  selector:
+    k8s-app: statics-webserver
+  ports:
+  - name: deploy
+    port: 9000
+    targetPort: 80
+    protocol: TCP
