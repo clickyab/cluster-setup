@@ -18,14 +18,27 @@ spec:
     spec:
       containers:
       - name: octopus-master
-        image: registry.clickyab.ae/clickyab/octopus:master.199
+        image: registry.clickyab.ae/clickyab/octopus:master.204
         livenessProbe:
           httpGet:
             path: /healthz
             port: 9002
             scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9002
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
         command: [ "bash","/app/bin/runoctupos.sh"]
         envFrom:
         - configMapRef:

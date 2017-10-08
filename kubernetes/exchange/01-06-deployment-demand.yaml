@@ -1,9 +1,8 @@
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: octopus-winner
+  name: octopus-demand
   namespace: octopus
 spec:
   strategy:
@@ -15,20 +14,33 @@ spec:
         # Label is used as selector in the service.
         app: octopus
         proc: worker
-        spec: winner
+        spec: demand
     spec:
       containers:
       - name: octopus-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/octopus:master.dev
+        image: registry.clickyab.ae/clickyab/octopus:master.204
         livenessProbe:
           httpGet:
             path: /healthz
             port: 9002
             scheme: HTTP
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"winner"]
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9002
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"demand"]
         envFrom:
         - configMapRef:
             name: octopus-config

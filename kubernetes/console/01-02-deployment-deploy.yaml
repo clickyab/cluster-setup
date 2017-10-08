@@ -2,32 +2,29 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: jabeh-master
-  namespace: jabeh
+  name: console-deploy
+  namespace: console
 spec:
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
     type: RollingUpdate
-  replicas: 7
+  replicas: 1
   template:
     metadata:
       labels:
         # Label is used as selector in the service.
-        app: jabeh
+        app: console
         proc: webserver
-        k8s-app: jabeh-master-webserver
+        k8s-app: console-deploy-webserver
         lang: php
-        branch: master
+        branch: deploy
     spec:
       containers:
-      - name: jabeh-master
-        image: registry.clickyab.ae/clickyab/jabeh:master.67
+      - name: console-deploy
+        image: registry.clickyab.ae/clickyab/console:deploy.3432
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 9001
+            port: 9004
             scheme: HTTP
           initialDelaySeconds: 180
           timeoutSeconds: 15
@@ -37,7 +34,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /healthz
-            port: 9001
+            port: 9004
             scheme: HTTP
           initialDelaySeconds: 1
           timeoutSeconds: 15
@@ -47,41 +44,20 @@ spec:
         command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
         - configMapRef:
-            name: jabeh-master-config
+            name: console-deploy-config
         ports:
-        - name: master-web
-          containerPort: 9000
+        - name: deploy-web
+          containerPort: 9004
         volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
+        - name: statics
+          mountPath: /app/public/static
       volumes:
-      - name: cdn
+      - name: statics
         cephfs:
           monitors:
             - 192.168.10.1:6789
             - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
           secretRef:
             name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
-          secretRef:
-            name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+          path: "/legacy/statics"
