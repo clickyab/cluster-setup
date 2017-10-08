@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: crab-master
-  namespace: ccc
+  name: console-master
+  namespace: console
 spec:
   strategy:
     type: RollingUpdate
@@ -12,53 +12,52 @@ spec:
     metadata:
       labels:
         # Label is used as selector in the service.
-        app: crab
+        app: console
         proc: webserver
-        k8s-app: crab-master-webserver
-        lang: go
+        k8s-app: console-master-webserver
+        lang: php
         branch: master
     spec:
       containers:
-      - name: mailhog
-        image: mailhog/mailhog
-        ports:
-        - name: master-web
-          containerPort: 8025
-      - name: crab-master
-        image: registry.clickyab.ae/clickyab/crab:master.105
+      - name: console-master
+        image: registry.clickyab.ae/clickyab/console:master.3447
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 8090
+            port: 9003
             scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
+          initialDelaySeconds: 180
           periodSeconds: 20
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /api/misc/swagger/index.json
-            port: 8090
+            path: /healthz
+            port: 9003
             scheme: HTTP
-          initialDelaySeconds: 0
+          initialDelaySeconds: 1
+          periodSeconds: 20
           timeoutSeconds: 5
-          periodSeconds: 60
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
         - configMapRef:
-            name: crab-master-config
+            name: console-master-config
         ports:
         - name: master-web
-          containerPort: 8090
+          containerPort: 9003
         volumeMounts:
         - name: statics
-          mountPath: /statics
+          mountPath: /app/public/static
       volumes:
       - name: statics
         cephfs:
           monitors:
             - 192.168.10.1:6789
             - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
           secretRef:
             name: ceph-secret
-          path: "/ccc"
+          path: "/legacy/statics"

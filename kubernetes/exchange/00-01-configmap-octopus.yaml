@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: octopus
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: octopus-config

@@ -34,3 +34,11 @@ spec:
         backend:
           serviceName: gad-service
           servicePort: 9001
+  - host: a-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-service
+          servicePort: 9001
+

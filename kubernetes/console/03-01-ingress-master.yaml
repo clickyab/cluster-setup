@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: console-ingress
+  namespace: console
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 8m
+spec:
+  rules:
+  - host: dev.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: master-service
+          servicePort: 9003
+  - host: console.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: deploy-service
+          servicePort: 9004
+  - host: static.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: statics-webserver
+          servicePort: 9000
+

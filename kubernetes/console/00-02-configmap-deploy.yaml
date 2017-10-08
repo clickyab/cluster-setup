@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: console-deploy-config
+  namespace: console
+data:
+  APP_DEBUG: 'false'
+  APP_KEY: 'UQxSeqPYW8m1uZsJL3vdBNbVcALY7mHO'
+  DB_DATABASE: 'clickyab'
+  DB_HOST: 'mysql-write.external'
+  DB_PASSWORD: 'dicnm7alZQUhUIOi'
+  DB_USERNAME: 'clickyab_console'
+  GIT_REV: '8f589911e92fefa4b878321e0543b09f3143269b'
+  MAIL_HOST: 'smtp.sendgrid.net'
+  MAIL_PASSWORD: 'sendg78u9i0o@789'
+  MAIL_PORT: '587'
+  MAIL_USERNAME: 'clickyab'
+  NO_VHOST: '0'
+  TIMEZONE: 'Asia/Tehran'
+  TZ: 'Asia/Tehran'
+  PORT: '9004'

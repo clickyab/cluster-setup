@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: curator
+  namespace: monitoring
+data:
+  host: "192.168.110.1"
+  port: "9200"
+  auth: "elastic:Iumi5thidieLa6ee"
+  unit_count: "30"
+
