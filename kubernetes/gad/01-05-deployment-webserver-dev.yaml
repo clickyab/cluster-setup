@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: gad-webserver-dev
+  namespace: gad
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: gad
+        proc: webserver
+        k8s-app: gad-webserver-dev
+    spec:
+      containers:
+      - name: gad-dev
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/gad:master.331
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9001
+            scheme: HTTP
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9001
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "/app/bin/server"]
+        envFrom:
+        - configMapRef:
+            name: gad-dev-config
+        ports:
+        - name: gad-web-dev
+          containerPort: 9001

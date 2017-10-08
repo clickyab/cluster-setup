@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gad-dev-ingress
+  namespace: gad
+spec:
+  rules:
+  - host: v-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-dev-service
+          servicePort: 9001
+  - host: native-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-dev-service
+          servicePort: 9001
+  - host: e-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-dev-service
+          servicePort: 9001
+  - host: app-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-dev-service
+          servicePort: 9001
+  - host: a-beta.clickyab.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gad-dev-service
+          servicePort: 9001
+
