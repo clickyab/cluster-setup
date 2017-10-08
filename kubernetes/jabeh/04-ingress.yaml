@@ -126,6 +126,20 @@ spec:
         backend:
           serviceName: jabeh-cdn-master-service
           servicePort: 80
+  - host: frcdn.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+  - host: ircdn.jabeh.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
   - host: cdn.jabeh.com
     http:
       paths:

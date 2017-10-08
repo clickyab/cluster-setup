@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: gad-impression
+  namespace: gad
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: gad
+        proc: worker
+        spec: imp
+    spec:
+      containers:
+      - name: gad-master
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/gad:master.268
+        command: [ "/app/bin/impworker"]
+        envFrom:
+        - configMapRef:
+            name: gad-config
