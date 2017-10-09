@@ -1,7 +1,7 @@
 # Update and Upgrade [Jenkins](https://jenkins.io/)
 
 ## Download
-In the first step, download new vertion `.war` file from [Jenkins Download page](mirrors.jenkins.io/war/latest/jenkins.war)
+In the first step, download new vertion `.war` file from [Jenkins Download page](http://mirrors.jenkins.io/war/latest/jenkins.war)
 ```bash
 cd ~/downloads
 wget http://mirrors.jenkins.io/war/latest/jenkins.war
