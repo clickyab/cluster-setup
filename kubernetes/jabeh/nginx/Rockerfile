@@ -1,0 +1,6 @@
+FROM nginx:alpine
+
+RUN sed 's/mp4;/mp4 jbh;/' /etc/nginx/mime.types
+
+TAG registry.clickyab.ae/clickyab/jabeh-nginx:alpine
+PUSH registry.clickyab.ae/clickyab/jabeh-nginx:alpine

@@ -10,10 +10,10 @@ NAMESPACE=${3:-ccc}
 VALID_DAYS=${4:-60}
 
 [ -z "$USER_NAME" ] && exit 1
-mkdir ${KEY_LOCATION}/${USER_NAME}
+mkdir -p ${KEY_LOCATION}/${USER_NAME}
 pushd ${KEY_LOCATION}/${USER_NAME}
-openssl genrsa -out ${USER_NAME}.key 2048
-openssl req -new -key ${USER_NAME}.key -out ${USER_NAME}.csr -subj "/CN=${USER_NAME}/O=${TEAM}"
+[ -f ${USER_NAME}.key ] || openssl genrsa -out ${USER_NAME}.key 2048
+[ -f ${USER_NAME}.csr ] || openssl req -new -key ${USER_NAME}.key -out ${USER_NAME}.csr -subj "/CN=${USER_NAME}/O=${TEAM}"
 openssl x509 -req -in ${USER_NAME}.csr -CA ${CA_LOCATION}/ca.crt -CAkey ${CA_LOCATION}/ca.key -CAcreateserial -out ${USER_NAME}.crt -days ${VALID_DAYS}
 
 cat <<EOF >config

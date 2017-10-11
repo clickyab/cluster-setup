@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: jabeh-cdn
-        image: nginx:1-alpine
+        image: registry.clickyab.ae/clickyab/jabeh-nginx:alpine
         volumeMounts:
         - name: cdn
           mountPath: /usr/share/nginx/html
