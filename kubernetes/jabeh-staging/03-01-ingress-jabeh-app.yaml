@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jabeh-app-ingress
+  namespace: jabeh-staging
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 32m
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-secret: auth
+    ingress.kubernetes.io/auth-realm: "Authentication Required"
+spec:
+  rules:
+    - host: staging.jabeh.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: jabeh-staging-app-service
+              servicePort: 9000
+    - host: www.staging.jabeh.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: jabeh-staging-app-service
+              servicePort: 9000

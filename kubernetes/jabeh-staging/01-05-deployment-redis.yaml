@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jabeho-staging-redis
+  namespace: jabeh-staging
+  labels:
+    k8s-app: jabeh-staging
+    service: redis
+    namespace: jabeh-staging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        namespace: jabeh-staging
+        service: redis
+        branch: dev
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - name: redis
+              containerPort: 6379

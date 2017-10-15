@@ -1,0 +1,27 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: jabeh-staging-crontab-every15m
+  namespace: jabeh-staging
+spec:
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 6
+  failedJobsHistoryLimit: 12
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          containers:
+            - name: jabeh-staging-crontab-every15m
+              image: registry.clickyab.ae/clickyab/jabeh:dev.393
+              command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
+              resources:
+                limits:
+                  cpu: 1000m
+              envFrom:
+                - configMapRef:
+                    name: jabeh-staging-config
+          restartPolicy: Never
+
