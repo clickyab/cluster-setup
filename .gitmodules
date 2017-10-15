@@ -1,0 +1,3 @@
+[submodule "kubernetes/rabbitmq/kubernetes-rabbitmq-cluster"]
+	path = kubernetes/rabbitmq/kubernetes-rabbitmq-cluster
+	url = git@github.com:clickyab/kubernetes-rabbitmq-cluster.git

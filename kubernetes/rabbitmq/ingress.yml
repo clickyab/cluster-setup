@@ -1,0 +1,15 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rabbitmq-management-ingress
+  namespace: rabbitmq
+spec:
+  rules:
+  - host: rabbitmq.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: rabbitmq-management
+          servicePort: 15672
