@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jabeh-staging-elasticsearch-service
+  namespace: jabeh-staging
+  labels:
+    k8s-app: jabeh-staging
+    service: searchd
+    namespace: jabeh-staging
+    branch: dev
+spec:
+  selector:
+    app: elasticsearch
+  ports:
+    - name: elasticsearch
+      port: 9200
+      protocol: TCP
+

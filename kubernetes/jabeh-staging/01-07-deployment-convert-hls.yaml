@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jabeh-staging-convert-hls
+  namespace: jabeh-staging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        type: worker
+        app: jabeh-staging-convert-hls
+        k8s-app: jabeh-staging
+        lang: php
+        branch: dev
+    spec:
+      containers:
+      - name: jabeh-staging-convert-hls
+        image: registry.clickyab.ae/clickyab/jabeh:dev.393
+        command: [ "/app/.heroku/php/bin/php","/app/artisan","queue:work", "--queue=ConvertToHls","--sleep=5", "--tries=5", "--daemon"]
+        resources:
+          limits:
+            cpu: 1000m
+        envFrom:
+        - configMapRef:
+            name: jabeh-staging-config
+        volumeMounts:
+        - name: cdn
+          mountPath: /cdn
+        - name: chunks
+          mountPath: /chunks
+        - name: cachethumb
+          mountPath: /tmp/thumbnails
+        - name: cachevideo
+          mountPath: /tmp/videos
+      volumes:
+      - name: cdn
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/cdn"
+      - name: chunks
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/chunks"
+      - name: cachethumb
+        emptyDir: {}
+      - name: cachevideo
+        emptyDir: {}

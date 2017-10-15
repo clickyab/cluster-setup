@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jabeh-staging-redis-service
+  namespace: jabeh-staging
+  labels:
+    k8s-app: jabeh-staging
+    service: redis
+    namespace: jabeh-staging
+    branch: dev
+spec:
+  selector:
+    service: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
+      protocol: TCP

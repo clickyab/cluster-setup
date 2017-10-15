@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jabeh-app
+  namespace: jabeh-staging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jabeh
+        service: app
+        k8s-app: jabeh-staging-app
+    spec:
+      containers:
+      - name: jabeh-app
+        image: registry.clickyab.ae/clickyab/jabeh:dev.393
+        command: [ "/bin/herokuish", "procfile","start", "web"]
+        envFrom:
+          - configMapRef:
+              name: jabeh-staging-config
+        ports:
+        - name: web
+          containerPort: 9000
+        volumeMounts:
+        - name: cdn
+          mountPath: /cdn
+        - name: chunks
+          mountPath: /chunks
+        - name: cachethumb
+          mountPath: /tmp/thumbnails
+        - name: cachevideo
+          mountPath: /tmp/videos
+      volumes:
+      - name: cdn
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/cdn"
+      - name: chunks
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/chunks"
+      - name: cachethumb
+        emptyDir: {}
+      - name: cachevideo
+        emptyDir: {}

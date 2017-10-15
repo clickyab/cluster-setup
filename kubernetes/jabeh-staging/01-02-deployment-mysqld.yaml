@@ -1,0 +1,67 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jabeh-staging-mysqld
+  namespace: jabeh-staging
+  labels:
+    k8s-app: jabeh
+    service: mysqld
+    namespace: jabeh-mysqld
+    branch: dev
+    type: db
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jabeh
+        service: mysqld
+        branch: dev
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: mysqld-staging
+          image: registry.clickyab.ae/clickyab/mysqld-staging
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - cat
+          #       - /run/mysqld/mysqld.pid
+          #   initialDelaySeconds: 600
+          #   timeoutSeconds: 15
+          #   periodSeconds: 20
+          #   successThreshold: 1
+          #   failureThreshold: 3
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - cat
+          #       - /run/mysqld/mysqld.pid
+          #   initialDelaySeconds: 1
+          #   timeoutSeconds: 15
+          #   periodSeconds: 20
+          #   successThreshold: 1
+          #   failureThreshold: 1
+          # env:
+          #   - name: SOURCE_DB_USER
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: source-db-user-pass
+          #         key: username
+          #   - name: SOURCE_DB_PASS
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: source-db-user-pass
+          #         key: password
+          #   - name: MYSQL_ROOT_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: db-pass
+          #         key: password
+          envFrom:
+            - configMapRef:
+                name: jabeh-staging-mysqld-config
+          ports:
+            - name: msyqld
+              containerPort: 3306
+

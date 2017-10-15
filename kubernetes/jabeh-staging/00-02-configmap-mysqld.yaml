@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jabeh-staging-mysqld-config
+  namespace: jabeh-staging
+data:
+  SOURCE_DB: jabeh
+  SOURCE_DB_HOST: 51.254.197.46
+  SOURCE_DB_USER: jabeh_staging
+  SOURCE_DB_PASS: pj91bDgUxiVzi3kX98n2
+  MYSQL_ROOT_PASSWORD: qIxUnir2HOdorY055Ke6OK2CEs9Jiak4

@@ -1,0 +1,33 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: jabeh-staging-daily
+  namespace: jabeh-staging
+spec:
+  schedule: "10 12 * * *"
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 6
+  failedJobsHistoryLimit: 12
+  suspend: false
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          containers:
+            - name: jabeh-staging-daily
+              image: registry.clickyab.ae/clickyab/jabeh:dev.393
+              imagePullPolicy: IfNotPresent
+              command:
+                - /app/.heroku/php/bin/php
+                - /app/artisan
+                - count:perchannel
+              envFrom:
+                - configMapRef:
+                    name: jabeh-staging-config
+              resources:
+                limits:
+                  cpu: "1"
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+
