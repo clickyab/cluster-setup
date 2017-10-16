@@ -9,10 +9,10 @@ data:
   CONVERTED_VIDEO_FULL_PATH: /temp/convert
   CONVERTED_VIDEO_RELATED_PATH: /cdn/converted
   DB_DATABASE: jabeh
-  DB_HOST: 192.168.100.11
-  DB_PASSWORD: nVNxKceOfa6E6h9
+  DB_HOST: jabeh-staging-mysqld-service.jabeh-staging
+  DB_PASSWORD: qIxUnir2HOdorY055Ke6OK2CEs9Jiak4
   DB_PORT: "3306"
-  DB_USERNAME: jabeh
+  DB_USERNAME: root
   ELASTIC_HOST: jabeh-staging-elasticsearch-service.jabeh-staging
   ELASTIC_PORT: "9200"
   HostName: staging.jabeh.com

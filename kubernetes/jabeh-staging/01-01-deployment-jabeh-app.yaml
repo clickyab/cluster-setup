@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jabeh-app
+  name: jabeh-dev
   namespace: jabeh-staging
 spec:
   replicas: 1
@@ -10,10 +10,10 @@ spec:
       labels:
         app: jabeh
         service: app
-        k8s-app: jabeh-staging-app
+        k8s-app: jabeh-dev-app
     spec:
       containers:
-      - name: jabeh-app
+      - name: jabeh-dev
         image: registry.clickyab.ae/clickyab/jabeh:dev.393
         command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
