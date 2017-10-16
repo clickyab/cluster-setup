@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jabeh-staging-combine
+  name: jabeh-dev-combine
   namespace: jabeh-staging
 spec:
   replicas: 1
@@ -9,13 +9,13 @@ spec:
     metadata:
       labels:
         type: worker
-        app: jabeh-staging-combine
+        app: jabeh-dev-combine
         k8s-app: jabeh-staging
         lang: php
         branch: dev
     spec:
       containers:
-      - name: jabeh-staging-combine
+      - name: jabeh-dev
         image: registry.clickyab.ae/clickyab/jabeh:dev.393
         command: [ "/app/.heroku/php/bin/php", "/app/artisan", "queue:work", "--queue=CombineVideo", "--sleep=5", "--tries=5", "--daemon"]
         resources:

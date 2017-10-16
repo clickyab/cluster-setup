@@ -11,10 +11,7 @@ metadata:
     namespace: jabeh-staging
 spec:
   selector:
-    k8s-app: jabeh
     service: mysqld
-    type: db
-    namespace: jabeh-staging
   ports:
     - name: mysqld
       port: 3306
