@@ -4,5 +4,5 @@ data:
 kind: Secret
 metadata:
   name: kibana-auth
-  namespace: monitoring
+  namespace: elasticsearch
 type: Opaque
