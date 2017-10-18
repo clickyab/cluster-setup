@@ -24,6 +24,8 @@ data:
   MDIR_MODE: "775"
   PORT: "9000"
   QUEUE_DRIVER: beanstalkd
+  BEANSTALK_HOST: jabeh-staging-beanstalkd-service.jabeh-staging
+  QUEUE_DRIVER: beanstalkd
   REDIS_HOST: jabeh-staging-redis-service.jabeh-staging
   SESSION_DOMAIN: staging.jabeh.com
   SESSION_DRIVER: redis
