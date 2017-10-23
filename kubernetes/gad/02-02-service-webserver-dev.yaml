@@ -1,16 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: gad-dev-service
-  namespace: gad
   labels:
     k8s-app: gad-dev-service
     kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "GadService"
+    kubernetes.io/name: GadService
+  name: gad-dev-service
+  namespace: gad
 spec:
-  selector:
-    k8s-app: gad-webserver-dev
   ports:
   - name: gad-web-dev
-    port: 9001
+    port: 9000
     protocol: TCP
+    targetPort: 9000
+  selector:
+    k8s-app: gad-webserver-dev
+  type: ClusterIP
