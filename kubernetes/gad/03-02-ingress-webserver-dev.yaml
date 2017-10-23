@@ -8,36 +8,35 @@ spec:
   - host: v-beta.clickyab.com
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: gad-dev-service
-          servicePort: 9001
+          servicePort: 9000
+        path: /
   - host: native-beta.clickyab.com
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: gad-dev-service
-          servicePort: 9001
+          servicePort: 9000
+        path: /
   - host: e-beta.clickyab.com
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: gad-dev-service
-          servicePort: 9001
+          servicePort: 9000
+        path: /
   - host: app-beta.clickyab.com
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: gad-dev-service
-          servicePort: 9001
+          servicePort: 9000
+        path: /
   - host: a-beta.clickyab.com
     http:
       paths:
-      - path: /
-        backend:
+      - backend:
           serviceName: gad-dev-service
-          servicePort: 9001
-
+          servicePort: 9000
+        path: /
