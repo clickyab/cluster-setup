@@ -1,0 +1,73 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: jabeh-dev-youtube-downloader
+    branch: dev
+    k8s-app: jabeh-staging
+    lang: php
+    type: worker
+  name: jabeh-dev-youtube-downloader
+  namespace: jabeh-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jabeh-dev-youtube-downloader
+      branch: dev
+      k8s-app: jabeh-staging
+      lang: php
+      type: worker
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jabeh-dev-youtube-downloader
+        branch: dev
+        k8s-app: jabeh-staging
+        lang: php
+        type: worker
+    spec:
+      containers:
+      - command:
+        - /app/.heroku/php/bin/php
+        - /app/artisan
+        - queue:work
+        - --queue=YoutubeDownloader
+        - --sleep=5
+        - --tries=5
+        - --daemon
+        envFrom:
+        - configMapRef:
+            name: jabeh-staging-config
+        image: registry.clickyab.ae/clickyab/jabeh:dev.421
+        imagePullPolicy: IfNotPresent
+        name: jabeh-dev
+        resources:
+          limits:
+            cpu: "1"
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: 2017-10-16T12:23:34Z
+    lastUpdateTime: 2017-10-16T12:23:34Z
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 11
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
