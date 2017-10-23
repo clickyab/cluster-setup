@@ -12,9 +12,11 @@ spec:
         service: app
         k8s-app: jabeh-dev-app
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
       - name: jabeh-dev
-        image: registry.clickyab.ae/clickyab/jabeh:dev.393
+        image: registry.clickyab.ae/clickyab/jabeh:dev.420
         command: [ "/bin/herokuish", "procfile","start", "web"]
         envFrom:
           - configMapRef:

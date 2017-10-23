@@ -14,9 +14,11 @@ spec:
         lang: php
         branch: dev
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
         - name: jabeh-dev
-          image: registry.clickyab.ae/clickyab/jabeh:dev.393
+          image: registry.clickyab.ae/clickyab/jabeh:dev.423
           command: [ "/app/.heroku/php/bin/php","/app/artisan","queue:work", "--queue=GenerateThumbnails","--sleep=5", "--tries=5", "--daemon"]
           resources:
             limits:

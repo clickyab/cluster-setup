@@ -1,58 +1,73 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: nginx
+    k8s-app: statics-webserver
+    proc: webserver
   name: statics
   namespace: console
 spec:
+  replicas: 2
   strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
     type: RollingUpdate
-  replicas: 1
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: nginx
-        proc: webserver
         k8s-app: statics-webserver
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: statics
-        image: nginx:alpine
+      - image: registry.clickyab.ae/clickyab/cdn-nginx:alpine
+        imagePullPolicy: IfNotPresent
         livenessProbe:
+          failureThreshold: 3
           httpGet:
             path: /healthz
             port: 80
             scheme: HTTP
           initialDelaySeconds: 180
-          timeoutSeconds: 15
           periodSeconds: 20
           successThreshold: 1
-          failureThreshold: 3
+          timeoutSeconds: 15
+        name: statics
+        ports:
+        - containerPort: 80
+          name: statics
+          protocol: TCP
         readinessProbe:
+          failureThreshold: 1
           httpGet:
             path: /healthz
             port: 80
             scheme: HTTP
           initialDelaySeconds: 1
-          timeoutSeconds: 15
           periodSeconds: 20
           successThreshold: 1
-          failureThreshold: 1
-        ports:
-        - name: statics
-          containerPort: 80
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            memory: 100Mi
         volumeMounts:
-        - name: statics
-          mountPath: /usr/share/nginx/html
+        - mountPath: /usr/share/nginx/html
+          name: statics
           readOnly: true
       volumes:
-      - name: statics
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /legacy/statics
           secretRef:
             name: ceph-secret
-          path: "/legacy/statics"
+          user: admin
+        name: statics

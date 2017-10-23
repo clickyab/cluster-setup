@@ -60,17 +60,11 @@ spec:
         command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-p", "/fluentd/plugins", "--inline-config", "<source>\n@type forward\nport 24224\nbind 0.0.0.0\n</source>"]
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: "192.168.110.1"
+            value: "elasticsearch.elasticsearch"
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
             value: "http"
-          # X-Pack Authentication
-          # =====================
-          - name: FLUENT_ELASTICSEARCH_USER
-            value: "elastic"
-          - name: FLUENT_ELASTICSEARCH_PASSWORD
-            value: "Iumi5thidieLa6ee"
           - name: "FLUENTD_OPT0"
             value: -i "<source>\n@type forward\nport 24224\nbind 0.0.0.0\n</source>"
         resources:
@@ -92,4 +86,4 @@ spec:
           path: /var/log
       - name: varlibdockercontainers
         hostPath:
-          path: /var/lib/docker/containers
+          path: /var/lib/docker/-containers

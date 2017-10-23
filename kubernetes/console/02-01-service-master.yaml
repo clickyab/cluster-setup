@@ -5,12 +5,10 @@ metadata:
   namespace: console
   labels:
     k8s-app: master-web-service
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "ConsoleMasterService"
 spec:
   selector:
     k8s-app: console-master-webserver
   ports:
   - name: mster
-    port: 9003
+    port: 9000
     protocol: TCP

@@ -13,14 +13,14 @@ spec:
       - path: /
         backend:
           serviceName: master-service
-          servicePort: 9003
+          servicePort: 9000
   - host: console.clickyab.com
     http:
       paths:
       - path: /
         backend:
           serviceName: deploy-service
-          servicePort: 9004
+          servicePort: 9000
   - host: static.clickyab.com
     http:
       paths:

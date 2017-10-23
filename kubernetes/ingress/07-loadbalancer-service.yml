@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+# Can also use LoadBalancer type
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    # This is not possible in the normal kubeadm installation. make sure the api server is running with
+    # --service-node-port-range=1-32767
+    nodePort: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    k8s-app: nginx-ingress-lb

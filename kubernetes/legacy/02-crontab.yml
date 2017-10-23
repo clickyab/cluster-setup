@@ -7,7 +7,7 @@ metadata:
 spec:
   strategy:
     type: RollingUpdate
-  replicas: 1
+  replicas: 0
   template:
     metadata:
       labels:
@@ -20,8 +20,10 @@ spec:
     spec:
       containers:
       - name: legacy-crontabs
-        image: registry.clickyab.ae/clickyab/crontabs:master.4
+        image: registry.clickyab.ae/clickyab/crontabs:master.32
         envFrom:
         - configMapRef:
             name: legacy-config
+      imagePullSecrets:
+        - name: regsecret
 ---

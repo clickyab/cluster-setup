@@ -19,6 +19,8 @@ spec:
         branch: dev
     spec:
       terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: regsecret
       containers:
         - name: mysqld-staging
           image: registry.clickyab.ae/clickyab/mysqld-staging

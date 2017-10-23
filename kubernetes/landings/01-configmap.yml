@@ -10,14 +10,13 @@ metadata:
   name: wordpress-config
   namespace: landings
 data:
-  WORDPRESS_DB_HOST: mysql-write.external
-  WORDPRESS_DB_PASSWORD: >
-  q!`Y#7UZR`"&bD_3WF@O@3eV~<xTJJF{]PKeky<DyYPGP_'8;Xg"p@9Ho,#a.oa{I#u')&-?ube
-  WORDPRESS_DB_USER: blog
+  WORDPRESS_AUTH_KEY: BpLf%E BTr<mlt0~NME~F7=gBf/8)e]0Z8`h gs$tNRAXSUKquV0d{`*O=stnb+1
+  WORDPRESS_DB_HOST: 192.168.100.11
   WORDPRESS_DB_NAME: blog
-  WORDPRESS_AUTH_KEY: "BpLf%E BTr<mlt0~NME~F7=gBf/8)e]0Z8`h gs$tNRAXSUKquV0d{`*O=stnb+1"
-  WORDPRESS_NONCE_KEY: "+=UAu!rU$^c[bB2L@ceXA-YHq3NSRo~M~D8Eyfj=@S&4J26!~>,~<_RmM9:},jEQ"
-  WORDPRESS_LOGGED_IN_SALT: "$;W}>Od5V&|h.O$uyvC,m#IDO}(#J%Ci.Pv<sM%nsr4*|7:s-U!rG#wh8$<^huff"
+  WORDPRESS_DB_PASSWORD: q!`Y#7UZR`"&bD_3WF@O@3eV~<xTJJF{]PKeky<DyYPGP_'8;Xg"p@9Ho,#a.oa{I#u')&-?ube
+  WORDPRESS_DB_USER: blog
+  WORDPRESS_LOGGED_IN_SALT: $;W}>Od5V&|h.O$uyvC,m#IDO}(#J%Ci.Pv<sM%nsr4*|7:s-U!rG#wh8$<^huff
+  WORDPRESS_NONCE_KEY: +=UAu!rU$^c[bB2L@ceXA-YHq3NSRo~M~D8Eyfj=@S&4J26!~>,~<_RmM9:},jEQ
 ---
 apiVersion: v1
 kind: Secret

@@ -16,7 +16,7 @@ spec:
         tier: frontend
     spec:
       containers:
-      - image: wordpress:4.7.3-apache
+      - image: wordpress:4.8.2-apache
         name: wordpress
         envFrom:
         - configMapRef:
@@ -33,6 +33,7 @@ spec:
           monitors:
             - 192.168.10.1:6789
             - 192.168.10.6:6789
+            - 192.168.10.11:6789
           user: admin
           secretRef:
             name: ceph-secret
@@ -55,8 +56,10 @@ spec:
         k8s-app: landing-home
         tier: frontend
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - image: registry.clickyab.ae/clickyab/console:clickyab.com.23
+      - image: registry.clickyab.ae/clickyab/console:clickyab.com.59
         name: clickyab-com
         ports:
         - containerPort: 80

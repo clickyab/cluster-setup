@@ -5,12 +5,10 @@ metadata:
   namespace: console
   labels:
     k8s-app: deploy-web-service
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "ConsoleDeployService"
 spec:
   selector:
     k8s-app: console-deploy-webserver
   ports:
   - name: deploy
-    port: 9004
+    port: 9000
     protocol: TCP

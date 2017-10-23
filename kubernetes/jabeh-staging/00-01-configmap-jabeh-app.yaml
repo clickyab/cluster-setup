@@ -1,18 +1,16 @@
-apiVersion:
-kind: ConfigMap
-metadata:
-  name: jabeh-staging-config
-  namespace: jabeh-staging
+apiVersion: v1
 data:
   APP_URL: http://staging.jabeh.com
+  BEANSTALK_HOST: jabeh-staging-beanstalkd-service.jabeh-staging
   CACHE_DRIVER: redis
-  CONVERTED_VIDEO_FULL_PATH: /temp/convert
+  CONVERTED_VIDEO_FULL_PATH: /cdn/converted
   CONVERTED_VIDEO_RELATED_PATH: /cdn/converted
   DB_DATABASE: jabeh
   DB_HOST: jabeh-staging-mysqld-service.jabeh-staging
   DB_PASSWORD: qIxUnir2HOdorY055Ke6OK2CEs9Jiak4
   DB_PORT: "3306"
   DB_USERNAME: root
+  DEBUG: "true"
   ELASTIC_HOST: jabeh-staging-elasticsearch-service.jabeh-staging
   ELASTIC_PORT: "9200"
   HostName: staging.jabeh.com
@@ -24,17 +22,18 @@ data:
   MDIR_MODE: "775"
   PORT: "9000"
   QUEUE_DRIVER: beanstalkd
-  BEANSTALK_HOST: jabeh-staging-beanstalkd-service.jabeh-staging
-  QUEUE_DRIVER: beanstalkd
   REDIS_HOST: jabeh-staging-redis-service.jabeh-staging
   SESSION_DOMAIN: staging.jabeh.com
   SESSION_DRIVER: redis
+  SLACK_SEND_ALL_ERROR: "false"
   THUMBNAILS_FULL_PATH: /cdn/images
   THUMBNAILS_GENERATE_DIR: /tmp/thumbnails
   THUMBNAILS_RELATED_PATH: /thumbnails
-  VIDEO_CHUNK_DIR: /chunks
-  VIDEO_UPLOAD_DIR: /cdn
-  VIDEO_UPLOAD_RELATED_PATH: /cdn
-  DEBUG: "false"
-  SLACK_SEND_ALL_ERROR: "false"
+  VIDEO_CHUNK_DIR: /chunks/staging
+  VIDEO_UPLOAD_DIR: /cdn/staging
+  VIDEO_UPLOAD_RELATED_PATH: /cdn/staging
   WEB_CONCURRENCY: "32"
+kind: ConfigMap
+metadata:
+  name: jabeh-staging-config
+  namespace: jabeh-staging

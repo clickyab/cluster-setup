@@ -4,7 +4,7 @@ metadata:
   name: cloud-monitor
   labels:
     k8s-app: cloud-monitor
-  namespace: monitoring
+  namespace: tools
 spec:
   replicas: 1
   template:
@@ -16,9 +16,11 @@ spec:
       terminationGracePeriodSeconds: 60
       serviceAccount: cloud-monitor
       serviceAccountName: cloud-monitor
+      imagePullSecrets:
+        - name: regsecret
       containers:
       - name: cloud-monitor
-        image: registry.clickyab.ae/clickyab/cluster-tools:master.12
+        image: registry.clickyab.ae/clickyab/cluster-tools:master.27
         command: [ "/app/bin/nodemon"]
         # livenessProbe:
         #   httpGet:

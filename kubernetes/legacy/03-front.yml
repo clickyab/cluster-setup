@@ -7,7 +7,7 @@ metadata:
 spec:
   strategy:
     type: RollingUpdate
-  replicas: 7
+  replicas: 3
   template:
     metadata:
       labels:
@@ -20,8 +20,10 @@ spec:
     spec:
       containers:
       - name: legacy-front
-        image: registry.clickyab.ae/clickyab/legacy-front:master.440
+        image: registry.clickyab.ae/clickyab/legacy-front:master.475
         envFrom:
         - configMapRef:
             name: legacy-config
+      imagePullSecrets:
+        - name: regsecret
 ---

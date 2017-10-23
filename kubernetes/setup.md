@@ -164,6 +164,8 @@ first login into private registry :
 
 ```bash 
 docker login registry.clickyab.ae
+mkdir -p /var/lib/docker/home/.docker
+cp ${HOME}/.docker/config /var/lib/docker/home/.docker
 ```
 
 But the problem is the the systemass (sorry , I mean systemd) can not use the $HOME variable
@@ -178,7 +180,7 @@ Must open an empty file put this in it (assume you login with root user ):
 
 ```
 [Service]
-Environment=HOME=/root
+Environment=HOME=/var/lib/docker/home
 ```
 
 then `systemctl restart  kubelet`

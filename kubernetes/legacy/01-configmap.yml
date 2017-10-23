@@ -11,15 +11,13 @@ metadata:
   namespace: legacy
 data:
   MYSQL_DATABASE: clickyab
-  MYSQL_WRITE_USER: clickyab_master
-  MYSQL_WRITE_PASSWORD: oRgLsGydHQnZzvdNfHM6
-  MYSQL_WRITE_HOST: mysql-write.external
-  MYSQL_WRITE_PORT: "3306"
-  READ_COUNT: "2"
-  MYSQL_READ_USER: clickyab_readonly
+  MYSQL_READ_HOST_ARRAY: 192.168.100.12,192.168.100.13
   MYSQL_READ_PASSWORD: gX^Zmp90jOJp91$GwPujOTl2POQdlI
-  MYSQL_READ_HOST_PATTERN: mysql-read-%d.external
   MYSQL_READ_PORT: "3306"
-  REDIS_HOST: redis-master.external
-  REDIS_PORT: "2222"
-  REDIS_PASSWORD: "bita123"
+  MYSQL_READ_USER: clickyab_readonly
+  MYSQL_WRITE_HOST: 192.168.100.11
+  MYSQL_WRITE_PASSWORD: oRgLsGydHQnZzvdNfHM6
+  MYSQL_WRITE_PORT: "3306"
+  MYSQL_WRITE_USER: clickyab_master
+  READ_COUNT: "2"
+  REDIS_HOST: 192.168.100.30

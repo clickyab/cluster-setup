@@ -1,63 +1,85 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: console
+    branch: deploy
+    k8s-app: console-deploy-webserver
+    lang: php
+    proc: webserver
   name: console-deploy
   namespace: console
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: console
-        proc: webserver
+        branch: deploy
         k8s-app: console-deploy-webserver
         lang: php
-        branch: deploy
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: console-deploy
-        image: registry.clickyab.ae/clickyab/console:deploy.3432
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 9004
-            scheme: HTTP
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9004
-            scheme: HTTP
-          initialDelaySeconds: 1
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 1
-        command: [ "/bin/herokuish", "procfile","start", "web"]
+      - command:
+        - /bin/herokuish
+        - procfile
+        - start
+        - web
         envFrom:
         - configMapRef:
             name: console-deploy-config
+        image: registry.clickyab.ae/clickyab/console:deploy.3475
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: console-deploy
         ports:
-        - name: deploy-web
-          containerPort: 9004
+        - containerPort: 9000
+          name: deploy-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 300Mi
+          requests:
+            memory: 200Mi
         volumeMounts:
-        - name: statics
-          mountPath: /app/public/static
+        - mountPath: /app/public/static
+          name: statics
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: statics
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /legacy/statics
           secretRef:
             name: ceph-secret
-          path: "/legacy/statics"
+          user: admin
+        name: statics

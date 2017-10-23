@@ -1,4 +1,4 @@
-apiVersion: batch/v2alpha1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: jabeh-dev-crontab-every15m
@@ -13,9 +13,11 @@ spec:
       activeDeadlineSeconds: 1200
       template:
         spec:
+          imagePullSecrets:
+            - name: regsecret
           containers:
             - name: jabeh-dev
-              image: registry.clickyab.ae/clickyab/jabeh:dev.393
+              image: registry.clickyab.ae/clickyab/jabeh:dev.420
               command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
               resources:
                 limits:

@@ -5,8 +5,6 @@ metadata:
   namespace: console
   labels:
     k8s-app: statics
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "ConsoleStaticsService"
 spec:
   selector:
     k8s-app: statics-webserver

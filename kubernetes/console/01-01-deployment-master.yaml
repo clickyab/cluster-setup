@@ -1,63 +1,86 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: console
+    branch: master
+    k8s-app: console-master-webserver
+    lang: php
+    proc: webserver
   name: console-master
   namespace: console
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: console
-        proc: webserver
+        branch: master
         k8s-app: console-master-webserver
         lang: php
-        branch: master
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: console-master
-        image: registry.clickyab.ae/clickyab/console:master.3447
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 9003
-            scheme: HTTP
-          initialDelaySeconds: 180
-          periodSeconds: 20
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9003
-            scheme: HTTP
-          initialDelaySeconds: 1
-          periodSeconds: 20
-          timeoutSeconds: 5
-          successThreshold: 1
-          failureThreshold: 1
-        command: [ "/bin/herokuish", "procfile","start", "web"]
+      - command:
+        - /bin/herokuish
+        - procfile
+        - start
+        - web
         envFrom:
         - configMapRef:
             name: console-master-config
+        image: registry.clickyab.ae/clickyab/console:master.3477
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: console-master
         ports:
-        - name: master-web
-          containerPort: 9003
+        - containerPort: 9000
+          name: master-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            memory: 100Mi
         volumeMounts:
-        - name: statics
-          mountPath: /app/public/static
+        - mountPath: /app/public/static
+          name: statics
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: statics
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /legacy/statics
           secretRef:
             name: ceph-secret
-          path: "/legacy/statics"
+          user: admin
+        name: statics
