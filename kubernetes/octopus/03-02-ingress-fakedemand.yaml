@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: octopus-fakedemand-ingress
+  namespace: octopus
+spec:
+  rules:
+  - host: exchange.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: octopus-fakedemand
+          servicePort: 9000
+        path: /exam

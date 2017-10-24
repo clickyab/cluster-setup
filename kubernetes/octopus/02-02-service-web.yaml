@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: octopus-web-service
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: OctopusService
+  name: octopus-service
+  namespace: octopus
+spec:
+  ports:
+  - name: octopusweb
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    k8s-app: octopus-web
