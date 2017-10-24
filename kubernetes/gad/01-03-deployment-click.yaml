@@ -21,7 +21,7 @@ spec:
         proc: worker
         spec: click
     spec:
-      ImagePullSecrets:
+      imagePullSecrets:
         - name: regsecret
       containers:
       - command:

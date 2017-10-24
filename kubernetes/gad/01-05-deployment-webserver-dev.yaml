@@ -22,7 +22,7 @@ spec:
         k8s-app: gad-webserver-dev
         proc: webserver
     spec:
-      ImagePullSecrets:
+      imagePullSecrets:
         - name: regsecret
       containers:
       - command:

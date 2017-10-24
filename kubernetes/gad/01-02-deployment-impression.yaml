@@ -21,7 +21,7 @@ spec:
         proc: worker
         spec: imp
     spec:
-      ImagePullSecrests:
+      imagePullSecrets:
         - name: regsecret
       containers:
       - command:
@@ -30,7 +30,6 @@ spec:
         - configMapRef:
             name: gad-config
         image: registry.clickyab.ae/clickyab/gad:master.343
-        imagePullPolicy: IfNotPresent
         name: gad-master
         resources:
           limits:
