@@ -1,64 +1,84 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: jabeh
+    branch: master
+    k8s-app: jabeh-master-convert-video
+    lang: php
+    proc: worker
   name: jabeh-master-convert-video
   namespace: jabeh
 spec:
+  replicas: 3
   strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
     type: RollingUpdate
-  replicas: 1
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: jabeh
-        proc: worker
+        branch: master
         k8s-app: jabeh-master-convert-video
         lang: php
-        branch: master
+        proc: worker
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: jabeh-master
-        image: registry.clickyab.ae/clickyab/jabeh:master.66
-        command: [ "/app/.heroku/php/bin/php","/app/artisan","queue:work", "--queue=ConvertVideo","--sleep=5", "--tries=5", "--daemon"]
-        resources:
-          limits:
-            cpu: 1000m
+      - command:
+        - /app/.heroku/php/bin/php
+        - /app/artisan
+        - queue:work
+        - --queue=ConvertVideo
+        - --sleep=5
+        - --tries=5
+        - --daemon
         envFrom:
         - configMapRef:
             name: jabeh-master-config
+        image: registry.clickyab.ae/clickyab/jabeh:master.402
+        imagePullPolicy: IfNotPresent
+        name: jabeh-master
+        resources:
+          limits:
+            cpu: "1"
         volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: cdn
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
           secretRef:
             name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
           secretRef:
             name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+          user: admin
+        name: chunks
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachethumb
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachevideo

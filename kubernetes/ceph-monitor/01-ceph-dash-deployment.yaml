@@ -2,10 +2,10 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: ceph-dashboard
-  namespace: monitoring
+  namespace: tools
   labels:
     k8s-app: ceph-dashboard
-    namespace: monitoring
+    namespace: tools
 spec:
   replicas: 1
   template:

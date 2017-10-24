@@ -1,87 +1,107 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: jabeh
+    branch: master
+    k8s-app: jabeh-master-webserver
+    lang: php
+    proc: webserver
   name: jabeh-master
   namespace: jabeh
 spec:
+  replicas: 3
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
     type: RollingUpdate
-  replicas: 7
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: jabeh
-        proc: webserver
+        branch: master
         k8s-app: jabeh-master-webserver
         lang: php
-        branch: master
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: jabeh-master
-        image: registry.clickyab.ae/clickyab/jabeh:master.67
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 1
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 1
-        command: [ "/bin/herokuish", "procfile","start", "web"]
+      - command:
+        - /bin/herokuish
+        - procfile
+        - start
+        - web
         envFrom:
         - configMapRef:
             name: jabeh-master-config
+        image: registry.clickyab.ae/clickyab/jabeh:master.402
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: jabeh-master
         ports:
-        - name: master-web
-          containerPort: 9000
+        - containerPort: 9000
+          name: master-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 1524Mi
+          requests:
+            memory: 1Gi
         volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: cdn
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
           secretRef:
             name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
           secretRef:
             name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+          user: admin
+        name: chunks
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachethumb
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachevideo

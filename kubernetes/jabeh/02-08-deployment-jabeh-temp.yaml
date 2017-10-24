@@ -1,64 +1,64 @@
-apiVersion: extensions/v1beta1          
-kind: Deployment
-metadata:
-  # This name uniquely identifies the Deployment
-  name: jabeh-master-temp
-  namespace: jabeh
-spec:
-  strategy:
-    type: RollingUpdate
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        # Label is used as selector in the service.
-        app: jabeh
-        proc: worker
-        k8s-app: jabeh-master-temp
-        lang: php
-        branch: master
-    spec:
-      containers:
-      - name: jabeh-master
-        image: registry.clickyab.ae/clickyab/jabeh:master.391
-        command: [ "/app/.heroku/php/bin/php","/app/artisan","videos:checkall", "68000,73000"]
-        # resources:
-          # limits:
-          #   cpu: 1000m
-        envFrom:
-        - configMapRef:
-            name: jabeh-master-config
-        volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
-      volumes:
-      - name: cdn
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
-          secretRef:
-            name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
-          secretRef:
-            name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+#apiVersion: extensions/v1beta1
+#kind: Deployment
+#metadata:
+#  # This name uniquely identifies the Deployment
+#  name: jabeh-master-temp
+#  namespace: jabeh
+#spec:
+#  strategy:
+#    type: RollingUpdate
+#  replicas: 1
+#  template:
+#    metadata:
+#      labels:
+#        # Label is used as selector in the service.
+#        app: jabeh
+#        proc: worker
+#        k8s-app: jabeh-master-temp
+#        lang: php
+#        branch: master
+#    spec:
+#      containers:
+#      - name: jabeh-master
+#        image: registry.clickyab.ae/clickyab/jabeh:master.391
+#        command: [ "/app/.heroku/php/bin/php","/app/artisan","videos:checkall", "68000,73000"]
+#        # resources:
+#          # limits:
+#          #   cpu: 1000m
+#        envFrom:
+#        - configMapRef:
+#            name: jabeh-master-config
+#        volumeMounts:
+#        - name: cdn
+#          mountPath: /cdn
+#        - name: chunks
+#          mountPath: /chunks
+#        - name: cachethumb
+#          mountPath: /tmp/thumbnails
+#        - name: cachevideo
+#          mountPath: /tmp/videos
+#      volumes:
+#      - name: cdn
+#        cephfs:
+#          monitors:
+#            - 192.168.10.1:6789
+#            - 192.168.10.6:6789
+#            - 192.168.10.11:6789
+#          user: admin
+#          secretRef:
+#            name: ceph-secret
+#          path: "/jabeh/cdn"
+#      - name: chunks
+#        cephfs:
+#          monitors:
+#            - 192.168.10.1:6789
+#            - 192.168.10.6:6789
+#            - 192.168.10.11:6789
+#          user: admin
+#          secretRef:
+#            name: ceph-secret
+#          path: "/jabeh/chunks"
+#      - name: cachethumb
+#        emptyDir: {}
+#      - name: cachevideo
+#        emptyDir: {}

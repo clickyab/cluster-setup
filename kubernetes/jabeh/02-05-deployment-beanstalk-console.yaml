@@ -1,26 +1,37 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
-  name: jabeh-benstalkd-console
+  name: jabeh-beanstalkd
   namespace: jabeh
+  labels:
+    k8s-app: jabeh-beanstalkd
+    service: beanstalkd
+    service: beanstalkd-console
+    namespace: jabeh
+    branch: master
+    type: queued
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
-        app: jabeh
-        proc: webserver
-        k8s-app: jabeh-benstalkd-console
-        lang: php
+        app: beanstalkd
+        service: beanstalkd
+        service: beanstalkd-console
+        namespace: jabeh
+        type: queued
         branch: master
+        k8s-app: jabeh-beanstalkd
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
-      - name: jabeh-bc
-        image: agaveapi/beanstalkd-console
-        envFrom:
-        - configMapRef:
-            name: jabeh-master-config
+        - name: jabeh-staging-beanstalkd
+          image: mehrdadkhah/beanstalkd
+          envFrom:
+            - configMapRef:
+                name: jabeh-master-config
+        - name: jabeh-staging-beanstalkd-console
+          image: agaveapi/beanstalkd-console
+          envFrom:
+            - configMapRef:
+                name: jabeh-master-config

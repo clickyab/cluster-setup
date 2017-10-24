@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ceph-dash-ingress
-  namespace: monitoring
+  namespace: tools
   annotations:
     # type of authentication
     ingress.kubernetes.io/auth-type: basic

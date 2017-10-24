@@ -1,3 +1,4 @@
+
 ---
 apiVersion: v1
 kind: Service
@@ -6,8 +7,6 @@ metadata:
   namespace: jabeh
   labels:
     k8s-app: jabeh-web-service
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "JabehMasterService"
 spec:
   selector:
     k8s-app: jabeh-master-webserver
@@ -23,8 +22,6 @@ metadata:
   namespace: jabeh
   labels:
     k8s-app: jabeh-cdn-service
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "JabehCDNMasterService"
 spec:
   selector:
     k8s-app: jabeh-master-cdn
@@ -36,29 +33,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jabeh-benstalkd-console-service
+  name: jabeh-benstalkd
   namespace: jabeh
   labels:
-    k8s-app: jabeh-benstalkd-console-service
+    k8s-app: jabeh-beanstalkd
 spec:
   selector:
-    k8s-app: jabeh-benstalkd-console
+    k8s-app: jabeh-beanstalkd
   ports:
   - name: bst
     port: 80
     protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mantis-hls-master-service
-  namespace: jabeh
-  labels:
-    k8s-app: mantis-hls-master
-spec:
-  selector:
-    k8s-app: mantis-hls-master
-  ports:
-  - name: mster
-    port: 9000
+  - name: bst2
+    port: 11300
     protocol: TCP

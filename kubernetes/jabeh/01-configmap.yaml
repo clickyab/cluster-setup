@@ -13,24 +13,36 @@ data:
   key: QVFERE9HZFpXaXI2T1JBQTFxcGVRQlJ3ZCtPRVIrdmdpenpzV1E9PQ==
 ---
 apiVersion: v1
-kind: ConfigMap
+data:
+  auth: c3RhZ2luZzokYXByMSRCTjlQUmRKMyRBQU50ZkdwVVdFSktmV0s1WWNJTlMvCmJlYW5zdGFsazokYXByMSR5VDlHT3VVSyQ2cEdxLmx4MzVMU1VCdk5YZEhTSWkxCg==
+kind: Secret
 metadata:
-  name: jabeh-master-config
+  name: basic-auth
   namespace: jabeh
+type: Opaque
+---
+apiVersion: v1
 data:
   APP_URL: http://jabeh.com
-  BEANSTALK_HOST: 192.168.110.1
-  BEANSTALKD_PORT_11300_TCP_ADDR: 192.168.110.1
+  AVATAR_FULL_PATH: /cdn/avatars
+  BEANSTALK_HOST: jabeh-benstalkd.jabeh
+  BEANSTALKD_HOST: jabeh-benstalkd.jabeh
+  BEANSTALKD_PORT: "11300"
+  BEANSTALKD_PORT_11300_TCP_ADDR: localhost:11300
   CACHE_DRIVER: redis
-  CONVERTED_VIDEO_FULL_PATH: /temp/convert
-  CONVERTED_VIDEO_RELATED_PATH: /cdn/converted
+  CDN_DEFAULT: ://frcdn.jabeh.com
+  CDN_IR: ://ircdn.jabeh.com
+  CONVERTED_VIDEO_FULL_PATH: /tmp/convert
+  CONVERTED_VIDEO_RELATED_PATH: /
   DB_DATABASE: jabeh
   DB_HOST: 192.168.100.11
   DB_PASSWORD: nVNxKceOfa6E6h9
   DB_PORT: "3306"
   DB_USERNAME: jabeh
+  DEBUG: "false"
   ELASTIC_HOST: 192.168.120.1
   ELASTIC_PORT: "9200"
+  HLS_SERVICES_REDIS_ADDRESS: 192.168.120.1:6379
   HostName: jabeh.com
   LockUserPanel: "false"
   MAIL_PASSWORD: sendg78u9i0o@789
@@ -41,14 +53,19 @@ data:
   PORT: "9000"
   QUEUE_DRIVER: beanstalkd
   REDIS_HOST: 192.168.120.1
-  SESSION_DOMAIN: jabeh.com
   SESSION_DRIVER: redis
+  SITEMAP_GENERATE_PATH: /cdn/sitemaps
+  SLACK_ENABLE: "true"
+  SLACK_SEND_ALL_ERROR: "false"
   THUMBNAILS_FULL_PATH: /cdn/images
   THUMBNAILS_GENERATE_DIR: /tmp/thumbnails
   THUMBNAILS_RELATED_PATH: /thumbnails
-  VIDEO_CHUNK_DIR: /chunks
+  VIDEO_CHUNK_DIR: /cdn/video_chunks
   VIDEO_UPLOAD_DIR: /cdn
   VIDEO_UPLOAD_RELATED_PATH: /cdn
-  DEBUG: "false"
-  SLACK_SEND_ALL_ERROR: "false"
   WEB_CONCURRENCY: "32"
+  WatermarkTempPath: /tmp
+kind: ConfigMap
+metadata:
+  name: jabeh-master-config
+  namespace: jabeh

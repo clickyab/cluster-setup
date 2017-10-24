@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/enable-cors: "true"
+    ingress.kubernetes.io/proxy-body-size: 32m
+  name: jabeh-cdn-ingress
+  namespace: jabeh
+spec:
+  rules:
+  - host: 1frcdn.jabeh.com
+    http:
+      paths:
+      - backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+        path: /
+  - host: 1ircdn.jabeh.com
+    http:
+      paths:
+      - backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+        path: /
+  - host: 1cdn.jabeh.com
+    http:
+      paths:
+      - backend:
+          serviceName: jabeh-cdn-master-service
+          servicePort: 80
+        path: /
