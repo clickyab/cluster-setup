@@ -1,38 +1,18 @@
----
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ccc-master-ingress
   namespace: ccc
-  annotations:
-    ingress.kubernetes.io/proxy-body-size: 5m
 spec:
   rules:
   - host: staging.crab.clickyab.ae
     http:
       paths:
-      - path: /api
-        backend:
+      - backend:
           serviceName: crab-master-service
-          servicePort: 8090
-      - path: /
-        backend:
+          servicePort: 9000
+        path: /api
+      - backend:
           serviceName: chameleon-master-service
           servicePort: 80
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ccc-mailhog-ingress
-  namespace: ccc
-  annotations:
-    ingress.kubernetes.io/proxy-body-size: 5m
-spec:
-  rules:
-  - host: staging.mailhog.clickyab.ae
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: crab-master-service
-          servicePort: 8025
+        path: /
