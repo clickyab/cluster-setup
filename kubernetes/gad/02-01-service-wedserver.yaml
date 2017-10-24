@@ -3,8 +3,6 @@ kind: Service
 metadata:
   labels:
     k8s-app: gad-we-service
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: GadService
   name: gad-service
   namespace: gad
 spec:

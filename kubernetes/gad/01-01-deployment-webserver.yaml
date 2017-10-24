@@ -57,7 +57,7 @@ spec:
           timeoutSeconds: 15
         resources:
           limits:
-            memory: 1424Mi
+            memory: 1500Mi
           requests:
-            memory: 1124Mi
+            memory: 1100Mi
       terminationGracePeriodSeconds: 30

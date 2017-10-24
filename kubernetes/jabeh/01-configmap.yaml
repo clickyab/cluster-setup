@@ -26,8 +26,6 @@ data:
   APP_URL: http://jabeh.com
   AVATAR_FULL_PATH: /cdn/avatars
   BEANSTALK_HOST: jabeh-benstalkd.jabeh
-  BEANSTALKD_HOST: jabeh-benstalkd.jabeh
-  BEANSTALKD_PORT: "11300"
   BEANSTALKD_PORT_11300_TCP_ADDR: localhost:11300
   CACHE_DRIVER: redis
   CDN_DEFAULT: ://frcdn.jabeh.com

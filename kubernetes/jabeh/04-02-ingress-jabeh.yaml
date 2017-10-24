@@ -7,14 +7,14 @@ metadata:
   namespace: jabeh
 spec:
   rules:
-  - host: 1.jabeh.com
+  - host: jabeh.com
     http:
       paths:
       - backend:
           serviceName: jabeh-master-service
           servicePort: 9000
         path: /
-  - host: www.1.jabeh.com
+  - host: www.jabeh.com
     http:
       paths:
       - backend:

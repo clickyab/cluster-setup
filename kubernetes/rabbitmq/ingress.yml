@@ -6,7 +6,7 @@ metadata:
   namespace: rabbitmq
 spec:
   rules:
-  - host: rabbitmq.clickyab.ae
+  - host: new-rabbitmq.clickyab.ae
     http:
       paths:
       - path: /
