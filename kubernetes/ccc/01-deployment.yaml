@@ -1,64 +1,85 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: crab
+    branch: master
+    k8s-app: crab-master-webserver
+    lang: go
+    proc: webserver
   name: crab-master
   namespace: ccc
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: crab
-        proc: webserver
+        branch: master
         k8s-app: crab-master-webserver
         lang: go
-        branch: master
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: mailhog
-        image: mailhog/mailhog
+      - image: mailhog/mailhog
+        imagePullPolicy: Always
+        name: mailhog
         ports:
-        - name: master-web
-          containerPort: 8025
-      - name: crab-master
-        image: registry.clickyab.ae/clickyab/crab:master.105
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 8090
-            scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 20
-        readinessProbe:
-          httpGet:
-            path: /api/misc/swagger/index.json
-            port: 8090
-            scheme: HTTP
-          initialDelaySeconds: 0
-          timeoutSeconds: 5
-          periodSeconds: 60
-        envFrom:
+        - containerPort: 8025
+          name: master-web
+          protocol: TCP
+      - envFrom:
         - configMapRef:
             name: crab-master-config
+        image: registry.clickyab.ae/clickyab/crab:master.134
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: crab-master
         ports:
-        - name: master-web
-          containerPort: 8090
+        - containerPort: 9000
+          name: master-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /api/misc/swagger/index.json
+            port: 9000
+            scheme: HTTP
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            memory: 100Mi
         volumeMounts:
-        - name: statics
-          mountPath: /statics
+        - mountPath: /statics
+          name: statics
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: statics
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /ccc
           secretRef:
             name: ceph-secret
-          path: "/ccc"
+          user: admin
+        name: statics
