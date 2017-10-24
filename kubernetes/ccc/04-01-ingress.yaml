@@ -5,7 +5,7 @@ metadata:
   namespace: ccc
 spec:
   rules:
-  - host: testing.ccc.clickyab.ae
+  - host: testing2.ccc.clickyab.ae
     http:
       paths:
       - backend:

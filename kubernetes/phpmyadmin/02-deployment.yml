@@ -1,9 +1,8 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
   name: phpmyadmin
-  namespace: global
+  namespace: tools
 spec:
   strategy:
     type: RollingUpdate
@@ -11,7 +10,6 @@ spec:
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: phpmyadmin
         k8s-app: tools-phpmyadmin
         lang: php

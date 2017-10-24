@@ -5,7 +5,7 @@ metadata:
   namespace: ccc
 spec:
   rules:
-  - host: staging.crab.clickyab.ae
+  - host: staging2.crab.clickyab.ae
     http:
       paths:
       - backend:
