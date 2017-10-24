@@ -1,49 +1,64 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  annotations:
+  labels:
+    app: gad
+    k8s-app: gad-webserver-dev
+    proc: webserver
   name: gad-webserver-dev
   namespace: gad
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: gad
-        proc: webserver
         k8s-app: gad-webserver-dev
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: gad-dev
-        # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.331
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 1
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 1
-        command: [ "/app/bin/server"]
+      - command:
+        - /app/bin/server
         envFrom:
         - configMapRef:
             name: gad-dev-config
+        image: registry.clickyab.ae/clickyab/gad:dev.345
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: gad-dev
         ports:
-        - name: gad-web-dev
-          containerPort: 9001
+        - containerPort: 9000
+          name: gad-web-dev
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 1224Mi
+          requests:
+            memory: 1Gi
+      terminationGracePeriodSeconds: 30

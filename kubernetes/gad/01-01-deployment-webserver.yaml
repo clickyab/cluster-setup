@@ -1,49 +1,63 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: gad
+    k8s-app: gad-webserver
+    proc: webserver
   name: gad-webserver
   namespace: gad
 spec:
+  replicas: 5
   strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
     type: RollingUpdate
-  replicas: 3
   template:
     metadata:
       labels:
-        # Label is used as selector in the service.
         app: gad
-        proc: webserver
         k8s-app: gad-webserver
+        proc: webserver
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
-      - name: gad-master
-        # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/gad:master.331
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9001
-            scheme: HTTP
-          initialDelaySeconds: 1
-          timeoutSeconds: 15
-          periodSeconds: 20
-          successThreshold: 1
-          failureThreshold: 1
-        command: [ "/app/bin/server"]
+      - command:
+        - /app/bin/server
         envFrom:
         - configMapRef:
             name: gad-config
+        image: registry.clickyab.ae/clickyab/gad:master.343
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: gad-master
         ports:
-        - name: gad-web
-          containerPort: 9001
+        - containerPort: 9000
+          name: gad-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 1424Mi
+          requests:
+            memory: 1124Mi
+      terminationGracePeriodSeconds: 30
