@@ -1,0 +1,83 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: jabeh
+    branch: master
+    k8s-app: jabeh-master-temp
+    lang: php
+    proc: worker
+  name: jabeh-master-temp
+  namespace: jabeh
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jabeh
+        branch: master
+        k8s-app: jabeh-master-temp
+        lang: php
+        proc: worker
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - command:
+        - /app/.heroku/php/bin/php
+        - /app/artisan
+        - videos:checkall
+        - 60000,69000
+        envFrom:
+        - configMapRef:
+            name: jabeh-master-config
+        image: registry.clickyab.ae/clickyab/jabeh:master.402
+        name: jabeh-master
+        resources:
+          limits:
+            cpu: "1"
+            memory: 800Mi
+          requests:
+            memory: 500Mi
+        volumeMounts:
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: chunks
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachethumb
+      - emptyDir:
+          sizeLimit: "0"
+        name: cachevideo
