@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: jabeh
+  labels:
+    k8s-app: jabeh
+    service: redis
+    namespace: jabeh
+    branch: master
+spec:
+  selector:
+    service: redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
+      protocol: TCP

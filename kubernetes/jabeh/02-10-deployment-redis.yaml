@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: jabeh
+  labels:
+    k8s-app: jabeh-redis
+    service: redis
+    namespace: legacy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis
+        namespace: jabeh
+        service: redis
+        branch: master
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - name: redis
+              containerPort: 6379
