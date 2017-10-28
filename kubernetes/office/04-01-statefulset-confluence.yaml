@@ -1,0 +1,42 @@
+apiVersion: apps/v1beta2
+kind: StatefulSet
+metadata:
+  name: confluence
+  namespace: office
+  labels:
+    app: confluence
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: confluence
+  serviceName: confluence-service
+  template:
+    metadata:
+      labels:
+        app: confluence
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: confluence
+          image: atlassian/confluence-server:5.10
+          envFrom:
+            - configMapRef:
+                name: confluence-configmap
+          ports:
+            - containerPort: 8090
+            - containerPort: 8091
+          volumeMounts:
+            - name: confluence-data
+              mountPath: /var/atlassian/application-data/confluence
+      volumes:
+        - name: confluence-data
+          cephfs:
+            monitors:
+              - 192.168.10.1:6789
+              - 192.168.10.6:6789
+              - 192.168.10.11:6789
+            user: admin
+            secretRef:
+              name: ceph-secret
+            path: "/office/confluence"
