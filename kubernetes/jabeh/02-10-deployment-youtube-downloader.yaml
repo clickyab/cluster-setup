@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: jabeh-youtube-downloader
+    branch: dev
+    k8s-app: jabeh
+    lang: php
+    type: worker
+  name: jabeh-master-youtube-downloader
+  namespace: jabeh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jabeh-master-youtube-downloader
+      branch: dev
+      k8s-app: jabeh
+      lang: php
+      type: worker
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jabeh-master-youtube-downloader
+        branch: dev
+        k8s-app: jabeh
+        lang: php
+        type: worker
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - command:
+        - /app/.heroku/php/bin/php
+        - /app/artisan
+        - queue:work
+        - --queue=YoutubeDownloader
+        - --sleep=5
+        - --tries=5
+        - --daemon
+        name: jabeh-master
+        envFrom:
+        - configMapRef:
+            name: jabeh-master-config
+        image: registry.clickyab.ae/clickyab/jabeh:dev.425
+        volumeMounts:
+        - name: cdn
+          mountPath: /cdn
+        - name: chunks
+          mountPath: /chunks
+        - name: cachethumb
+          mountPath: /tmp/thumbnails
+        - name: cachevideo
+          mountPath: /tmp/videos
+      volumes:
+      - name: cdn
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/cdn"
+      - name: chunks
+        cephfs:
+          monitors:
+            - 192.168.10.1:6789
+            - 192.168.10.6:6789
+            - 192.168.10.11:6789
+          user: admin
+          secretRef:
+            name: ceph-secret
+          path: "/jabeh/chunks"
+      - name: cachethumb
+        emptyDir: {}
+      - name: cachevideo
+        emptyDir: {}
