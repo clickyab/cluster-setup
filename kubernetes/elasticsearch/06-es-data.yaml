@@ -8,7 +8,7 @@ metadata:
     role: data
 spec:
   serviceName: elasticsearch-data
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -49,7 +49,7 @@ spec:
         - name: HTTP_ENABLE
           value: "false"
         - name: "ES_JAVA_OPTS"
-          value: "-Xms512m -Xmx512m"
+          value: "-Xms1g -Xmx1g"
         ports:
         - containerPort: 9300
           name: transport

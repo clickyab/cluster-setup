@@ -23,6 +23,11 @@ spec:
           privileged: true
       containers:
       - name: es-master
+        resources:
+          requests:
+            memory: "700Mi"
+          limits:
+            memory: "1Gi"
         securityContext:
           privileged: false
           capabilities:

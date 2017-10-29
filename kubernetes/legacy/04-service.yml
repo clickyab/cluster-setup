@@ -6,8 +6,6 @@ metadata:
   namespace: legacy
   labels:
     k8s-app: legacy-front
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "LegacyFrontService"
 spec:
   selector:
     k8s-app: legacy-front

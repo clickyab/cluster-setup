@@ -44,7 +44,7 @@ spec:
         - --sleep=5
         - --tries=5
         - --daemon
-        name: youtubedl
+        name: jabeh-dev
         envFrom:
         - configMapRef:
             name: jabeh-staging-config

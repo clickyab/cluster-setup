@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: 5m
+  name: ccc-mailhog-ingress
+  namespace: ccc
+spec:
+  rules:
+  - host: staging.mailhog.clickyab.ae
+    http:
+      paths:
+      - backend:
+          serviceName: crab-master-service
+          servicePort: 8025
+        path: /

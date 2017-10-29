@@ -20,4 +20,5 @@ data:
   MYSQL_WRITE_PORT: "3306"
   MYSQL_WRITE_USER: clickyab_master
   READ_COUNT: "2"
-  REDIS_HOST: 192.168.100.30
+  REDIS_PORT: "6379"
+  REDIS_HOST: redis-service.legacy

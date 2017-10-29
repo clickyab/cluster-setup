@@ -23,10 +23,11 @@ data:
   GAD_MYSQL_WDSN: clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true
   GAD_PROFILE: disable
   GAD_PROTO: http
-  GAD_REDIS_ADDRESS: 192.168.120.1:2222
+  GAD_REDIS_ADDRESS: redis-cluster.redis
   GAD_REDIS_DATABASE: "7"
-  GAD_REDIS_PASSWORD: bita123
   GAD_REDIS_SIZE: "250"
+  GAD_REDIS_CLUSTER: "true"
+  GAD_REDIS_PORT: "6379"
   GAD_SITE: a.clickyab.com
   PORT: "9000"
 kind: ConfigMap

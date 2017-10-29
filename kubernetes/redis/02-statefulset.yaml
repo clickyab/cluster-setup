@@ -1,0 +1,97 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: redis-cluster
+  namespace: redis
+spec:
+  serviceName: redis-cluster
+  replicas: 9
+  template:
+    metadata:
+      labels:
+        app: redis-cluster
+    spec:
+      terminationGracePeriodSeconds: 10
+      #hostNetwork: true
+      containers:
+      - name: redis-cluster
+        image: redis:3.2.1
+        ports:
+        - containerPort: 6379
+          name: client
+        - containerPort: 16379
+          name: gossip
+        command:
+        - sh
+        args:
+        - /conf/bootstrap-pod.sh
+        # Ensure that Redis is online before initializing the next node.
+        # TODO: Test that the cluster node is init'd properly.
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "redis-cli -h $(hostname) ping"
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        # Mark a node as down if Redis server stops running
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "redis-cli -h $(hostname) ping"
+          initialDelaySeconds: 20
+          periodSeconds: 3
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        volumeMounts:
+        - name: conf
+          mountPath: /conf
+          readOnly: false
+        - name: podinfo
+          mountPath: /etc/podinfo
+          readOnly: false
+        - name: extraconf
+          mountPath: /etc/globalconf
+          readOnly: false
+      volumes:
+      # Insert our pre-baked Redis configuration file into /conf/redis.conf
+      - name: conf
+        configMap:
+          name: redis-cluster-config
+          items:
+          - key: redis.conf
+            path: redis.conf
+          - key: bootstrap-pod.sh  # TODO: Move this or extract it into its own Docker image
+            path: bootstrap-pod.sh
+      # The init container will use this info to find cluster peers
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+            - path: "pod_name"
+              fieldRef:
+                fieldPath: metadata.name
+            - path: "pod_namespace"
+              fieldRef:
+                fieldPath: metadata.namespace
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /configs/redis
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: extraconf
