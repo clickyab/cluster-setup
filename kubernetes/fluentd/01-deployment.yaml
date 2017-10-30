@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: fluentd
+    k8s-app: fluentd
+  name: fluentd
+  namespace: elasticsearch
+spec:
+  replicas: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: fluentd
+        k8s-app: fluentd
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: fluentd
+        env:
+          - name:  FLUENT_ELASTICSEARCH_HOST
+            value: "elasticsearch.elasticsearch"
+          - name:  FLUENT_ELASTICSEARCH_PORT
+            value: "9200"
+          - name: FLUENT_ELASTICSEARCH_SCHEME
+            value: "http"
+        image: registry.clickyab.ae/clickyab/fluentd
+        resources:
+          limits:
+            memory: 1500Mi
+          requests:
+            memory: 1100Mi
+      terminationGracePeriodSeconds: 30
