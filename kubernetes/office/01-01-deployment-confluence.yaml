@@ -1,34 +1,36 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    k8s-app: confluence
+    namespace: office
   name: confluence
   namespace: office
-  labels:
-    k8s-app: congluence
-    namespace: office
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: confluence
   template:
     metadata:
       labels:
-        app: confluence
+        k8s-app: confluence
+      namespace: office
+      name: confluence
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
         - name: confluence
           image: atlassian/confluence-server
-          envFrom:
-            - configMapRef:
-                name: confluence-configmap
           ports:
             - containerPort: 8090
+              protocol: TCP
             - containerPort: 8091
+              protocol: TCP
           volumeMounts:
             - name: confluence-data
               mountPath: /var/atlassian/application-data/confluence
+          envFrom:
+            - configMapRef:
+                name: confluence-configmap
+      nodeSelector:
+        app: confluence
       volumes:
         - name: confluence-data
           cephfs:
@@ -40,54 +42,3 @@ spec:
             secretRef:
               name: ceph-secret
             path: "/office/confluence"
-
-# apiVersion: extensions/v1beta1
-# kind: Deployment
-# metadata:
-#   labels:
-#     k8s-app: congluence
-#     namespace: office
-#   name: confluence
-#   namespace: office
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: confluence
-#   template:
-#     metadata:
-#       labels:
-#         app: confluence
-#     spec:
-#       containers:
-#       - envFrom:
-#         - configMapRef:
-#             name: confluence-configmap
-#         image: atlassian/confluence-server
-#         imagePullPolicy: Always
-#         name: confluence
-#         ports:
-#         - containerPort: 8090
-#           protocol: TCP
-#         - containerPort: 8091
-#           protocol: TCP
-#         # resources:
-#         #   limits:
-#         #     memory: 3Gi
-#         #   requests:
-#         #     memory: 2560Mi
-#         volumeMounts:
-#         - mountPath: /var/atlassian/application-data/confluence
-#           name: confluence-data
-#       terminationGracePeriodSeconds: 60
-#       volumes:
-#       - cephfs:
-#           monitors:
-#           - 192.168.10.1:6789
-#           - 192.168.10.6:6789
-#           - 192.168.10.11:6789
-#           path: /office/confluence
-#           secretRef:
-#             name: ceph-secret
-#           user: admin
-#         name: confluence-data
