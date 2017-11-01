@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: curator
+  namespace: elasticsearch
+spec:
+  schedule: 12 00 * * *
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: curator
+              image: bobrik/curator
+              args: ["--config", "/etc/config/config.yaml", "/etc/config/action.yaml"]
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /etc/config
+          volumes:
+            - name: config-volume
+              configMap:
+                name: curator-config
+          restartPolicy: OnFailure
