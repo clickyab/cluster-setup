@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jabeh-elastic-service
+  namespace: jabeh
+  labels:
+    app: jabeh
+    k8s-app: jabeh-master-elasticsearch
+    proc: queued
+    branch: master
+spec:
+  selector:
+    k8s-app: jabeh-master-elasticsearch
+  ports:
+    - name: elastic-port
+      port: 9200
+      protocol: TCP
