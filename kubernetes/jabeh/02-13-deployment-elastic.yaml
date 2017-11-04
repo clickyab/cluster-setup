@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  namespace: jabeh
+  labels:
+    app: jabeh
+    k8s-app: jabeh-master-elasticsearch
+    proc: queued
+    branch: master
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: jabeh
+        k8s-app: jabeh-master-elasticsearch
+        proc: queued
+        branch: master
+    spec:
+      containers:
+        - name: elasticsearch
+          image: elasticsearch
+          ports:
+            - containerPort: 9200
+              name: elastic-port
+              protocol: TCP
+      terminationGracePeriodSeconds: 60
