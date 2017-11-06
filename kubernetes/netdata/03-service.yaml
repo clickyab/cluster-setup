@@ -7,4 +7,4 @@ spec:
   type: ExternalName
   ports:
   - port: 19999
-  externalName: 192.168.100.11
+  externalName: netdata-master.clickyab.ae
