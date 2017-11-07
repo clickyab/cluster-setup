@@ -56,7 +56,7 @@ function backup() {
 
     # taking full backup
     if [ -z $database ]; then
-        msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 $lbackup_dir > $tmpfile 2>&1)
+        msg=$(innobackupex --user=$username --password=$password --host=$hostname --port="${port}" $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
             echo "    $msg" >> $logfile
@@ -65,7 +65,7 @@ function backup() {
             echo "[✓] Innobackupex command successfully completed." >> $logfile
         fi
     else
-        msg=$(innobackupex --user=$username --password=$password --host=$hostname --port=3306 --databases=$database $lbackup_dir > $tmpfile 2>&1)
+        msg=$(innobackupex --user=$username --password=$password --host=$hostname --port="${port}" --databases=$database $lbackup_dir > $tmpfile 2>&1)
         if [[ $? -ne 0 ]]; then
             echo "[×] An Error occured in innobackupex command." >> $logfile
             echo "    $msg" >> $logfile
@@ -100,13 +100,15 @@ function transfer() {
 function send_report() {
     if [ $backup_status == "fail" ]; then
         subject="[FAILED] DB Backup Process Failed."
-        echo -e "DataBase backing up process failed.\nTo find this problem reason, please check an attachment." > /tmp/mail-body-$(date +"%Y%m%d").txt
-        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -a $logfile -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
+        echo -e "DataBase backing up process failed.\nTo find this problem reason, please check below list:" > /tmp/mail-body-$(date +"%Y%m%d").txt
+        cat $logfile >> /tmp/mail-body-$(date +"%Y%m%d").txt
+        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
     fi
     if [ $backup_status == "success" ]; then
         subject="[SUCCESS] DB Backup Process Complete Successfully."
-        echo -e "DataBase backing up process complete successfully.\nTo find this process details, please check an attachment." > /tmp/mail-body-$(date +"%Y%m%d").txt
-        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -a $logfile -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
+        echo -e "DataBase backing up process complete successfully.\nTo find this process details, please check below list:" > /tmp/mail-body-$(date +"%Y%m%d").txt
+        cat $logfile >> /tmp/mail-body-$(date +"%Y%m%d").txt
+        EMAIL="backup <no-reply@clickyab.com>" mutt -s "${subject}" -- sysadmin@clickyab.com < /tmp/mail-body-$(date +"%Y%m%d").txt
     fi
 }
 
