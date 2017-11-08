@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: slavemon-ingress
+  namespace: monitoring
+spec:
+  rules:
+  - host: mscheck.clickyab.ae
+    http:
+      paths:
+      - backend:
+          serviceName: slavemon-service
+          servicePort: 9000
+        path: /
