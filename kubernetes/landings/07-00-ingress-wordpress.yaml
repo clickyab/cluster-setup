@@ -1,4 +1,3 @@
----
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -21,26 +20,4 @@ spec:
       - path: /blog
         backend:
           serviceName: wordpress-service
-          servicePort: 9000
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: home-ingress
-  namespace: landings
-spec:
-  rules:
-  - host: clickyab.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: clickyab-com-service
-          servicePort: 9000
-  - host: www.clickyab.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: clickyab-com-service
           servicePort: 9000

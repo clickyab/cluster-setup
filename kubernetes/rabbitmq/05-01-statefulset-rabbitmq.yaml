@@ -1,0 +1,76 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  labels:
+    app: rabbitmq
+  name: rabbitmq
+  namespace: rabbitmq
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: rabbitmq
+  serviceName: rmq-cluster
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: dpr
+        - name: RABBITMQ_DEFAULT_PASS
+          value: hooMah0Eahtis2Ah
+        - name: RABBITMQ_LOG_LEVEL
+          value: info
+        - name: RABBITMQ_ERLANG_COOKIE
+          value: za4Ke9oiHiR4joQuloloRei2ce5ooSew
+        - name: RABBITMQ_USE_LONGNAME
+          value: "true"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        - name: RABBITMQ_NODENAME
+          value: rabbit@$(NODE_NAME).rmq-cluster
+        image: registry.clickyab.ae/clickyab/rabbitmq:064ede8
+        resources:
+          requests:
+            memory: "200Mi"
+          limmits:
+            memory: "300Mi"
+        imagePullPolicy: IfNotPresent
+        name: rabbitmq
+        ports:
+        - containerPort: 5672
+          name: queue-port
+          protocol: TCP
+        - containerPort: 15672
+          name: management-port
+          protocol: TCP
+        - containerPort: 4369
+          name: cluster-port
+          protocol: TCP
+        - containerPort: 25672
+          name: dist-port
+          protocol: TCP
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: rabbitmq-sa
+      serviceAccountName: rabbitmq-sa
+      terminationGracePeriodSeconds: 10
+  updateStrategy:
+    type: OnDelete
+status:
+  currentReplicas: 5
+  currentRevision: rabbitmq-2464675173
+  observedGeneration: 2
+  readyReplicas: 5
+  replicas: 5
+  updateRevision: rabbitmq-3814351746
