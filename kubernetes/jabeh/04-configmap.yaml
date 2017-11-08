@@ -1,26 +1,3 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: jabeh
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ceph-secret
-  namespace: jabeh
-data:
-  key: QVFERE9HZFpXaXI2T1JBQTFxcGVRQlJ3ZCtPRVIrdmdpenpzV1E9PQ==
----
-apiVersion: v1
-data:
-  auth: c3RhZ2luZzokYXByMSRCTjlQUmRKMyRBQU50ZkdwVVdFSktmV0s1WWNJTlMvCmJlYW5zdGFsazokYXByMSR5VDlHT3VVSyQ2cEdxLmx4MzVMU1VCdk5YZEhTSWkxCg==
-kind: Secret
-metadata:
-  name: basic-auth
-  namespace: jabeh
-type: Opaque
----
 apiVersion: v1
 data:
   APP_URL: http://jabeh.com

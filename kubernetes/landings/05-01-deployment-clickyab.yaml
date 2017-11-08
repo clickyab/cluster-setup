@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: clickyab-com
+  namespace: landings
+  labels:
+    app: clickyab-com-landing
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: clickyab-com
+        k8s-app: landing-home
+        tier: frontend
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - image: registry.clickyab.ae/clickyab/console:clickyab.com.59
+        name: clickyab-com
+        ports:
+        - containerPort: 80
+          name: clickyab-com

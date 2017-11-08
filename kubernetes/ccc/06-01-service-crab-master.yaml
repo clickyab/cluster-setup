@@ -17,19 +17,3 @@ spec:
     targetPort: 8025
   selector:
     k8s-app: crab-master-webserver
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    k8s-app: chameleon-master-webserver
-  name: chameleon-master-service
-  namespace: ccc
-spec:
-  ports:
-  - name: mster
-    port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    k8s-app: chameleon-master-webserver
