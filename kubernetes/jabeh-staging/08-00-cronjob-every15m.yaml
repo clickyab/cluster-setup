@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-dev-crontab-every15m
+  name: jabeh-crontab
   namespace: jabeh-staging
 spec:
   schedule: "*/15 * * * *"
