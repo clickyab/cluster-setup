@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: web
+  namespace: exchange-staging
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        k8s-app: exchange-staging
+        app: octopus
+        proc: worker
+        spec: web
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: octopus-master
+        image: registry.clickyab.ae/clickyab/octopus:master.204
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "bash","/app/bin/runoctupos.sh"]
+        envFrom:
+        - configMapRef:
+            name: exchange-staging-config
+        ports:
+        - name: octopus-web
+          containerPort: 9000

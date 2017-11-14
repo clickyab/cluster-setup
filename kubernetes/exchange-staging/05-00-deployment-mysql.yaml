@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: exchange-staging
+  labels:
+    k8s-app: exchange-staging
+    service: mysqld
+    branch: dev
+    type: db
+    namespace: exchange-staging
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: exchange-staging
+        service: mysqld
+        branch: dev
+        type: db
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+        - name: mysqld-staging
+          image: registry.clickyab.ae/clickyab/mysqld-staging
+          envFrom:
+            - configMapRef:
+                name: mysqld-exchange-staging-config
+          ports:
+            - name: mysqld
+              containerPort: 3306
+

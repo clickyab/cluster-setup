@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysqld-exchange-staging-config
+  namespace: exchange-staging
+data:
+  SOURCE_DB: octopus
+  SOURCE_DB_HOST: 192.168.100.13
+  SOURCE_DB_USER: exchange_staging
+  SOURCE_DB_PASS: eFi9qDu0Vo0V9GOngsf1QsqHCSnhNA
+  MYSQL_ROOT_PASSWORD: Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ
+

@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: fakedemand
+  namespace: exchange-staging
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        k8s-app: exchange-staging-fakedemand
+        app: octopus
+        proc: worker
+        spec: fakedemand
+        branch: dev
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: octopus-master
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/octopus:master.204
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "/app/bin/fakedemand"]
+        envFrom:
+        - configMapRef:
+            name: exchange-staging-config
+        ports:
+        - name: exam-web
+          containerPort: 9000

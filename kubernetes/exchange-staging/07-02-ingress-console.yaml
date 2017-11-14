@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: console-ingress
+  namespace: exchange-staging
+spec:
+  rules:
+  - host: staging.exchange.clickyab.ae
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: console-service
+          servicePort: 9000
