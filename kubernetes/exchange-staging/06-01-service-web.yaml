@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: exchange-staging
+  labels:
+    k8s-app: octopus-web-service
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "OctopusService"
+spec:
+  selector:
+    spec: web
+  ports:
+  - name: octopusweb
+    port: 9000
+    protocol: TCP

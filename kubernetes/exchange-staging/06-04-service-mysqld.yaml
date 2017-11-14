@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqld-service
+  namespace: exchange-staging
+  labels:
+    k8s-app: exchange-staging
+    app: octopus
+    service: mysqld
+    branch: dev
+    type: db
+    namespace: exchange-staging
+spec:
+  selector:
+    service: mysqld
+  ports:
+    - name: mysqld
+      port: 3306
+      protocol: TCP

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exchange-staging-config
+  namespace: exchange-staging
+data:
+  EXC_OCTOPUS_HOST_NAME: 'exchange-staging.clickyab.ae'
+  EXC_SERVICES_AMQP_DSN: 'amqp://exchange_staging:44lVBoV7ws9mTsnPKpcgX4zYvIBcGg@rabbitmq.rabbitmq:5672/exchange_staging'
+  EXC_SERVICES_AMQP_EXCHANGE: 'third'
+  EXC_SERVICES_BROKER_PROVIDER: 'rabbitmq'
+  EXC_SERVICES_MYSQL_MAX_CONNECTION: '100'
+  EXC_SERVICES_MYSQL_RDSN: 'root:Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ@tcp(mysqld-service.exchange-staging:3306)/octopus?charset=utf8&parseTime=true'
+  EXC_SERVICES_MYSQL_WDSN: 'root:Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ@tcp(mysqld-service.exchange-staging:3306)/octopus?charset=utf8&parseTime=true'
+  EXC_SERVICES_REDIS_ADDRESS: 'redis.exchange-staging:6379'
+  # EXC_SERVICES_REDIS_DB: '5'
+  # EXC_SERVICES_REDIS_PASSWORD: 'bita123'
+  EXC_SERVICES_SLACK_ACTIVE: 'true'
+  EXC_SERVICES_SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+  RABBITMQ_URL: 'amqp://exchange_staging:44lVBoV7ws9mTsnPKpcgX4zYvIBcGg@rabbitmq.rabbitmq:5672/exchange_staging'
+  PORT: '9000'
