@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: console-ingress
-  namespace: exchange-staging
+  name: rtbsupplier-ingress
+  namespace: octopus-staging
 spec:
   rules:
   - host: staging.exchange.clickyab.ae
     http:
       paths:
-      - path: /
+      - path: /rtbsup
         backend:
-          serviceName: console-service
+          serviceName: rtbsupplier-service
           servicePort: 9000

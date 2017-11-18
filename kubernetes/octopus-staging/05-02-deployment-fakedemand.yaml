@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: impression
-  namespace: exchange-staging
+  name: octopus-fakedemand
+  namespace: octopus-staging
 spec:
   strategy:
     type: RollingUpdate
@@ -12,15 +12,16 @@ spec:
     metadata:
       labels:
         # Label is used as selector in the service.
-        k8s-app: exchange-staging
+        k8s-app: octopus-staging-fakedemand
         app: octopus
         proc: worker
-        spec: impression
+        spec: fakedemand
+        branch: dev
     spec:
       imagePullSecrets:
         - name: regsecret
       containers:
-      - name: octopus-master
+      - name: octopus-dev
         # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/octopus:master.204
         livenessProbe:
@@ -43,10 +44,10 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"impression"]
+        command: [ "/app/bin/fakedemand"]
         envFrom:
         - configMapRef:
-            name: exchange-staging-config
+            name: octopus-staging-config
         ports:
-        - name: web-health
+        - name: exam-web
           containerPort: 9000

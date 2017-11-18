@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: aggregator
-  namespace: exchange-staging
+  name: octopus-show
+  namespace: octopus-staging
 spec:
   strategy:
     type: RollingUpdate
@@ -12,15 +12,15 @@ spec:
     metadata:
       labels:
         # Label is used as selector in the service.
-        k8s-app: exchange-staging
+        k8s-app: octopus-staging
         app: octopus
         proc: worker
-        spec: aggregator
+        spec: click
     spec:
       imagePullSecrets:
         - name: regsecret
       containers:
-      - name: octopus-master
+      - name: octopus-dev
         # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/octopus:master.204
         livenessProbe:
@@ -43,10 +43,10 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"aggregator"]
+        command: [ "bash","/app/bin/runioctopus-worker.sh" ,"show"]
         envFrom:
         - configMapRef:
-            name: exchange-staging-config
+            name: octopus-staging-config
         ports:
         - name: web-health
           containerPort: 9000

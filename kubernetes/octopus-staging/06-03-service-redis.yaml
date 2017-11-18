@@ -4,7 +4,7 @@ metadata:
   labels:
     service: redis
   name: redis
-  namespace: exchange-staging
+  namespace: octopus-staging
 spec:
   ports:
   - name: redis

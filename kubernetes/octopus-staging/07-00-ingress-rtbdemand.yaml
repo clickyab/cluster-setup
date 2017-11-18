@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: web-ingress
-  namespace: exchange-staging
+  name: rtbdemand-ingress
+  namespace: octopus-staging
 spec:
   rules:
   - host: staging.exchange.clickyab.ae
     http:
       paths:
-      - path: /api
+      - path: /rtbdem
         backend:
-          serviceName: web-service
+          serviceName: rtbdemand-service
           servicePort: 9000
