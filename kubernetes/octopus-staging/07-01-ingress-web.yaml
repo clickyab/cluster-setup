@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: octopus-staging
+spec:
+  rules:
+  - host: staging.exchange.clickyab.ae
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: web-service
+          servicePort: 9000

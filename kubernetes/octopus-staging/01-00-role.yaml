@@ -1,0 +1,9 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: octopus-staging
+  name: devteam
+rules:
+- apiGroups: ["", "extensions", "apps", "*"]
+  resources: ["*"]
+  verbs: ["*"]

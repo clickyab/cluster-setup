@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: exchange-staging
+  name: octopus-staging
   labels:
-    name: exchange-staging
+    name: octopus-staging
     type: staging

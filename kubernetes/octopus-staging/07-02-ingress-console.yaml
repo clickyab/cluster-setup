@@ -1,14 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: fakedemand-ingress
-  namespace: exchange-staging
+  name: console-ingress
+  namespace: octopus-staging
 spec:
   rules:
   - host: staging.exchange.clickyab.ae
     http:
       paths:
-      - path: /exam
+      - path: /
         backend:
-          serviceName: octopus-fakedemand
+          serviceName: console-service
           servicePort: 9000

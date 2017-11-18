@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtbdemand-service
+  namespace: octopus-staging
+  labels:
+    k8s-app: rtbdemand-service
+spec:
+  selector:
+    spec: rtbdemand
+  ports:
+  - name: rtbdemand
+    port: 9000
+    protocol: TCP

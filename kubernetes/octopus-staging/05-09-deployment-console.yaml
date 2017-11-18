@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
   name: console
-  namespace: exchange-staging
+  namespace: octopus-staging
 spec:
   strategy:
     type: RollingUpdate
@@ -12,7 +12,7 @@ spec:
     metadata:
       labels:
         # Label is used as selector in the service.
-        k8s-app: exchange-staging
+        k8s-app: octopus-staging
         app: octopus
         proc: worker
         spec: console
