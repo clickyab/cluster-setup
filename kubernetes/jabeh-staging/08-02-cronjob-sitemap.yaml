@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: jabeh-sitemap
+  namespace: jabeh-staging
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regsecret
+          containers:
+          - command:
+            - /app/.heroku/php/bin/php
+            - /app/artisan
+            - generate:sitemap
+            envFrom:
+            - configMapRef:
+                name: jabeh-master-config
+            image: registry.clickyab.ae/clickyab/jabeh:master.420
+            imagePullPolicy: IfNotPresent
+            name: jabeh-cron-sitemap
+            resources:
+              limits:
+                cpu: "1"
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+  schedule: 1 * * * *
+  successfulJobsHistoryLimit: 6
+  suspend: false
