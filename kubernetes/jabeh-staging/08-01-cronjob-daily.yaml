@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-dev-daily
+  name: jabeh-crontab-daily
   namespace: jabeh-staging
 spec:
   schedule: "10 12 * * *"
