@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: zanatadb
+  name: zanatadb-service
+  namespace: ccc
+spec:
+  ports:
+  - name: zanatadb
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    spec: zanatadb
