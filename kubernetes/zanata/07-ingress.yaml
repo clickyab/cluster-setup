@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: zanata-ingress
+  namespace: ccc
+spec:
+  rules:
+  - host: zanata.clickyab.ae
+    http:
+      paths:
+      - backend:
+          serviceName: zanata-service
+          servicePort: 8080
+        path: /
