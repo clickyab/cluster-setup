@@ -4,6 +4,10 @@ metadata:
   name: octopus-staging-config
   namespace: octopus-staging
 data:
+  EXC_SERVICES_SLACK_ACTIVE: T
+  EXC_SERVICES_SLACK_CHANNEL: '#octopus'
+  EXC_SERVICES_SLACK_USERNAME: crab
+  EXC_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
   EXC_OCTOPUS_HOST_NAME: 'staging.exchange.clickyab.ae'
   EXC_SERVICES_AMQP_DSN: 'amqp://octopus_staging:44lVBoV7ws9mTsnPKpcgX4zYvIBcGg@rabbitmq.rabbitmq:5672/octopus_staging'
   EXC_SERVICES_AMQP_EXCHANGE: 'third'

@@ -4,6 +4,10 @@ metadata:
   name: rtbdemand-config
   namespace: octopus-staging
 data:
+  EXC_SERVICES_SLACK_ACTIVE: T
+  EXC_SERVICES_SLACK_CHANNEL: '#octopus'
+  EXC_SERVICES_SLACK_USERNAME: crab
+  EXC_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
   PORT: '9000'
   EXC_SERVICES_FRAMEWORK_CONTROLLER_MOUNT_POINT: "/rtbdem"
   EXC_SERVICES_REDIS_ADDRESS: 'redis.octopus-staging:6379'
