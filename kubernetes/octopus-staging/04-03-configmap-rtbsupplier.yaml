@@ -1,9 +1,13 @@
 apiVersion: v1
+data:
+  EXC_SERVICES_FRAMEWORK_CONTROLLER_MOUNT_POINT: /rtbsup
+  EXC_SERVICES_SLACK_ACTIVE: T
+  EXC_SERVICES_SLACK_CHANNEL: '#octopus'
+  EXC_SERVICES_SLACK_USERNAME: crab
+  EXC_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+  EXC_SUPPLIER_EXCHANGE_URL: http://staging.exchange.clickyab.ae/api/rest/get
+  PORT: "9000"
 kind: ConfigMap
 metadata:
   name: rtbsupplier-config
   namespace: octopus-staging
-data:
-  PORT: '9000'
-  EXC_SERVICES_FRAMEWORK_CONTROLLER_MOUNT_POINT: "/rtbsup"
-  EXC_SUPPLIER_EXCHANGE_URL: "http://staging.exchange.clickyab.ae/api/rest/get"
