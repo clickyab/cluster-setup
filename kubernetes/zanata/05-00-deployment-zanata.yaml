@@ -16,13 +16,17 @@ spec:
         app: zanata
         spec: zanata
     spec:
+      imagePullSecrets:
+        - name: regsecret
       containers:
         - name: zanata
           # Pulls the default Minio image from Docker Hub
-          image: zanata/server
+          image: registry.clickyab.ae/clickyab/zanata-server
           envFrom:
             - configMapRef:
                 name: zanata-configmap
           ports:
             - name: zanata-listen
               containerPort: 8080
+            - name: zanata-mgmt
+              containerPort: 9990
