@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dockeroxy
+  namespace: tools
+  labels:
+    k8s-app: dockeroxy
+    service: sshD
+    namespace: tools
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: dockeroxy
+        service: sshD
+        namespace: tools
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+        - name: dockeroxy
+          image: registry.clickyab.ae/clickyab/dockeroxy
+          envFrom:
+            - configMapRef:
+                name: dockeroxy-config
+          ports:
+            - name: dockeroxy
+              containerPort: 22
