@@ -25,7 +25,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: jabeh-dev-youtube-downloader
         branch: dev
@@ -33,54 +32,50 @@ spec:
         lang: php
         type: worker
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
-        - /app/.heroku/php/bin/php
+        - php
         - /app/artisan
         - queue:work
         - --queue=YoutubeDownloader
         - --sleep=5
         - --tries=5
         - --daemon
-        name: jabeh-dev
         envFrom:
         - configMapRef:
             name: jabeh-staging-config
-        image: registry.clickyab.ae/clickyab/jabeh:dev.423
+        image: registry.clickyab.ae/clickyab/jabeh:dev.730
         imagePullPolicy: IfNotPresent
+        name: jabeh-dev
         volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      imagePullSecrets:
+      - name: regsecret
       volumes:
-      - name: cdn
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
           secretRef:
             name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
           secretRef:
             name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+          user: admin
+        name: chunks
