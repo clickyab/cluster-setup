@@ -21,7 +21,7 @@ spec:
               image: registry.clickyab.ae/clickyab/jabeh:dev.420
               imagePullPolicy: IfNotPresent
               command:
-                - /app/.heroku/php/bin/php
+                - php
                 - /app/artisan
                 - count:perchannel
               envFrom:
