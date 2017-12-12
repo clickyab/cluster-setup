@@ -18,7 +18,7 @@ spec:
           containers:
             - name: jabeh-dev
               image: registry.clickyab.ae/clickyab/jabeh:dev.420
-              command: ["/app/.heroku/php/bin/php", "/app/artisan", "count:impressions"]
+              command: ["php", "/app/artisan", "count:impressions"]
               resources:
                 limits:
                   cpu: 1000m
