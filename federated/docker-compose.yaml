@@ -1,0 +1,34 @@
+version: "3"
+services:
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   ports:
+  #     - 8090:15672
+  #     - 5672:5672
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: usermq
+  #     RABBITMQ_DEFAULT_PASS: JmW79Nwob8oIA7K2iLteWwJ17P3sdLxoTyGQ8TeL
+  redis:
+    image:
+      - redis
+    container_name:
+      - redis_server
+  app:
+    image:
+      - registry.clickyab.ae/clickyab/crane:master.251
+    container_name:
+      - crane_webserver
+    ports:
+      - 9000:9000
+    env_file:
+      - crane-app.env
+    command:
+      - /app/bin/crane
+  nginx:
+    image:
+      - nginx
+    container_name:
+      - nginx_proxy
+    ports:
+      - 9000:80
+
