@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: crane-impression
+  name: crane-impression-worker
   namespace: crane
 spec:
   strategy:
