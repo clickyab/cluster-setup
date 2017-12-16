@@ -39,17 +39,4 @@ roleRef:
   kind: Role
   name: devteam
   apiGroup: ""
----
-kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
-metadata:
-  name: deployment-manager-binding-danial
-  namespace: ccc
-subjects:
-- kind: User
-  name: danial
-  apiGroup: ""
-roleRef:
-  kind: Role
-  name: devteam
-  apiGroup: ""
+  
