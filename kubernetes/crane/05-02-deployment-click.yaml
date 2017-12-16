@@ -19,7 +19,7 @@ spec:
       imagePullSecrets:
         - name: regsecret
       containers:
-      - name: click
+      - name: crane-master
         # Pulls the default Minio image from Docker Hub
         image: registry.clickyab.ae/clickyab/crane:master.244
         livenessProbe:
