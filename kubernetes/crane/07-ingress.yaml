@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: crane-ingress
+  namespace: crane
+spec:
+  rules:
+  - host: cc.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: crane-service
+          servicePort: 9000
+        path: /

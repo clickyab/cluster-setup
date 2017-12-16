@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # This name uniquely identifies the Deployment
+  name: crane-click
+  namespace: crane
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        # Label is used as selector in the service.
+        app: crane
+        proc: worker
+        spec: click
+    spec:
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: click
+        # Pulls the default Minio image from Docker Hub
+        image: registry.clickyab.ae/clickyab/crane:master.244
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          failureThreshold: 1
+        command: [ "/app/bin/crane-click-worker"]
+        envFrom:
+        - configMapRef:
+            name: crane-config
+        ports:
+        - name: web-health
+          containerPort: 9002
