@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: crane-click
+  name: crane-click-worker
   namespace: crane
 spec:
   strategy:
