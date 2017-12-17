@@ -21,7 +21,7 @@ spec:
       containers:
       - name: crane-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/crane:master.244
+        image: registry.clickyab.ae/clickyab/crane:master.256
         livenessProbe:
           httpGet:
             path: /healthz
@@ -49,3 +49,16 @@ spec:
         ports:
         - name: web-health
           containerPort: 9000
+        volumeMounts:
+          - mountPath: /secrets
+            name: secrets
+      volumes:
+        - cephfs:
+            monitors:
+              - 192.168.10.1:6789
+              - 192.168.10.6:6789
+              - 192.168.10.11:6789
+            path: /crane/secrets
+            secretRef:
+              name: ceph-secret
+          name: secrets
