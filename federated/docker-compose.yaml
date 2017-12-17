@@ -15,7 +15,7 @@ services:
       - redis_server
   app:
     image:
-      - registry.clickyab.ae/clickyab/crane:master.251
+      - registry.clickyab.ae/clickyab/crane_master:latest
     container_name:
       - crane_webserver
     ports:
@@ -24,6 +24,8 @@ services:
       - crane-app.env
     command:
       - /app/bin/crane
+    volumes:
+      - ./secrets:/secrets
   nginx:
     image:
       - nginx
