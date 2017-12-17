@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dockeroxy-service
+  namespace: tools
+  labels:
+    k8s-app: dockeroxy
+    service: sshD
+    namespace: tools
+spec:
+  selector:
+    service: sshD
+  type: NodePort
+  ports:
+    - name: dockeroxy
+      port: 22
+      nodePort: 7000
+      targetPort: 22
+      protocol: TCP
+
