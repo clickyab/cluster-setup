@@ -5,7 +5,7 @@ metadata:
   namespace: crane
 spec:
   rules:
-  - host: cc.clickyab.com
+  - host: demand.3rdad.com
     http:
       paths:
       - backend:
