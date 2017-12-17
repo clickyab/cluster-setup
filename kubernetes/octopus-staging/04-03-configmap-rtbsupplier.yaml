@@ -1,8 +1,4 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: rtbsupplier-config
-  namespace: octopus-staging
 data:
   EXC_SERVICES_SLACK_ACTIVE: T
   EXC_SERVICES_SLACK_CHANNEL: '#octopus'
@@ -11,3 +7,7 @@ data:
   PORT: '9000'
   EXC_SERVICES_FRAMEWORK_CONTROLLER_MOUNT_POINT: "/rtbsup"
   EXC_SUPPLIER_EXCHANGE_URL: "http://staging.exchange.clickyab.ae/api/rest/get"
+kind: ConfigMap
+metadata:
+  name: rtbsupplier-config
+  namespace: octopus-staging
