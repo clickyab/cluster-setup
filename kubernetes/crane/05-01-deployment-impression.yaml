@@ -42,7 +42,7 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "/app/bin/crane-impression-worker"]
+        command: [ "/app/bin/impression-worker"]
         envFrom:
         - configMapRef:
             name: crane-config
