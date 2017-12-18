@@ -16,11 +16,11 @@ spec:
           - path: /
             backend:
               serviceName: jabeh-staging-app-service
-              servicePort: 9000
+              servicePort: 80
     - host: www.staging.jabeh.com
       http:
         paths:
           - path: /
             backend:
               serviceName: jabeh-staging-app-service
-              servicePort: 9000
+              servicePort: 80
