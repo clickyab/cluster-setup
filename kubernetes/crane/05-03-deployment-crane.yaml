@@ -42,7 +42,7 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "/app/bin/crane"]
+        command: [ "/app/bin/demand"]
         envFrom:
         - configMapRef:
             name: crane-config
