@@ -20,7 +20,7 @@ data:
   MAIL_USERNAME: clickyab
   MAIN_VIDEO_FULL_PATH: /cdn
   MDIR_MODE: "775"
-  PORT: "9000"
+  PORT: "80"
   QUEUE_DRIVER: beanstalkd
   REDIS_HOST: jabeh-staging-redis-service.jabeh-staging
   SESSION_DOMAIN: staging.jabeh.com

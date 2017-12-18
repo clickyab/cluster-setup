@@ -16,14 +16,13 @@ spec:
         - name: regsecret
       containers:
       - name: jabeh-dev
-        image: registry.clickyab.ae/clickyab/jabeh:dev.420
-        command: [ "/bin/herokuish", "procfile","start", "web"]
+        image: registry.clickyab.ae/clickyab/jabeh:dev.765
         envFrom:
           - configMapRef:
               name: jabeh-staging-config
         ports:
         - name: web
-          containerPort: 9000
+          containerPort: 80
         volumeMounts:
         - name: cdn
           mountPath: /cdn
@@ -33,6 +32,26 @@ spec:
           mountPath: /tmp/thumbnails
         - name: cachevideo
           mountPath: /tmp/videos
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
       volumes:
       - name: cdn
         cephfs:
