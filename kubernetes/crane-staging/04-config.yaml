@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  PORT: "9000"
+  CRN_CORE_DEVEL_MODE: "TRUE"
+  CRN_SERVICES_AMQP_DSN: "amqp://crane-staging:ig2Ucae0in1iYee4Yaa4phohPooghot1@rabbitmq.rabbitmq:5672/crane-staging"
+  CRN_SERVICES_AMQP_EXCHANGE: "crane"
+  CRN_SERVICES_BROKER_PROVIDER: "rabbitmq"
+  CRN_SERVICES_MYSQL_WDSN: "root:Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ@tcp(crane-staging-mysqld-service.crane-staging:3306)/clickyab?charset=utf8&parseTime=true"
+  CRN_SERVICES_MYSQL_REPLICATION_DELAY: "30"
+  CRN_SERVICES_MYSQL_REPLICATION_STATUS: "FALSE"
+  CRN_SERVICES_MYSQL_RDSN: "clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.12:3306)/clickyab?charset=utf8&parseTime=true,clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true"
+  CRN_SERVICES_REDIS_ADDRESS: "redis.crane-staging"
+  CRN_SERVICES_REDIS_CLUSTER: "FALSE"
+  CRN_SERVICES_REDIS_POR: "6379"
+  CRN_SERVICES_STORE_JWT_FILE: "TRUE"
+  CRN_SERVICES_STORE_JWT_PRIVATE_256: "/secrets/crane_key.priv"
+  CRN_SERVICES_STORE_JWT_PUBLIC_256: "/secrets/crane_key.pub"
+kind: ConfigMap
+metadata:
+  name: crane-config
+  namespace: crane-staging

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: crane-app
+  name: crane-service
+  namespace: crane-staging
+spec:
+  ports:
+  - name: crane-port
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    k8s-app: crane-app
