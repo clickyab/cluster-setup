@@ -9,28 +9,16 @@ services:
   #     RABBITMQ_DEFAULT_USER: usermq
   #     RABBITMQ_DEFAULT_PASS: JmW79Nwob8oIA7K2iLteWwJ17P3sdLxoTyGQ8TeL
   redis:
-    image:
-      - redis
-    container_name:
-      - redis_server
+    image: redis
+    container_name: redis_server
   app:
-    image:
-      - registry.clickyab.ae/clickyab/crane_master:latest
-    container_name:
-      - crane_webserver
+    image: registry.clickyab.ae/clickyab/crane_master:latest
+    container_name: crane_webserver
     ports:
-      - 9000:9000
+      - 9000:80
     env_file:
       - crane-app.env
     command:
-      - /app/bin/crane
+      - /app/bin/demand
     volumes:
       - ./secrets:/secrets
-  nginx:
-    image:
-      - nginx
-    container_name:
-      - nginx_proxy
-    ports:
-      - 9000:80
-
