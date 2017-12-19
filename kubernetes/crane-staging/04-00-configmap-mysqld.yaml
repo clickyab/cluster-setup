@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysqld-config
+  namespace: crane-staging
+data:
+  SOURCE_DB: clickyab
+  SOURCE_DB_HOST: 192.168.100.13
+  SOURCE_DB_USER: crane_staging
+  SOURCE_DB_PASS: assmcY4ufeyVEE7OTFA1gRyOUcsc4R
+  MYSQL_ROOT_PASSWORD: Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ
+  ONLY_SCHEMA: "true"
