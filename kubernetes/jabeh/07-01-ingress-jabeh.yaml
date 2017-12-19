@@ -12,12 +12,12 @@ spec:
       paths:
       - backend:
           serviceName: jabeh-master-service
-          servicePort: 9000
+          servicePort: 80
         path: /
   - host: www.jabeh.com
     http:
       paths:
       - backend:
           serviceName: jabeh-master-service
-          servicePort: 9000
+          servicePort: 80
         path: /

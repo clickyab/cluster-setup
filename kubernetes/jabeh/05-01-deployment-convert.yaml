@@ -29,7 +29,7 @@ spec:
         - name: regsecret
       containers:
       - command:
-        - /app/.heroku/php/bin/php
+        - php
         - /app/artisan
         - queue:work
         - --queue=ConvertVideo
