@@ -9,4 +9,4 @@ data:
   SOURCE_DB_USER: octopus_staging
   SOURCE_DB_PASS: eFi9qDu0Vo0V9GOngsf1QsqHCSnhNA
   MYSQL_ROOT_PASSWORD: Kc6Pvepk3YTehm6gxvPhCCVE4OqdjZ
-
+  ONLY_SCHEMA: "False"
