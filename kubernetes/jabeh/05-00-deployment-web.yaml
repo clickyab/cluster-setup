@@ -28,12 +28,7 @@ spec:
       imagePullSecrets:
         - name: regsecret
       containers:
-      - command:
-        - /bin/herokuish
-        - procfile
-        - start
-        - web
-        envFrom:
+      - envFrom:
         - configMapRef:
             name: jabeh-master-config
         image: registry.clickyab.ae/clickyab/jabeh:master.402
@@ -42,7 +37,7 @@ spec:
           failureThreshold: 3
           httpGet:
             path: /healthz
-            port: 9000
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 180
           periodSeconds: 20
@@ -50,14 +45,14 @@ spec:
           timeoutSeconds: 15
         name: jabeh-master
         ports:
-        - containerPort: 9000
+        - containerPort: 80
           name: master-web
           protocol: TCP
         readinessProbe:
           failureThreshold: 1
           httpGet:
             path: /healthz
-            port: 9000
+            port: 80
             scheme: HTTP
           initialDelaySeconds: 1
           periodSeconds: 20
