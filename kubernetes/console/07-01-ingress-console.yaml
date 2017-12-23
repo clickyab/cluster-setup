@@ -7,25 +7,11 @@ metadata:
     ingress.kubernetes.io/proxy-body-size: 8m
 spec:
   rules:
-  - host: dev.clickyab.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: master-service
-          servicePort: 9000
   - host: console.clickyab.com
     http:
       paths:
       - path: /
         backend:
           serviceName: deploy-service
-          servicePort: 9000
-  - host: static.clickyab.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: statics-webserver
           servicePort: 9000
 
