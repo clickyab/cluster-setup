@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: crane-impression-worker
+  name: crane-supplier-server
   namespace: crane
 spec:
   strategy:
@@ -13,8 +13,8 @@ spec:
       labels:
         # Label is used as selector in the service.
         app: crane
-        proc: worker
-        spec: impression
+        spec: supplier
+        k8s-app: supplier-crane
     spec:
       imagePullSecrets:
         - name: regsecret
@@ -42,10 +42,17 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "/app/bin/impression-worker"]
+        command: [ "/app/bin/supplier"]
         envFrom:
         - configMapRef:
             name: crane-config
         ports:
         - name: web-health
           containerPort: 9000
+        volumeMounts:
+          - mountPath: /secrets
+            name: secrets
+      volumes:
+        - name: secrets
+          secret:
+            secretName: jwt-token

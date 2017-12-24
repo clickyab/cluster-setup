@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: supplier-ingress
+  namespace: crane
+spec:
+  rules:
+  - host: supplier.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: supplier-service
+          servicePort: 9000
+        path: /
