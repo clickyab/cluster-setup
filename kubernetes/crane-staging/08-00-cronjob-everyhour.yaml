@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: every-hour
+  namespace: crane-staging
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 12
+  successfulJobsHistoryLimit: 6
+  suspend: false
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regsecret
+          containers:
+            - command: ["/app/bin/cron"]
+              envFrom:
+                - configMapRef:
+                    name: crane-config
+              image: registry.clickyab.ae/clickyab/crane_dev:latest
+              name: crane-cron
+  schedule: '15 * * * *'

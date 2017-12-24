@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   # This name uniquely identifies the Deployment
-  name: crane-demand-server
+  name: crane-supplier-server
   namespace: crane-staging
 spec:
   strategy:
@@ -13,8 +13,8 @@ spec:
       labels:
         # Label is used as selector in the service.
         app: crane
-        proc: app
-        k8s-app: crane-app
+        spec: supplier
+        k8s-app: supplier-crane
     spec:
       imagePullSecrets:
         - name: regsecret
@@ -42,7 +42,7 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           failureThreshold: 1
-        command: [ "/app/bin/demand"]
+        command: [ "/app/bin/supplier"]
         envFrom:
         - configMapRef:
             name: crane-config
