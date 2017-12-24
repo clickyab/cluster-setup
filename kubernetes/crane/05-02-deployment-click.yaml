@@ -21,7 +21,7 @@ spec:
       containers:
       - name: crane-master
         # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/crane:master.244
+        image: registry.clickyab.ae/clickyab/crane_master:latest
         livenessProbe:
           httpGet:
             path: /healthz
