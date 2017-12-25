@@ -12,3 +12,10 @@ spec:
           serviceName: crane-service
           servicePort: 9000
         path: /
+  - host: appsuptest.clickyab.ae
+    http:
+      paths:
+      - backend:
+          serviceName: crane-service
+          servicePort: 9000
+        path: /
