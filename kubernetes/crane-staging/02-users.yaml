@@ -1,0 +1,28 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deployment-manager-binding-dara
+  namespace: crane-staging
+subjects:
+- kind: User
+  name: dara
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: devteam
+  apiGroup: ""
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deployment-manager-binding-kian
+  namespace: crane-staging
+subjects:
+- kind: User
+  name: kian
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: devteam
+  apiGroup: ""
+  
