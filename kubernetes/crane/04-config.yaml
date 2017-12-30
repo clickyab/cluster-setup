@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
   PORT: "9000"
-  CRN_CORE_DEVEL_MODE: "TRUE"
+  CRN_CORE_DEVEL_MODE: "FALSE"
   CRN_SERVICES_AMQP_DSN: "amqp://crane:yGxOq8xVQNxJNXV9D7N1yGJFGSxPea@rabbitmq.rabbitmq:5672/crane"
   CRN_SERVICES_AMQP_EXCHANGE: "crane"
   CRN_SERVICES_BROKER_PROVIDER: "rabbitmq"
@@ -15,7 +15,7 @@ data:
   CRN_SERVICES_STORE_JWT_FILE: "TRUE"
   CRN_SERVICES_STORE_JWT_PRIVATE_256: "/secrets/crane_key.priv"
   CRN_SERVICES_STORE_JWT_PUBLIC_256: "/secrets/crane_key.pub"
-  CRN_CRANE_SUPPLIER_BANNER_URL: "crane-service.crane:9000"
+  CRN_CRANE_SUPPLIER_BANNER_URL: "http://crane-service.crane:9000"
 kind: ConfigMap
 metadata:
   name: crane-config
