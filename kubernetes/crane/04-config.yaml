@@ -15,7 +15,7 @@ data:
   CRN_SERVICES_STORE_JWT_FILE: "TRUE"
   CRN_SERVICES_STORE_JWT_PRIVATE_256: "/secrets/crane_key.priv"
   CRN_SERVICES_STORE_JWT_PUBLIC_256: "/secrets/crane_key.pub"
-  CRN_CRANE_SUPPLIER_BANNER_URL: "crane-service.crane:9000"
+  CRN_CRANE_SUPPLIER_BANNER_URL: "http://crane-service.crane:9000"
 kind: ConfigMap
 metadata:
   name: crane-config
