@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-crontab-daily
+  name: jabeh-crontab-6hours
   namespace: jabeh
 spec:
   concurrencyPolicy: Forbid
@@ -16,19 +16,18 @@ spec:
           containers:
           - command:
             - php
-            - /app/artisan
-            - count:perchannel
+            - artisan
+            - check:new-videos-state
             envFrom:
             - configMapRef:
                 name: jabeh-master-config
             image: registry.clickyab.ae/clickyab/jabeh:master.831
             imagePullPolicy: IfNotPresent
-            name: jabeh-cron-daily
+            name: jabeh-cron-6hours
             resources:
               limits:
                 cpu: "1"
           restartPolicy: Never
-          terminationGracePeriodSeconds: 30
-  schedule: 10 0 * * *
+  schedule: 16 */6 * * *
   successfulJobsHistoryLimit: 6
   suspend: false

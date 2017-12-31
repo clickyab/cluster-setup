@@ -32,11 +32,11 @@ spec:
         - php
         - /app/artisan
         - videos:checkall
-        - 60000,69000
+        - 10000,65000
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.402
+        image: registry.clickyab.ae/clickyab/jabeh:master.831
         name: jabeh-master
         resources:
           limits:
