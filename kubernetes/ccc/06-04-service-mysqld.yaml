@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: crab-staging-mysqld-service
+  namespace: ccc
+  labels:
+    k8s-app: crab
+    service: mysqld
+    branch: dev
+    type: db
+    namespace: ccc
+spec:
+  selector:
+    service: mysqld
+  ports:
+    - name: mysqld
+      port: 3306
+      protocol: TCP

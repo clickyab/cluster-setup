@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: crab-staging-mysqld
+  namespace: ccc
+  labels:
+    k8s-app: crab
+    service: mysqld
+    namespace: crab-mysqld
+    branch: dev
+    type: db
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: crab
+        service: mysqld
+        branch: dev
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+        - name: mysqld-staging
+          image: registry.clickyab.ae/clickyab/mysqld-staging
+          envFrom:
+            - configMapRef:
+                name: crab-staging-mysqld-config
+          ports:
+            - name: msyqld
+              containerPort: 3306

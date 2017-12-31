@@ -5,10 +5,9 @@ data:
   CRB_SERVICES_FLUENTD_ENABLE: "true"
   CRB_SERVICES_FLUENTD_HOST: fluentd.elasticsearch
   CRB_SERVICES_FLUENTD_TAG: log.crab
-  CRB_SERVICES_MYSQL_RDSN: ccc_read:vCc0U1s0KyblNfoWUoByqAAaa1hNlJyyjIWvhWtuYbphn4sLEf2j4HqbHXNjz1uV@tcp(192.168.100.12:3306)/ccc-staging?charset=utf8&parseTime=true,ccc_read:vCc0U1s0KyblNfoWUoByqAAaa1hNlJyyjIWvhWtuYbphn4sLEf2j4HqbHXNjz1uV@tcp(192.168.100.13:3306)/ccc-staging?charset=utf8&parseTime=true
-  CRB_SERVICES_MYSQL_REPLICATION_STATUS: "true"
-  CRB_SERVICES_MYSQL_WDSN: ccc_full:yMeiCnCuAxXoXoeP5BPKG62mdcnSXkpy7m2MJYeysWLn7sjC14bsRGLMQYVI5rUa@tcp(192.168.100.11:3306)/ccc-staging?charset=utf8&parseTime=true
-  CRB_SERVICES_REDIS_ADDRESS: redis.ccc:6379
+  CRB_SERVICES_MYSQL_RDSN: root:qIxUnir2HOdorY055Ke6OK2CEs9Jiak4@tcp(crab-staging-mysqld-service.ccc:3306)/crab?charset=utf8&parseTime=true
+  CRB_SERVICES_MYSQL_WDSN: root:qIxUnir2HOdorY055Ke6OK2CEs9Jiak4@tcp(crab-staging-mysqld-service.ccc:3306)/crab?charset=utf8&parseTime=true
+  CRB_SERVICES_REDIS_ADDRESS: redis.ccc
   CRB_SERVICES_REDMINE_ACTIVE: "false"
   CRB_SERVICES_REDMINE_APIKEY: d924a953644dd1a339278a031c466210cf2b60fd
   CRB_SERVICES_REDMINE_NEW_ISSUE_TYPE_ID: "1"
