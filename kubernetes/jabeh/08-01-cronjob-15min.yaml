@@ -15,13 +15,13 @@ spec:
             - name: regsecret
           containers:
           - command:
-            - /app/.heroku/php/bin/php
+            - php
             - /app/artisan
             - count:impressions
             envFrom:
             - configMapRef:
                 name: jabeh-master-config
-            image: registry.clickyab.ae/clickyab/jabeh:master.402
+            image: registry.clickyab.ae/clickyab/jabeh:master.831
             imagePullPolicy: IfNotPresent
             name: jabeh-cron
             resources:
