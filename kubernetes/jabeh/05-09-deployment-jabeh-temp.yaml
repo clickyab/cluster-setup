@@ -36,7 +36,7 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.831
+        image: registry.clickyab.ae/clickyab/jabeh:master.834
         name: jabeh-master
         resources:
           limits:
