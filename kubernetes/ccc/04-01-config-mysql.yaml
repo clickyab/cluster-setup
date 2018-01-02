@@ -7,4 +7,5 @@ data:
   SOURCE_DB: crab
   MYSQL_ROOT_PASSWORD: qIxUnir2HOdorY055Ke6OK2CEs9Jiak4
   EMPTY_DB: "TRUE"
+  OPTIONS: "CHARACTER SET utf8 COLLATE utf8_general_ci"
 
