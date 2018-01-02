@@ -20,8 +20,8 @@ spec:
             - generate:sitemap
             envFrom:
             - configMapRef:
-                name: jabeh-master-config
-            image: registry.clickyab.ae/clickyab/jabeh:master.420
+                name: jabeh-staging-config
+            image: registry.clickyab.ae/clickyab/jabeh:master.834
             imagePullPolicy: IfNotPresent
             name: jabeh-cron-sitemap
             resources:
