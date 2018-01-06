@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-monitor-service
+  namespace: tools
+  labels:
+    k8s-app: rmeter
+spec:
+  selector:
+    k8s-app: rabbit-monitor
+  ports:
+  - name: rmeter
+    targetPort: 8090
+    port: 8090
+    protocol: TCP

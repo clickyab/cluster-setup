@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rabbit-monitor-ingress
+  namespace: tools
+spec:
+  rules:
+  - host: rmeter.clickyab.ae
+    http:
+      paths:
+      - backend:
+          serviceName: rabbit-monitor-service
+          servicePort: 8090
+        path: /

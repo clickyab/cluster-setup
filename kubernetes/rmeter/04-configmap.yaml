@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbit-monitor
+  namespace: tools
+data:
+  RMR_METRICS_AMQP_DSN: "amqp://rmeter:FzxzNvTCoyow5Cl@rabbitmq.rabbitmq:5672/"
+  RMR_METRICS_QUEUE_NAMES: "jabeh/ConvertVideo"

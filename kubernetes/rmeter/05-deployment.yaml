@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rabbit-monitor
+  labels:
+    k8s-app: rabbit-monitor
+  namespace: tools
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: rabbit-monitor
+        category: monitoring
+    spec:
+      terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: regsecret
+      containers:
+      - name: rabbit-monitor
+        image: registry.clickyab.ae/clickyab/cluster-tools:latest
+        command: [ "/app/bin/rmeter"]
+        envFrom:
+        - configMapRef:
+            name: rabbit-monitor
