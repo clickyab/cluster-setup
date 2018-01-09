@@ -12,3 +12,7 @@ spec:
           serviceName: crab-master-service
           servicePort: 9000
         path: /api
+      - backend:
+          serviceName: chameleon-master-service
+          servicePort: 80
+        path: /
