@@ -38,7 +38,8 @@ spec:
       - envFrom:
         - configMapRef:
             name: crab-master-config
-        image: registry.clickyab.ae/clickyab/crab:master.134
+        image: registry.clickyab.ae/clickyab/crab_master:latest
+        command: ["/bin/bash", "/app/bin/run_order.sh"]
         livenessProbe:
           failureThreshold: 3
           httpGet:
