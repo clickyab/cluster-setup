@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: zanadb-backup
+  namespace: ccc
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 12
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regsecret
+          containers:
+          - name: zantadb-backup
+            envFrom:
+            - configMapRef:
+                name: zanatadb-backup-config
+            image: registry.clickyab.ae/clickyab/dbbackup-cron:latest
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: "1"
+          restartPolicy: Never
+  schedule: 15 17 * * *
+  successfulJobsHistoryLimit: 6
+  suspend: false
