@@ -30,17 +30,7 @@ done
 
 # define needed functions.
 function backup() {
-    # check mysql server status.
-    msg=$(pidof mysqld 2>&1)
-    if [[ -z $msg ]]; then
-        echo "[×] MySQL service is NOT RUNNING." >> $logfile
-        echo "    $msg" >> $logfile
-        return 1
-    else
-        echo "[✓] MySQL service is RUNNING." >> $logfile
-    fi
-
-    # create backup directory
+   # create backup directory
     if [[ ! -d $lbackup_dir ]]; then
         msg=$(mkdir $lbackup_dir 2>&1)
         if [[ $? -ne 0 ]]; then
