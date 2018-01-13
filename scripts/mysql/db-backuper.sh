@@ -12,12 +12,13 @@ logfile="/var/log/mysql-backup-$(date +%Y%m%d).log"
 tmpfile="/tmp/mysql-backup-$(echo $$).log"
 
 # initialize variables with new values.
-while getopts ":h:u:p:d:r:l:" opt; do
+while getopts ":h:u:p:b:d:r:l:" opt; do
     case $opt in
         h) hostname=$OPTARG;;
         u) username=$OPTARG;;
         p) password=$OPTARG;;
         d) database=$OPTARG;;
+        b) backup_server=${OPTARG};;
         r) rbackup_dir=$OPTARG;;
         l) lbackup_dir=$OPTARG;;
         \?) echo "Invalid option: -$OPTARG" >&2
@@ -88,7 +89,7 @@ function backup() {
 }
 
 function transfer() {
-    msg=$(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir/* root@88.198.13.41:$rbackup_dir/ 2>&1)
+    msg=$(rsync --checksum --recursive --archive -e "ssh -p 6570" $lbackup_dir/* root@${backup_server}:$rbackup_dir/ 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in transfering backup files via rsync." >> $logfile
         echo "    $msg" >> $logfile
@@ -122,7 +123,7 @@ function remove_old(){
         echo "[✓] backup files successfully removed." >> $logfile
     fi
     # remove old remote backup directory
-    msg=$(ssh root@88.198.13.41 -p 6570 rm -r $rbackup_dir/$(date --date="3 days ago" +"%F")* 2>&1)
+    msg=$(ssh root@${backup_server} -p 6570 rm -r $rbackup_dir/$(date --date="3 days ago" +"%F")* 2>&1)
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in removing old remote backup files." >> $logfile
         echo "    $msg" >> $logfile
