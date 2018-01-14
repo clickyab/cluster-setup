@@ -1,0 +1,19 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: ca.pem
+    server: https://145.239.10.114:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: pod-tracker
+  name: pod-tracker-context
+current-context: pod-tracker-context
+kind: Config
+preferences: {}
+users:
+- name: pod-tracker
+  user:
+    client-certificate: pod-tracker.crt
+    client-key: pod-tracker.key
