@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: zanadb-backup
+  name: zanatadb-backup
   namespace: ccc
 spec:
   concurrencyPolicy: Forbid
@@ -14,16 +14,22 @@ spec:
           imagePullSecrets:
             - name: regsecret
           containers:
-          - name: zantadb-backup
-            envFrom:
-            - configMapRef:
-                name: zanatadb-backup-config
-            image: registry.clickyab.ae/clickyab/dbbackup-cron:latest
-            imagePullPolicy: IfNotPresent
-            resources:
-              limits:
-                cpu: "1"
+            - name: zantadb-backup
+              envFrom:
+                - configMapRef:
+                    name: zanatadb-backup-config
+              image: registry.clickyab.ae/clickyab/dbbackup-cron:latest
+              resources:
+                limits:
+                  cpu: "1"
+              volumeMounts:
+                - name: ssh-keys
+                  mountPath: /root/.ssh/
+          volumes:
+            - name: ssh-keys
+              secret:
+                secretName: ssh-key-secret
           restartPolicy: Never
-  schedule: 15 17 * * *
+  schedule: '0 0 * * *'
   successfulJobsHistoryLimit: 6
   suspend: false
