@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: every-hour
+  name: every-hour-cron
   namespace: crane-staging
 spec:
   concurrencyPolicy: Forbid
@@ -22,4 +22,5 @@ spec:
                     name: crane-config
               image: registry.clickyab.ae/clickyab/crane_dev:latest
               name: crane-cron
+          restartPolicy: Never
   schedule: '15 * * * *'

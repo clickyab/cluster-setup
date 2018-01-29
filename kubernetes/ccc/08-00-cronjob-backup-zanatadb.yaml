@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: zanatadb-backup
+  name: zanatadb-backup-cron
   namespace: ccc
 spec:
   concurrencyPolicy: Forbid

@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-crontab-6hours
+  name: jabeh-6hours-cron
   namespace: jabeh
 spec:
   concurrencyPolicy: Forbid
