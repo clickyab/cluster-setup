@@ -22,4 +22,5 @@ spec:
                     name: crane-config
               image: registry.clickyab.ae/clickyab/crane_master:latest
               name: crane-cron
+          restartPolicy: Never
   schedule: '30 00 * * *'

@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-crontab-6hours
+  name: jabeh-6hours-cron
   namespace: jabeh
 spec:
   concurrencyPolicy: Forbid
@@ -28,6 +28,6 @@ spec:
               limits:
                 cpu: "1"
           restartPolicy: Never
-  schedule: 16 */6 * * *
+  schedule: 16 * * * *
   successfulJobsHistoryLimit: 6
   suspend: false
