@@ -13,3 +13,4 @@ data:
   ND_7: "stream.conf|stream/buffer size bytes = 1048576"
   ND_8: "stream.conf|stream/reconnect delay seconds = 5"
   ND_9: "stream.conf|stream/initial clock resync iterations = 60"
+  ND_10: "netdata.conf|global/process scheduling policy = idle"
