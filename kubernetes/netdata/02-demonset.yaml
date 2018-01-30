@@ -16,13 +16,15 @@ spec:
       hostPID: true
       hostIPC: true
       hostNetwork: true
+      imagePullSecrets:
+        - name: regsecret
       containers:
         - resources:
             requests:
               cpu: 0.15
           securityContext:
             privileged: true
-          image: fzerorubigd/netdata
+          image: registry.clickyab.ae/clickyab/netdata-builtin:14
           name: netdata
           envFrom:
           - configMapRef:
