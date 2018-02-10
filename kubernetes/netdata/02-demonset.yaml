@@ -24,7 +24,7 @@ spec:
               cpu: 0.15
           securityContext:
             privileged: true
-          image: registry.clickyab.ae/clickyab/netdata-builtin:14
+          image: registry.clickyab.ae/clickyab/netdata-builtin:latest
           name: netdata
           envFrom:
           - configMapRef:
