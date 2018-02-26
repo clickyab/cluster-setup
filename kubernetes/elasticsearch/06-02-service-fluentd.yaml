@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: fluentd
+  name: fluentd
+  namespace: elasticsearch
+spec:
+  clusterIP: 10.233.9.245
+  ports:
+  - name: loggert
+    port: 24224
+    protocol: TCP
+    targetPort: 24224
+  - name: loggeru
+    port: 24224
+    protocol: UDP
+    targetPort: 24224
+  selector:
+    k8s-app: fluentd
+  sessionAffinity: None
+  type: ClusterIP
