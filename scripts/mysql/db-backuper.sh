@@ -83,8 +83,10 @@ function transfer() {
     if [[ $? -ne 0 ]]; then
         echo "[×] We have an error in transfering backup files via rsync." >> $logfile
         echo "    $msg" >> $logfile
+        return 1
     else
         echo "[✓] backup files successfully transfered." >> $logfile
+        return 0
     fi
 }
 
