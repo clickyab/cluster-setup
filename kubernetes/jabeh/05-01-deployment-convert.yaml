@@ -10,7 +10,14 @@ metadata:
   name: jabeh-master-convert-video
   namespace: jabeh
 spec:
-  replicas: 3
+  replicas: 30
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-convert-video
+      lang: php
+      proc: worker
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -25,8 +32,6 @@ spec:
         lang: php
         proc: worker
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - php
@@ -39,12 +44,8 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.402
-        imagePullPolicy: IfNotPresent
+        image: registry.clickyab.ae/clickyab/jabeh:master.982
         name: jabeh-master
-        resources:
-          limits:
-            cpu: "1"
         volumeMounts:
         - mountPath: /cdn
           name: cdn
@@ -54,7 +55,9 @@ spec:
           name: cachethumb
         - mountPath: /tmp/videos
           name: cachevideo
-      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
       volumes:
       - cephfs:
           monitors:
@@ -76,9 +79,7 @@ spec:
             name: ceph-secret
           user: admin
         name: chunks
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachethumb
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachevideo

@@ -10,7 +10,14 @@ metadata:
   name: jabeh-master-combine
   namespace: jabeh
 spec:
-  replicas: 1
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-combine
+      lang: php
+      proc: worker
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -25,8 +32,6 @@ spec:
         lang: php
         proc: worker
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - php
@@ -39,12 +44,10 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.402
-        imagePullPolicy: IfNotPresent
+        image: registry.clickyab.ae/clickyab/jabeh:master.982
         name: jabeh-master
         resources:
           limits:
-            cpu: "1"
             memory: 500Mi
           requests:
             memory: 300Mi
@@ -57,7 +60,9 @@ spec:
           name: cachethumb
         - mountPath: /tmp/videos
           name: cachevideo
-      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
       volumes:
       - cephfs:
           monitors:
@@ -79,9 +84,7 @@ spec:
             name: ceph-secret
           user: admin
         name: chunks
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachethumb
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachevideo

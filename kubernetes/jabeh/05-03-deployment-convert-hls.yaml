@@ -1,6 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  generation: 136
   labels:
     app: jabeh
     branch: master
@@ -10,7 +11,14 @@ metadata:
   name: jabeh-master-convert-hls
   namespace: jabeh
 spec:
-  replicas: 2
+  replicas: 4
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-convert-hls
+      lang: php
+      proc: worker
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -25,8 +33,6 @@ spec:
         lang: php
         proc: worker
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - php
@@ -39,12 +45,10 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.402
-        imagePullPolicy: IfNotPresent
+        image: registry.clickyab.ae/clickyab/jabeh:master.982
         name: jabeh-master
         resources:
           limits:
-            cpu: "1"
             memory: 2Gi
           requests:
             memory: 1424Mi
@@ -57,7 +61,9 @@ spec:
           name: cachethumb
         - mountPath: /tmp/videos
           name: cachevideo
-      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
       volumes:
       - cephfs:
           monitors:
@@ -79,9 +85,7 @@ spec:
             name: ceph-secret
           user: admin
         name: chunks
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachethumb
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachevideo

@@ -24,9 +24,6 @@ spec:
             image: registry.clickyab.ae/clickyab/jabeh:master.831
             imagePullPolicy: IfNotPresent
             name: jabeh-cron
-            resources:
-              limits:
-                cpu: "1"
           restartPolicy: Never
   schedule: '*/15 * * * *'
   successfulJobsHistoryLimit: 6
