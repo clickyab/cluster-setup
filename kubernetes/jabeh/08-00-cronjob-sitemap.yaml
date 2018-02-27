@@ -24,9 +24,6 @@ spec:
             image: registry.clickyab.ae/clickyab/jabeh:master.831
             imagePullPolicy: IfNotPresent
             name: jabeh-cron-sitemap
-            resources:
-              limits:
-                cpu: "1"
           restartPolicy: Never
           terminationGracePeriodSeconds: 30
   schedule: 1 * * * *
