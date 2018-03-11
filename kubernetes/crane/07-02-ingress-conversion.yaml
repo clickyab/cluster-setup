@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: conversion-ingress
+  namespace: crane
+  annotations:
+    ingress.kubernetes.io/use-gzip: "false"
+spec:
+  rules:
+  - host: a.clickyab.com
+    http:
+      paths:
+      - path: /conversion
+        backend:
+          serviceName: crane-service
+          servicePort: 9000
