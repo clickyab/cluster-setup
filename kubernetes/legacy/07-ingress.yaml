@@ -21,7 +21,7 @@ spec:
         backend:
           serviceName: front-legecy-service
           servicePort: 9000
-  - host: a.clickyab.com
+  - host: a-old.clickyab.com
     http:
       paths:
       - path: /conversion
