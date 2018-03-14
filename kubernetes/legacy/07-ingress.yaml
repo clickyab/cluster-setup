@@ -28,3 +28,10 @@ spec:
         backend:
           serviceName: front-legecy-service
           servicePort: 9000
+  - host: a.clickyab.com
+    http:
+      paths:
+      - path: /effect.js
+        backend:
+          serviceName: front-legecy-service
+          servicePort: 9000
