@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: legacy-config
+  namespace: legacy
+data:
+  MYSQL_DATABASE: clickyab
+  MYSQL_READ_HOST_ARRAY: 192.168.100.12,192.168.100.13
+  MYSQL_READ_PASSWORD: gX^Zmp90jOJp91$GwPujOTl2POQdlI
+  MYSQL_READ_PORT: "3306"
+  MYSQL_READ_USER: clickyab_readonly
+  MYSQL_WRITE_HOST: 192.168.100.11
+  MYSQL_WRITE_PASSWORD: oRgLsGydHQnZzvdNfHM6
+  MYSQL_WRITE_PORT: "3306"
+  MYSQL_WRITE_USER: clickyab_master
+  READ_COUNT: "2"
+  REDIS_PORT: "6379"
+  REDIS_HOST: redis-service.legacy
