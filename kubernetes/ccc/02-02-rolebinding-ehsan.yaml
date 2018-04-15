@@ -1,0 +1,13 @@
+kind: RoleBinding                                                                                                                           
+apiVersion: rbac.authorization.k8s.io/v1beta1                                                                                               
+metadata:                                                                                                                                   
+  name: deployment-manager-binding-ehsan                                                                                                    
+  namespace: ccc                                                                                                                            
+subjects:                                                                                                                                   
+- kind: User                                                                                                                                
+  name: ehsan                                                                                                                               
+  apiGroup: ""                                                                                                                              
+roleRef:                                                                                                                                    
+  kind: Role                                                                                                                                
+  name: devteam                                                                                                                             
+  apiGroup: ""

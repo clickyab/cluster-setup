@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  CEPHMONS: 192.168.10.1,192.168.10.6,192.168.10.11
+  KEYRING: |
+    [client.admin]
+    key = AQDDOGdZWir6ORAA1qpeQBRwd+OER+vgizzsWQ==
+    caps mds = "allow *"
+    caps mon = "allow *"
+    caps osd = "allow *"
+kind: ConfigMap
+metadata:
+  name: ceph-dash-config
+  namespace: tools
