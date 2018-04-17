@@ -45,7 +45,7 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-staging-config
-        image: registry.clickyab.ae/clickyab/jabeh:dev.753
+        image: registry.clickyab.ae/clickyab/jabeh:dev.1045
         imagePullPolicy: IfNotPresent
         name: jabeh-dev
         resources: {}

@@ -8,7 +8,12 @@ metadata:
   name: statics
   namespace: console
 spec:
-  replicas: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      k8s-app: statics-webserver
+      proc: webserver
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,13 +21,12 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: nginx
         k8s-app: statics-webserver
         proc: webserver
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - image: registry.clickyab.ae/clickyab/cdn-nginx:alpine
         imagePullPolicy: IfNotPresent
@@ -56,10 +60,19 @@ spec:
             memory: 200Mi
           requests:
             memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: statics
           readOnly: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
       volumes:
       - cephfs:
           monitors:

@@ -1,26 +1,52 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: crontabs
+    branch: master
+    k8s-app: legacy-crontabs
+    lang: php
+    proc: cron
   name: legacy-crontabs
   namespace: legacy
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crontabs
+      branch: master
+      k8s-app: legacy-crontabs
+      lang: php
+      proc: cron
   strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
     type: RollingUpdate
-  replicas: 0
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: crontabs
-        proc: cron
+        branch: master
         k8s-app: legacy-crontabs
         lang: php
-        branch: master
+        proc: cron
     spec:
       containers:
-      - name: legacy-crontabs
-        image: registry.clickyab.ae/clickyab/crontabs:master.32
-        envFrom:
+      - envFrom:
         - configMapRef:
             name: legacy-config
+        image: registry.clickyab.ae/clickyab/crontabs:master.51
+        imagePullPolicy: IfNotPresent
+        name: legacy-crontabs
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
       imagePullSecrets:
-        - name: regsecret
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

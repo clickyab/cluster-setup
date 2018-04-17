@@ -1,25 +1,42 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: clickyab-com
-  namespace: landings
   labels:
     app: clickyab-com-landing
+  name: clickyab-com
+  namespace: landings
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clickyab-com
+      k8s-app: landing-home
+      tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: clickyab-com
         k8s-app: landing-home
         tier: frontend
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
-      - image: registry.clickyab.ae/clickyab/console:clickyab.com.59
+      - image: registry.clickyab.ae/clickyab/console:clickyab.com.63
+        imagePullPolicy: IfNotPresent
         name: clickyab-com
         ports:
         - containerPort: 80
           name: clickyab-com
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

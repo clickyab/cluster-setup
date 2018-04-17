@@ -1,49 +1,46 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cloud-monitor
   labels:
     k8s-app: cloud-monitor
+  name: cloud-monitor
   namespace: tools
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      category: monitoring
+      k8s-app: cloud-monitor
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        k8s-app: cloud-monitor
         category: monitoring
+        k8s-app: cloud-monitor
     spec:
-      terminationGracePeriodSeconds: 60
-      serviceAccount: cloud-monitor
-      serviceAccountName: cloud-monitor
-      imagePullSecrets:
-        - name: regsecret
       containers:
-      - name: cloud-monitor
-        image: registry.clickyab.ae/clickyab/cluster-tools:master.27
-        command: [ "/app/bin/nodemon"]
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/healthz
-        #     port: 8090
-        #     scheme: HTTP
-        #   initialDelaySeconds: 30
-        #   timeoutSeconds: 5
+      - command:
+        - /app/bin/nodemon
         envFrom:
         - configMapRef:
             name: cloud-monitor
-        # volumeMounts:
-        #   - name: cert
-        #     mountPath: /etc/ssl/certs/ca-certificates.crt
-        #     readOnly: true
-        # resources:
-        #   limits:
-        #     cpu: 100m
-        #     memory: 30Mi
-        #   requests:
-        #     cpu: 10m
-        #     memory: 20Mi
-      # volumes:
-      #   - name: cert
-      #     hostPath:
-      #       path: /etc/ssl/certs/ca-certificates.crt
+        image: registry.clickyab.ae/clickyab/cluster-tools_master:36
+        imagePullPolicy: IfNotPresent
+        name: cloud-monitor
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: cloud-monitor
+      serviceAccountName: cloud-monitor
+      terminationGracePeriodSeconds: 60

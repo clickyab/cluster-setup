@@ -1,28 +1,45 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ceph-dashboard
-  namespace: tools
   labels:
     k8s-app: ceph-dashboard
     namespace: tools
+  name: ceph-dashboard
+  namespace: tools
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ceph-dashboard
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         k8s-app: ceph-dashboard
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
-        - name: ceph-dash
-          image: crapworks/ceph-dash
-          envFrom:
-            - configMapRef:
-                name: ceph-dash-config
-          ports:
-            - containerPort: 5000
-          resources:
-            limits:
-              cpu: 100m
-              memory: 200Mi
+      - envFrom:
+        - configMapRef:
+            name: ceph-dash-config
+        image: crapworks/ceph-dash
+        imagePullPolicy: Always
+        name: ceph-dash
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 200Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

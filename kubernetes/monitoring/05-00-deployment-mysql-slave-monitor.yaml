@@ -1,31 +1,42 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mysql-slave-monitor
   labels:
     k8s-app: mysql-slave-monitor
+  name: mysql-slave-monitor
   namespace: monitoring
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: mysql-slave-monitor
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         k8s-app: mysql-slave-monitor
     spec:
-      terminationGracePeriodSeconds: 60
-      imagePullSecrets:
-        - name: regsecret
       containers:
-      - name: mysql-slave-monitor
-        image: registry.clickyab.ae/clickyab/cluster-tools:master.12
-        command: [ "/app/bin/slavemonitor"]
+      - command:
+        - /app/bin/slavemonitor
         envFrom:
         - configMapRef:
             name: slave-mon-config
-        resources:
-          limits:
-            cpu: 100m
-            memory: 30Mi
-          requests:
-            cpu: 10m
-            memory: 20Mi
+        image: registry.clickyab.ae/clickyab/cluster-tools_master:36
+        imagePullPolicy: IfNotPresent
+        name: mysql-slave-monitor
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

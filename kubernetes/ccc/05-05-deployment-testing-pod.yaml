@@ -9,6 +9,11 @@ metadata:
   namespace: ccc
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: crab
+      k8s-app: testing
+      proc: testing
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,13 +21,12 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: crab
         k8s-app: testing
         proc: testing
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - /sbin/my_init
@@ -31,9 +35,19 @@ spec:
         - -c
         - while true; do sleep 100; done
         image: phusion/baseimage:0.9.22
+        imagePullPolicy: IfNotPresent
         name: base
         ports:
         - containerPort: 9000
           name: testing-web
           protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30

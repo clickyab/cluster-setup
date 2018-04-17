@@ -8,7 +8,12 @@ metadata:
   name: octopus-click
   namespace: octopus
 spec:
-  replicas: 1
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      proc: worker
+      spec: click
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,13 +21,12 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: octopus
         proc: worker
         spec: click
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - bash
@@ -32,6 +36,7 @@ spec:
         - configMapRef:
             name: octopus-config
         image: registry.clickyab.ae/clickyab/octopus:master.204
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -62,4 +67,12 @@ spec:
             memory: 200Mi
           requests:
             memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30

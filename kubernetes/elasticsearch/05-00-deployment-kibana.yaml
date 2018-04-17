@@ -1,26 +1,30 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: kibana
-  namespace: elasticsearch
   labels:
     component: kibana
+  name: kibana
+  namespace: elasticsearch
 spec:
   replicas: 1
   selector:
     matchLabels:
-     component: kibana
+      component: kibana
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         component: kibana
     spec:
       containers:
-      - name: kibana
-        image: cfontes/kibana-xpack-less:5.5.0
-        env:
-        - name: "CLUSTER_NAME"
-          value: "clickyab"
+      - env:
+        - name: CLUSTER_NAME
+          value: clickyab
         - name: XPACK_SECURITY_ENABLED
           value: 'false'
         - name: XPACK_GRAPH_ENABLED
@@ -29,12 +33,22 @@ spec:
           value: 'false'
         - name: XPACK_REPORTING_ENABLED
           value: 'false'
-        resources:
-          limits:
-            cpu: 1000m
-          requests:
-            cpu: 100m
+        image: cfontes/kibana-xpack-less:5.5.0
+        imagePullPolicy: IfNotPresent
+        name: kibana
         ports:
         - containerPort: 5601
           name: kibana
           protocol: TCP
+        resources:
+          limits:
+            cpu: '1'
+          requests:
+            cpu: 100m
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

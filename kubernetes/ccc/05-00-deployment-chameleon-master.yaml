@@ -8,6 +8,10 @@ metadata:
   namespace: ccc
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: chameleon-master-webserver
+      lang: js
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -15,17 +19,16 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         k8s-app: chameleon-master-webserver
         lang: js
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - envFrom:
         - configMapRef:
             name: crab-master-config
-        image: registry.clickyab.ae/clickyab/chameleon:master.234
+        image: registry.clickyab.ae/clickyab/chameleon_master:378
         imagePullPolicy: IfNotPresent
         name: chameleon-master
         resources:
@@ -38,6 +41,12 @@ spec:
         volumeMounts:
         - mountPath: /usr/share/nginx/html/uploads
           name: statics
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
       - cephfs:

@@ -8,7 +8,13 @@ metadata:
   name: octopus-fakedemand
   namespace: octopus
 spec:
-  replicas: 1
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      k8s-app: octopus-fakedemand
+      proc: worker
+      spec: fakedemand
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,14 +22,13 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: octopus
         k8s-app: octopus-fakedemand
         proc: worker
         spec: fakedemand
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - /app/bin/fakedemand
@@ -31,6 +36,7 @@ spec:
         - configMapRef:
             name: octopus-config
         image: registry.clickyab.ae/clickyab/octopus:master.204
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -61,4 +67,12 @@ spec:
             memory: 200Mi
           requests:
             memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30

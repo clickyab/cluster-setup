@@ -33,8 +33,6 @@ spec:
         lang: php
         type: worker
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - php
@@ -47,7 +45,7 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.765
+        image: registry.clickyab.ae/clickyab/jabeh:master.1039
         imagePullPolicy: IfNotPresent
         name: jabeh-master
         resources: {}

@@ -1,32 +1,53 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: zanata
+    k8s-app: zanata
+    spec: zanata
   name: zanata
   namespace: ccc
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
+  selector:
+    matchLabels:
+      app: zanata
+      k8s-app: zanata
+      spec: zanata
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        # Label is used as selector in the service.
-        k8s-app: zanata
         app: zanata
+        k8s-app: zanata
         spec: zanata
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
-        - name: zanata
-          # Pulls the default Minio image from Docker Hub
-          image: registry.clickyab.ae/clickyab/zanata-server
-          envFrom:
-            - configMapRef:
-                name: zanata-configmap
-          ports:
-            - name: zanata-listen
-              containerPort: 8080
-            - name: zanata-mgmt
-              containerPort: 9990
+      - envFrom:
+        - configMapRef:
+            name: zanata-configmap
+        image: registry.clickyab.ae/clickyab/zanata-server
+        imagePullPolicy: Always
+        name: zanata
+        ports:
+        - containerPort: 8080
+          name: zanata-listen
+          protocol: TCP
+        - containerPort: 9990
+          name: zanata-mgmt
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

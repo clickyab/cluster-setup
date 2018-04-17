@@ -1,37 +1,38 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    app: jabeh
+    k8s-app: jabeh-dev-app
+    service: app
   name: jabeh-dev
   namespace: jabeh-staging
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: jabeh
+      k8s-app: jabeh-dev-app
+      service: app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: jabeh
-        service: app
         k8s-app: jabeh-dev-app
+        service: app
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
-      - name: jabeh-dev
-        image: registry.clickyab.ae/clickyab/jabeh:dev.765
-        envFrom:
-          - configMapRef:
-              name: jabeh-staging-config
-        ports:
-        - name: web
-          containerPort: 80
-        volumeMounts:
-        - name: cdn
-          mountPath: /cdn
-        - name: chunks
-          mountPath: /chunks
-        - name: cachethumb
-          mountPath: /tmp/thumbnails
-        - name: cachevideo
-          mountPath: /tmp/videos
+      - envFrom:
+        - configMapRef:
+            name: jabeh-staging-config
+        image: registry.clickyab.ae/clickyab/jabeh:dev.1045
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -42,6 +43,11 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           timeoutSeconds: 15
+        name: jabeh-dev
+        ports:
+        - containerPort: 80
+          name: web
+          protocol: TCP
         readinessProbe:
           failureThreshold: 1
           httpGet:
@@ -52,28 +58,47 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           timeoutSeconds: 15
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: cdn
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
           secretRef:
             name: ceph-secret
-          path: "/jabeh/cdn"
-      - name: chunks
-        cephfs:
-          monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
           user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
           secretRef:
             name: ceph-secret
-          path: "/jabeh/chunks"
-      - name: cachethumb
-        emptyDir: {}
-      - name: cachevideo
-        emptyDir: {}
+          user: admin
+        name: chunks
+      - emptyDir: {}
+        name: cachethumb
+      - emptyDir: {}
+        name: cachevideo

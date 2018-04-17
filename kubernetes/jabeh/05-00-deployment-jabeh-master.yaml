@@ -10,7 +10,14 @@ metadata:
   name: jabeh-master
   namespace: jabeh
 spec:
-  replicas: 3
+  replicas: 4
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-webserver
+      lang: php
+      proc: webserver
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,6 +25,7 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: jabeh
         branch: master
@@ -25,13 +33,11 @@ spec:
         lang: php
         proc: webserver
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.402
+        image: registry.clickyab.ae/clickyab/jabeh:master.1039
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -63,6 +69,8 @@ spec:
             memory: 1524Mi
           requests:
             memory: 1Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /cdn
           name: cdn
@@ -72,6 +80,14 @@ spec:
           name: cachethumb
         - mountPath: /tmp/videos
           name: cachevideo
+        - mountPath: /etc/custom-metrics
+          name: custommetrics
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
       - cephfs:
@@ -94,9 +110,11 @@ spec:
             name: ceph-secret
           user: admin
         name: chunks
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachethumb
-      - emptyDir:
-          sizeLimit: "0"
+      - emptyDir: {}
         name: cachevideo
+      - name: custommetrics
+        secret:
+          defaultMode: 420
+          secretName: definition

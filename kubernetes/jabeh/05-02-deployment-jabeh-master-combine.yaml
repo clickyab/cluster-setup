@@ -25,6 +25,7 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: jabeh
         branch: master
@@ -44,13 +45,16 @@ spec:
         envFrom:
         - configMapRef:
             name: jabeh-master-config
-        image: registry.clickyab.ae/clickyab/jabeh:master.982
+        image: registry.clickyab.ae/clickyab/jabeh:master.1039
+        imagePullPolicy: IfNotPresent
         name: jabeh-master
         resources:
           limits:
             memory: 500Mi
           requests:
             memory: 300Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /cdn
           name: cdn
@@ -60,9 +64,13 @@ spec:
           name: cachethumb
         - mountPath: /tmp/videos
           name: cachevideo
+      dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: regsecret
       restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
       volumes:
       - cephfs:
           monitors:
