@@ -9,6 +9,11 @@ metadata:
   namespace: gad
 spec:
   replicas: 5
+  selector:
+    matchLabels:
+      app: gad
+      k8s-app: gad-webserver
+      proc: webserver
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -16,20 +21,20 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: gad
         k8s-app: gad-webserver
         proc: webserver
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - /app/bin/server
         envFrom:
         - configMapRef:
             name: gad-config
-        image: registry.clickyab.ae/clickyab/gad:master.343
+        image: registry.clickyab.ae/clickyab/gad:master.388
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -60,4 +65,12 @@ spec:
             memory: 1500Mi
           requests:
             memory: 1100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30

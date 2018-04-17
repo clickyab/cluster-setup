@@ -1,33 +1,51 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: redis
-  namespace: legacy
   labels:
     k8s-app: redis
-    service: redis
     namespace: legacy
+    service: redis
+  name: redis
+  namespace: legacy
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      branch: dev
+      namespace: legacy
+      service: redis
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: redis
+        branch: dev
         namespace: legacy
         service: redis
-        branch: dev
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
-        - name: redis
-          image: redis
-          ports:
-            - name: redis
-              containerPort: 6379
-          resources:
-            limits:
-              memory: "9216Mi"
-            requests:
-              memory: "6144Mi"
-
-            
+      - image: redis
+        imagePullPolicy: Always
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        resources:
+          limits:
+            memory: 9Gi
+          requests:
+            memory: 6Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

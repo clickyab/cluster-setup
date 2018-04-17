@@ -1,26 +1,47 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: jabeho-staging-redis
-  namespace: jabeh-staging
   labels:
     k8s-app: jabeh-staging
-    service: redis
     namespace: jabeh-staging
+    service: redis
+  name: jabeho-staging-redis
+  namespace: jabeh-staging
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      branch: dev
+      namespace: jabeh-staging
+      service: redis
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: redis
+        branch: dev
         namespace: jabeh-staging
         service: redis
-        branch: dev
     spec:
-      terminationGracePeriodSeconds: 60
       containers:
-        - name: redis
-          image: redis
-          ports:
-            - name: redis
-              containerPort: 6379
+      - image: redis
+        imagePullPolicy: Always
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

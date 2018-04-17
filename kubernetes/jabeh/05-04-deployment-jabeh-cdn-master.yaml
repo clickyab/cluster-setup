@@ -10,7 +10,14 @@ metadata:
   name: jabeh-cdn-master
   namespace: jabeh
 spec:
-  replicas: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-cdn
+      lang: php
+      proc: webserver
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -18,6 +25,7 @@ spec:
     type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: jabeh
         branch: master
@@ -25,8 +33,6 @@ spec:
         lang: php
         proc: webserver
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - image: registry.clickyab.ae/clickyab/jabeh-nginx:alpine
         imagePullPolicy: IfNotPresent
@@ -40,9 +46,17 @@ spec:
             memory: 3Gi
           requests:
             memory: 2560Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /usr/share/nginx/html
           name: cdn
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
       - cephfs:

@@ -8,7 +8,12 @@ metadata:
   name: octopus-show
   namespace: octopus
 spec:
-  replicas: 1
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      proc: worker
+      spec: show
   strategy:
     rollingUpdate:
       maxSurge: 2
@@ -22,8 +27,6 @@ spec:
         proc: worker
         spec: show
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
       - command:
         - bash
@@ -64,4 +67,12 @@ spec:
             memory: 200Mi
           requests:
             memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
       terminationGracePeriodSeconds: 30

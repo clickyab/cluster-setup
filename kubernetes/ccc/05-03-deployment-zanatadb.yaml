@@ -1,27 +1,47 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: mariadb
+    k8s-app: zanata
+    spec: zanatadb
   name: zanatadb
   namespace: ccc
 spec:
-  strategy:
-    type: RollingUpdate
   replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+      k8s-app: zanata
+      spec: zanatadb
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        # Label is used as selector in the service.
-        k8s-app: zanata
         app: mariadb
+        k8s-app: zanata
         spec: zanatadb
     spec:
       containers:
-        - name: zanatadb
-          image: mariadb:10.1
-          args:
-            - --character-set-server=utf8
-            - --collation-server=utf8_general_ci
-          envFrom:
-            - configMapRef:
-                name: zanata-configmap
+      - args:
+        - --character-set-server=utf8
+        - --collation-server=utf8_general_ci
+        envFrom:
+        - configMapRef:
+            name: zanata-configmap
+        image: mariadb:10.1
+        imagePullPolicy: IfNotPresent
+        name: zanatadb
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

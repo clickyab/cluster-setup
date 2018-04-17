@@ -1,29 +1,51 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  # This name uniquely identifies the Deployment
+  labels:
+    app: octopus
+    k8s-app: octopus-staging
+    proc: worker
+    spec: rtbdemand
   name: octopus-rtbdemand
   namespace: octopus-staging
 spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      k8s-app: octopus-staging
+      proc: worker
+      spec: rtbdemand
   strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
     type: RollingUpdate
-  replicas: 1
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        # Label is used as selector in the service.
-        k8s-app: octopus-staging
         app: octopus
+        k8s-app: octopus-staging
         proc: worker
         spec: rtbdemand
     spec:
-      imagePullSecrets:
-        - name: regsecret
       containers:
-      - name: octopus-dev
-        # Pulls the default Minio image from Docker Hub
-        image: registry.clickyab.ae/clickyab/octopus:dev.287
-        command: [ "/app/bin/rtb-demand"]
+      - command:
+        - /app/bin/rtb-demand
         envFrom:
         - configMapRef:
             name: rtbdemand-config
+        image: registry.clickyab.ae/clickyab/octopus:dev.322
+        imagePullPolicy: IfNotPresent
+        name: octopus-dev
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,40 +1,57 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: wordpress
-  namespace: landings
   labels:
     app: wordpress
+  name: wordpress
+  namespace: landings
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+      k8s-app: landing-wordpress
+      tier: frontend
   strategy:
     type: Recreate
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: wordpress
         k8s-app: landing-wordpress
         tier: frontend
     spec:
       containers:
-      - image: wordpress:4.8.2-apache
-        name: wordpress
-        envFrom:
+      - envFrom:
         - configMapRef:
             name: wordpress-config
+        image: wordpress:4.8.2-apache
+        imagePullPolicy: IfNotPresent
+        name: wordpress
         ports:
         - containerPort: 80
           name: wordpress
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
         volumeMounts:
-        - name: wordpress-persistent-storage
-          mountPath: /var/www/html
+        - mountPath: /var/www/html
+          name: wordpress-persistent-storage
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: wordpress-persistent-storage
-        cephfs:
+      - cephfs:
           monitors:
-            - 192.168.10.1:6789
-            - 192.168.10.6:6789
-            - 192.168.10.11:6789
-          user: admin
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /landings/wp
           secretRef:
             name: ceph-secret
-          path: "/landings/wp"
+          user: admin
+        name: wordpress-persistent-storage
