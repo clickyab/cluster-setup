@@ -16,6 +16,7 @@ data:
   TIMEZONE: Asia/Tehran
   TZ: Asia/Tehran
   WEB_CONCURRENCY: "8"
+  IPLOCATION_SRC: "/root/IP-COUNTRY-REGION-CITY-ISP.BIN"
 kind: ConfigMap
 metadata:
   name: console-master-config
