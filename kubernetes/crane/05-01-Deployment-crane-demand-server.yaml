@@ -3,17 +3,17 @@ kind: Deployment
 metadata:
   labels:
     app: crane
-    proc: worker
-    spec: click
-  name: crane-click-worker
-  namespace: crane-staging
+    k8s-app: crane-app
+    proc: app
+  name: crane-demand-server
+  namespace: crane
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: crane
-      proc: worker
-      spec: click
+      k8s-app: crane-app
+      proc: app
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -24,16 +24,16 @@ spec:
       creationTimestamp: null
       labels:
         app: crane
-        proc: worker
-        spec: click
+        k8s-app: crane-app
+        proc: app
     spec:
       containers:
       - command:
-        - /app/bin/click-worker
+        - /app/bin/demand
         envFrom:
         - configMapRef:
             name: crane-config
-        image: registry.clickyab.ae/clickyab/crane_dev:498
+        image: registry.clickyab.ae/clickyab/crane_master:469
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
@@ -45,9 +45,9 @@ spec:
           periodSeconds: 20
           successThreshold: 1
           timeoutSeconds: 15
-        name: crane-dev
+        name: crane-master
         ports:
-        - containerPort: 9002
+        - containerPort: 9000
           name: web-health
           protocol: TCP
         readinessProbe:
@@ -63,6 +63,9 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets
       dnsPolicy: ClusterFirst
       imagePullSecrets:
       - name: regsecret
@@ -70,3 +73,8 @@ spec:
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
+      volumes:
+      - name: secrets
+        secret:
+          defaultMode: 420
+          secretName: jwt-token

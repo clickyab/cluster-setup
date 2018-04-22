@@ -33,7 +33,7 @@ spec:
         envFrom:
         - configMapRef:
             name: crane-config
-        image: registry.clickyab.ae/clickyab/crane_dev:487
+        image: registry.clickyab.ae/clickyab/crane_dev:498
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
