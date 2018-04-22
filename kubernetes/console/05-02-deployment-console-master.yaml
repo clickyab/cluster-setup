@@ -42,7 +42,7 @@ spec:
         envFrom:
         - configMapRef:
             name: console-master-config
-        image: registry.clickyab.ae/clickyab/console:master.3606
+        image: registry.clickyab.ae/clickyab/console:master.3610
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3

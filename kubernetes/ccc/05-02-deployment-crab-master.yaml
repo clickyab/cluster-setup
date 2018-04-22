@@ -50,7 +50,7 @@ spec:
         envFrom:
         - configMapRef:
             name: crab-master-config
-        image: registry.clickyab.ae/clickyab/crab_master:281
+        image: registry.clickyab.ae/clickyab/crab_master:309
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
