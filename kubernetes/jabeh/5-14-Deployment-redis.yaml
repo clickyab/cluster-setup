@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: jabeh-redis
+    namespace: legacy
+    service: redis
+  name: redis
+  namespace: jabeh
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      branch: master
+      namespace: jabeh
+      service: redis
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: redis
+        branch: master
+        namespace: jabeh
+        service: redis
+    spec:
+      containers:
+      - image: redis
+        imagePullPolicy: Always
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

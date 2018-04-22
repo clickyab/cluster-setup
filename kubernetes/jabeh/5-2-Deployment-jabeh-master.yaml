@@ -1,0 +1,120 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: jabeh
+    branch: master
+    k8s-app: jabeh-master-webserver
+    lang: php
+    proc: webserver
+  name: jabeh-master
+  namespace: jabeh
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: jabeh
+      branch: master
+      k8s-app: jabeh-master-webserver
+      lang: php
+      proc: webserver
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jabeh
+        branch: master
+        k8s-app: jabeh-master-webserver
+        lang: php
+        proc: webserver
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: jabeh-master-config
+        image: registry.clickyab.ae/clickyab/jabeh:master.1039
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: jabeh-master
+        ports:
+        - containerPort: 80
+          name: master-web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 1524Mi
+          requests:
+            memory: 1Gi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+        - mountPath: /etc/custom-metrics
+          name: custommetrics
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: chunks
+      - emptyDir: {}
+        name: cachethumb
+      - emptyDir: {}
+        name: cachevideo
+      - name: custommetrics
+        secret:
+          defaultMode: 420
+          secretName: definition

@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: rabbit-monitor
+  name: rabbit-monitor
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      category: monitoring
+      k8s-app: rabbit-monitor
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        category: monitoring
+        k8s-app: rabbit-monitor
+    spec:
+      containers:
+      - command:
+        - /app/bin/rmeter
+        envFrom:
+        - configMapRef:
+            name: rabbit-monitor
+        image: registry.clickyab.ae/clickyab/cluster-tools_master:36
+        imagePullPolicy: Always
+        name: rabbit-monitor
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

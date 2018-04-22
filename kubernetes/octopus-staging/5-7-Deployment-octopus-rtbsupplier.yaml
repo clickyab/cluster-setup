@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: octopus
+    k8s-app: octopus-staging
+    proc: worker
+    spec: rtbsupplier
+  name: octopus-rtbsupplier
+  namespace: octopus-staging
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      k8s-app: octopus-staging
+      proc: worker
+      spec: rtbsupplier
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: octopus
+        k8s-app: octopus-staging
+        proc: worker
+        spec: rtbsupplier
+    spec:
+      containers:
+      - command:
+        - /app/bin/rtb-supplier
+        envFrom:
+        - configMapRef:
+            name: rtbsupplier-config
+        image: registry.clickyab.ae/clickyab/octopus:dev.322
+        imagePullPolicy: IfNotPresent
+        name: octopus-dev
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: zanata
+    k8s-app: zanata
+    spec: zanata
+  name: zanata
+  namespace: ccc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zanata
+      k8s-app: zanata
+      spec: zanata
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: zanata
+        k8s-app: zanata
+        spec: zanata
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: zanata-configmap
+        image: registry.clickyab.ae/clickyab/zanata-server
+        imagePullPolicy: Always
+        name: zanata
+        ports:
+        - containerPort: 8080
+          name: zanata-listen
+          protocol: TCP
+        - containerPort: 9990
+          name: zanata-mgmt
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
