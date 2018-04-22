@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: confluence
+    namespace: office
+  name: confluence
+  namespace: office
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      k8s-app: confluence
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: confluence
+      name: confluence
+      namespace: office
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: confluence-configmap
+        image: atlassian/confluence-server
+        imagePullPolicy: Always
+        name: confluence
+        ports:
+        - containerPort: 8090
+          protocol: TCP
+        - containerPort: 8091
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/atlassian/application-data/confluence
+          name: confluence-data
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        app: confluence
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /office/confluence
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: confluence-data

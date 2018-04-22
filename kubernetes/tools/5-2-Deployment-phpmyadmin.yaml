@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: phpmyadmin
+    k8s-app: tools-phpmyadmin
+    lang: php
+  name: phpmyadmin
+  namespace: tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+      k8s-app: tools-phpmyadmin
+      lang: php
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: phpmyadmin
+        k8s-app: tools-phpmyadmin
+        lang: php
+    spec:
+      containers:
+      - env:
+        - name: PMA_ARBITRARY
+          value: '1'
+        image: phpmyadmin/phpmyadmin
+        imagePullPolicy: Always
+        name: phpmyadmin
+        ports:
+        - containerPort: 80
+          name: phpmyadmin-web
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

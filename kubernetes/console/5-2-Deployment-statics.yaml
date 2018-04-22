@@ -1,0 +1,86 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+    k8s-app: statics-webserver
+    proc: webserver
+  name: statics
+  namespace: console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      k8s-app: statics-webserver
+      proc: webserver
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+        k8s-app: statics-webserver
+        proc: webserver
+    spec:
+      containers:
+      - image: registry.clickyab.ae/clickyab/cdn-nginx:alpine
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: statics
+        ports:
+        - containerPort: 80
+          name: statics
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: statics
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /legacy/statics
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: statics

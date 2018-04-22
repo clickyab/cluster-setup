@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: show-ad
+    branch: master
+    k8s-app: legacy-front
+    lang: php
+    proc: front
+  name: legacy-front
+  namespace: legacy
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: show-ad
+      branch: master
+      k8s-app: legacy-front
+      lang: php
+      proc: front
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: show-ad
+        branch: master
+        k8s-app: legacy-front
+        lang: php
+        proc: front
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: legacy-config
+        image: registry.clickyab.ae/clickyab/legacy-front:master.492
+        imagePullPolicy: IfNotPresent
+        name: legacy-front
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

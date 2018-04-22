@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: octopus
+    k8s-app: octopus-staging
+    proc: worker
+    spec: console
+  name: console
+  namespace: octopus-staging
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: octopus
+      k8s-app: octopus-staging
+      proc: worker
+      spec: console
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: octopus
+        k8s-app: octopus-staging
+        proc: worker
+        spec: console
+    spec:
+      containers:
+      - image: registry.clickyab.ae/clickyab/octopus-console:master.43
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 180
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: octopus-console-master
+        ports:
+        - containerPort: 80
+          name: octoconsole
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /healthz
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 15
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

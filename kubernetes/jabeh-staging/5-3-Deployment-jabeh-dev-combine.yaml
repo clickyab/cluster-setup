@@ -1,0 +1,96 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: jabeh-dev-combine
+    branch: dev
+    k8s-app: jabeh-staging
+    lang: php
+    type: worker
+  name: jabeh-dev-combine
+  namespace: jabeh-staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jabeh-dev-combine
+      branch: dev
+      k8s-app: jabeh-staging
+      lang: php
+      type: worker
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: jabeh-dev-combine
+        branch: dev
+        k8s-app: jabeh-staging
+        lang: php
+        type: worker
+    spec:
+      containers:
+      - command:
+        - php
+        - /app/artisan
+        - queue:work
+        - --queue=CombineVideo
+        - --sleep=5
+        - --tries=5
+        - --daemon
+        envFrom:
+        - configMapRef:
+            name: jabeh-staging-config
+        image: registry.clickyab.ae/clickyab/jabeh:dev.1045
+        imagePullPolicy: IfNotPresent
+        name: jabeh-dev
+        resources:
+          limits:
+            cpu: '1'
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /cdn
+          name: cdn
+        - mountPath: /chunks
+          name: chunks
+        - mountPath: /tmp/thumbnails
+          name: cachethumb
+        - mountPath: /tmp/videos
+          name: cachevideo
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/cdn
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: cdn
+      - cephfs:
+          monitors:
+          - 192.168.10.1:6789
+          - 192.168.10.6:6789
+          - 192.168.10.11:6789
+          path: /jabeh/chunks
+          secretRef:
+            name: ceph-secret
+          user: admin
+        name: chunks
+      - emptyDir: {}
+        name: cachethumb
+      - emptyDir: {}
+        name: cachevideo

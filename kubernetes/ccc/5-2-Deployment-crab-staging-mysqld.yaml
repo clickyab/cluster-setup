@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    branch: dev
+    k8s-app: crab
+    namespace: crab-mysqld
+    service: mysqld
+    type: db
+  name: crab-staging-mysqld
+  namespace: ccc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crab
+      branch: dev
+      service: mysqld
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: crab
+        branch: dev
+        service: mysqld
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: crab-staging-mysqld-config
+        image: registry.clickyab.ae/clickyab/mysqld-staging
+        imagePullPolicy: Always
+        name: mysqld-staging
+        ports:
+        - containerPort: 3306
+          name: msyqld
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60

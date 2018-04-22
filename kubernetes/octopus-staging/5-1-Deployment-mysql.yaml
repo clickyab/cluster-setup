@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    branch: dev
+    k8s-app: octopus-staging
+    namespace: octopus-staging
+    service: mysqld
+    type: db
+  name: mysql
+  namespace: octopus-staging
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      branch: dev
+      k8s-app: octopus-staging
+      service: mysqld
+      type: db
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        branch: dev
+        k8s-app: octopus-staging
+        service: mysqld
+        type: db
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: mysqld-config
+        image: registry.clickyab.ae/clickyab/mysqld-staging
+        imagePullPolicy: Always
+        name: mysqld-staging
+        ports:
+        - containerPort: 3306
+          name: mysqld
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60
