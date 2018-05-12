@@ -16,6 +16,10 @@ data:
   CRN_SERVICES_STORE_JWT_PRIVATE_256: "/secrets/crane_key.priv"
   CRN_SERVICES_STORE_JWT_PUBLIC_256: "/secrets/crane_key.pub"
   CRN_CRANE_SUPPLIER_BANNER_URL: "http://crane-service.crane:9000/api/ortb/forbidden"
+  CRN_SERVICES_SLACK_CHANNEL: '#crane'
+  CRN_SERVICES_SLACK_USERNAME: crane
+  CRN_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+  CRN_SERVICES_SLACK_ACTIVE: "TRUE"
 kind: ConfigMap
 metadata:
   name: crane-config
