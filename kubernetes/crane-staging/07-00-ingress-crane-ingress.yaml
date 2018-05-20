@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: crane-ingress
   namespace: crane-staging
+  annotations:
+    ingress.kubernetes.io/enable-cors: "true"
 spec:
   rules:
   - host: demand.clickyab.ae

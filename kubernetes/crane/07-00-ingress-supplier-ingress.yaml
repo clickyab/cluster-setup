@@ -12,3 +12,17 @@ spec:
           serviceName: supplier-service
           servicePort: 9000
         path: /
+  - host: app.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: supplier-service
+          servicePort: 9000
+        path: /
+  - host: v.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: supplier-service
+          servicePort: 9000
+        path: /
