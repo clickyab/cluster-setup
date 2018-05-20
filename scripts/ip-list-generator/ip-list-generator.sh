@@ -20,7 +20,8 @@ while read line; do
         name=$(echo $line | cut -d";" -f4)
     else
         ip=$(echo $line | awk '{print $1}')
-        echo -e $ip"\t:\t\t" $name >> ${destination_file}
+        mac=$(echo $line | awk '{print $2}')
+        echo -e $ip"\t:\t" $mac"\t:\t" $name >> ${destination_file}
         ip=""
         name=""
     fi
