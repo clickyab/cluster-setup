@@ -31,7 +31,7 @@ data:
   PORT: "9000"
   QUEUE_DRIVER: rabbitmq
   RABBITMQ_HOST: rabbitmq.rabbitmq
-  RABBITMQ_LOGIN: jabehdev
+  RABBITMQ_LOGIN: jabeh-dev
   RABBITMQ_PASSWORD: m3NyAmEVI9nJX5fCohLLGMCk77nuws
   RABBITMQ_VHOST: jabeh-staging
   REDIS_HOST: jabeh-staging-redis-service.jabeh-staging
