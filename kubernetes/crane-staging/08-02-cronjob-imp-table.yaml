@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: imp-table
+  namespace: crane-staging
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 12
+  successfulJobsHistoryLimit: 6
+  suspend: false
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regsecret
+          containers:
+            - command: ["/app/make", "create-imp-table"]
+              envFrom:
+                - configMapRef:
+                    name: crane-config
+              image: registry.clickyab.ae/clickyab/crane_dev:latest
+              name: cronjob-imp-table
+          restartPolicy: Never
+  schedule: '30 04 * * *'
