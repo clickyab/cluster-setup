@@ -1,4 +1,4 @@
-FROM mariadb:10.3
+FROM mariadb:10.0.34
 MAINTAINER vahit<vahid.maani@gmail.com>
 
 COPY ./bin/ /root
