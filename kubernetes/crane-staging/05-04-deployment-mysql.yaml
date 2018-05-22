@@ -35,7 +35,7 @@ spec:
       - envFrom:
         - configMapRef:
             name: mysqld-config
-        image: registry.clickyab.ae/clickyab/mysqld-staging
+        image: registry.clickyab.ae/clickyab/mysqld-staging:latest
         imagePullPolicy: Always
         name: mysqld-staging
         ports:
