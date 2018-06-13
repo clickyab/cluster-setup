@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: jabeh-worldcup
+  namespace: jabeh
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 12
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          imagePullSecrets:
+            - name: regsecret
+          containers:
+          - command:
+            - php
+            - artisan
+            - WorldCup:generate
+            envFrom:
+            - configMapRef:
+                name: jabeh-master-config
+            image: registry.clickyab.ae/clickyab/jabeh:master.latest
+            imagePullPolicy: IfNotPresent
+            name: jabeh-worldcup
+          restartPolicy: Never
+  schedule: 0 */1 * * *
+  successfulJobsHistoryLimit: 6
+  suspend: false
