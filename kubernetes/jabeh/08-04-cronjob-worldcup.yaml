@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: jabeh-worldcup
+  name: jabeh-cron-worldcup
   namespace: jabeh
 spec:
   concurrencyPolicy: Forbid
