@@ -1,25 +1,31 @@
 apiVersion: v1
 data:
-  PORT: "9000"
-  CRN_CORE_DEVEL_MODE: "FALSE"
-  CRN_SERVICES_AMQP_DSN: "amqp://crane:yGxOq8xVQNxJNXV9D7N1yGJFGSxPea@rabbitmq.rabbitmq:5672/crane"
-  CRN_SERVICES_AMQP_EXCHANGE: "crane"
-  CRN_SERVICES_BROKER_PROVIDER: "rabbitmq"
-  CRN_SERVICES_MYSQL_WDSN: "clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true"
+  CRN_CORE_DEVEL_MODE: "TRUE"
+  CRN_CRANE_CONTEXT_SEAT_CLICK_LIMIT: "80"
+  CRN_CRANE_SUPPLIER_BANNER_URL: http://crane-service.crane:9000/api/ortb/forbidden
+  CRN_SERVICES_AMQP_CONNECTION_COUNT: "8"
+  CRN_SERVICES_AMQP_DSN: amqp://crane:yGxOq8xVQNxJNXV9D7N1yGJFGSxPea@rabbitmq.rabbitmq:5672/crane
+  CRN_SERVICES_AMQP_EXCHANGE: crane
+  CRN_SERVICES_AMQP_PUBLISHER: "40"
+  CRN_SERVICES_BROKER_PROVIDER: rabbitmq
+  CRN_SERVICES_MYSQL_RDSN: clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true,clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true
   CRN_SERVICES_MYSQL_REPLICATION_DELAY: "30"
   CRN_SERVICES_MYSQL_REPLICATION_STATUS: "TRUE"
-  CRN_SERVICES_MYSQL_RDSN: "clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.12:3306)/clickyab?charset=utf8&parseTime=true,clickyab_readonly:gX^Zmp90jOJp91$GwPujOTl2POQdlI@tcp(192.168.100.13:3306)/clickyab?charset=utf8&parseTime=true"
-  CRN_SERVICES_REDIS_ADDRESS: "redis.crane"
-  CRN_SERVICES_REDIS_CLUSTER: "FALSE"
-  CRN_SERVICES_REDIS_POR: "6379"
-  CRN_SERVICES_STORE_JWT_FILE: "TRUE"
-  CRN_SERVICES_STORE_JWT_PRIVATE_256: "/secrets/crane_key.priv"
-  CRN_SERVICES_STORE_JWT_PUBLIC_256: "/secrets/crane_key.pub"
-  CRN_CRANE_SUPPLIER_BANNER_URL: "http://crane-service.crane:9000/api/ortb/forbidden"
+  CRN_SERVICES_MYSQL_WDSN: clickyab_master:oRgLsGydHQnZzvdNfHM6@tcp(192.168.100.11:3306)/clickyab?charset=utf8&parseTime=true
+  CRN_SERVICES_REDIS_ADDRESS: redis-cluster.redis
+  CRN_SERVICES_REDIS_CLUSTER: "TRUE"
+  CRN_SERVICES_REDIS_DATABASE: "10"
+  CRN_SERVICES_REDIS_POOLSIZE: "250"
+  CRN_SERVICES_REDIS_PORT: "6379"
+  CRN_SERVICES_SLACK_ACTIVE: "TRUE"
   CRN_SERVICES_SLACK_CHANNEL: '#crane'
   CRN_SERVICES_SLACK_USERNAME: crane
-  CRN_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
-  CRN_SERVICES_SLACK_ACTIVE: "TRUE"
+  CRN_SERVICES_SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+  CRN_SERVICES_STORE_JWT_FILE: "TRUE"
+  CRN_SERVICES_STORE_JWT_PRIVATE_256: /secrets/crane_key.priv
+  CRN_SERVICES_STORE_JWT_PUBLIC_256: /secrets/crane_key.pub
+  PORT: "9000"
+  ROOT: /app
 kind: ConfigMap
 metadata:
   name: crane-config
