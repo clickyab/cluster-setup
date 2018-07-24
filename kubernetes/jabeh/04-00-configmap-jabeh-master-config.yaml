@@ -1,45 +1,72 @@
 apiVersion: v1
 data:
   APP_URL: http://jabeh.com
-  AVATAR_FULL_PATH: /cdn/avatars
+  AVATAR_FULL_PATH: /cdn/avatars/
+  BANNER_FULL_PATH: /cdn/banners/
+  BANNER_RELATED_PATH: /banners/
   BEANSTALK_HOST: jabeh-benstalkd.jabeh
   BEANSTALKD_PORT_11300_TCP_ADDR: localhost:11300
   CACHE_DRIVER: redis
   CDN_DEFAULT: ://frcdn.jabeh.com
   CDN_IR: ://ircdn.jabeh.com
-  CONVERTED_VIDEO_FULL_PATH: /tmp/convert
-  CONVERTED_VIDEO_RELATED_PATH: /
+  CDN_IR_1: ://ircache1.jabeh.com
+  CDN_IR_2: ://ircache2.jabeh.com
+  CDN_IR_3: ://ircache3.jabeh.com
+  CDN_IR_SUB_DAY: "120"
+  CDN_IR_SUB_DAY_2: "356"
+  CLICKYAB_SHOW_JS_URL: //v.clickyab.com/show.js
+  CLICKYAB_VAST_JS_URL: //static.clickyab.com/js/vastAD.js
+  CONVERT_VIDEO_TEMP_PATH: /tmp/convert/
+  CONVERTED_VIDEO_FULL_PATH: /cdn/converted/
+  CONVERTED_VIDEO_RELATED_PATH: /converted/
   DB_DATABASE: jabeh
   DB_HOST: 192.168.100.11
   DB_PASSWORD: nVNxKceOfa6E6h9
   DB_PORT: "3306"
   DB_USERNAME: jabeh
   DEBUG: "false"
-  ELASTIC_HOST: 192.168.120.1
+  ELASTIC_HOST: jabeh-elastic-service.jabeh
   ELASTIC_PORT: "9200"
-  HLS_SERVICES_REDIS_ADDRESS: 192.168.120.1:6379
+  EMBED_ADS_ENABLE: "true"
+  ENABLE_BILLING_FOR_ALL: "false"
+  EXCEL_PATH: /cdn/excel-reports/
+  EXCEL_RELATED_PATH: /excel-reports/
+  HLS_SERVICES_REDIS_ADDRESS: redis-service.jabeh:6379
+  HTTPS: "true"
   HostName: jabeh.com
+  LOCATE_PATH: /cdn/findDB/locate02-4
   LockUserPanel: "false"
   MAIL_PASSWORD: sendg78u9i0o@789
   MAIL_USER: clickyab
   MAIL_USERNAME: clickyab
-  MAIN_VIDEO_FULL_PATH: /cdn
+  MAIN_VIDEO_FULL_PATH: /cdn/
   MDIR_MODE: "775"
+  MYSQL_READ_HOST_1: 192.168.100.11
+  MYSQL_READ_HOST_2: 192.168.100.11
+  MYSQL_READ_HOST_COUNT: "1"
+  MYSQL_WRITE_HOST: 192.168.100.11
   PORT: "9000"
-  QUEUE_DRIVER: beanstalkd
-  REDIS_HOST: 192.168.120.1
+  QUEUE_DRIVER: rabbitmq
+  RABBITMQ_HOST: rabbitmq.rabbitmq
+  RABBITMQ_LOGIN: jabeh
+  RABBITMQ_PASSWORD: 8DQopPcLX03SyKuwliNUWzMqMrYtAN
+  RABBITMQ_VHOST: jabeh
+  REDIS_HOST: redis-service.jabeh
+  SENTRY_LARAVEL_DSN: https://bd77227ca347444a8e34efe352557e53:219e70ac67fd4b92837892ded027a343@sentry.io/1225361
+  SENTRY_STATUS: "true"
   SESSION_DRIVER: redis
-  SITEMAP_GENERATE_PATH: /cdn/sitemaps
+  SHORT_TIME_CACHE: "120"
+  SITEMAP_GENERATE_PATH: /cdn/sitemaps/
   SLACK_ENABLE: "true"
-  SLACK_SEND_ALL_ERROR: "false"
-  THUMBNAILS_FULL_PATH: /cdn/images
-  THUMBNAILS_GENERATE_DIR: /tmp/thumbnails
-  THUMBNAILS_RELATED_PATH: /thumbnails
-  VIDEO_CHUNK_DIR: /cdn/video_chunks
-  VIDEO_UPLOAD_DIR: /cdn
-  VIDEO_UPLOAD_RELATED_PATH: /cdn
+  SLACK_SEND_ALL_ERROR: "true"
+  THUMBNAILS_FULL_PATH: /cdn/images/
+  THUMBNAILS_GENERATE_DIR: /tmp/thumbnails/
+  THUMBNAILS_RELATED_PATH: /images/
+  VIDEO_CHUNK_DIR: /cdn/video_chunks/
+  VIDEO_UPLOAD_DIR: /cdn/
+  VIDEO_UPLOAD_RELATED_PATH: /
   WEB_CONCURRENCY: "32"
-  WatermarkTempPath: /tmp
+  WatermarkTempPath: /tmp/
 kind: ConfigMap
 metadata:
   name: jabeh-master-config
