@@ -2,6 +2,7 @@ apiVersion: v1
 data:
   APP_DEBUG: "false"
   APP_KEY: UQxSeqPYW8m1uZsJL3vdBNbVcALY7mHO
+  CLICKYAB_NEW_NATIVE_CODE: "true"
   DB_DATABASE: clickyab
   DB_HOST: 192.168.100.11
   DB_PASSWORD: dicnm7alZQUhUIOi
@@ -15,7 +16,7 @@ data:
   PORT: "9000"
   TIMEZONE: Asia/Tehran
   TZ: Asia/Tehran
-  WEB_CONCURRENCY: "8"
+  WEB_CONCURRENCY: "32"
 kind: ConfigMap
 metadata:
   name: console-deploy-config
