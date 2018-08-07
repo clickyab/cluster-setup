@@ -3,35 +3,40 @@ kind: Ingress
 metadata:
   name: front-ingress
   namespace: legacy
-  annotations:
-    ingress.kubernetes.io/use-gzip: "false"
 spec:
   rules:
   - host: a.clickyab.com
     http:
       paths:
-      - path: /ads
-        backend:
+      - backend:
           serviceName: front-legecy-service
           servicePort: 9000
+        path: /ads
   - host: a.clickyab.com
     http:
       paths:
-      - path: /show.js
-        backend:
+      - backend:
           serviceName: front-legecy-service
           servicePort: 9000
+        path: /show.js
   - host: a-old.clickyab.com
     http:
       paths:
-      - path: /conversion
-        backend:
+      - backend:
           serviceName: front-legecy-service
           servicePort: 9000
+        path: /conversion
   - host: a.clickyab.com
     http:
       paths:
-      - path: /effect.js
-        backend:
+      - backend:
           serviceName: front-legecy-service
           servicePort: 9000
+        path: /effect.js
+  - host: a.clickyab.com
+    http:
+      paths:
+      - backend:
+          serviceName: front-legecy-service
+          servicePort: 9000
+        path: /robots.txt
