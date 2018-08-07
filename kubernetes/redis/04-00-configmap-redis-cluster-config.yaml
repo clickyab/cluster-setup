@@ -1,21 +1,9 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redis-cluster-config
-  namespace: redis
 data:
-  redis.conf: |+
-    cluster-enabled yes
-    cluster-require-full-coverage no
-    cluster-node-timeout 15000
-    cluster-config-file /etc/globalconf/redis-cluster-{{POD_NUM}}.conf
-    cluster-migration-barrier 1
-    appendonly yes
-    # Other cluster members need to be able to connect
-    protected-mode no
-  bootstrap-pod.sh: |+
+  bootstrap-pod.sh: |
     #!/bin/sh
     set -e
+    echo 65535 > /cproc/sys/net/core/somaxconn
     # Find which member of the Stateful Set this pod is running
     # e.g. "redis-cluster-0" -> "0"
     PET_ORDINAL=$(cat /etc/podinfo/pod_name | rev | cut -d- -f1)
@@ -35,12 +23,24 @@ data:
       # TODO: Get list of peers using the peer finder using an init container
       PEER_IP=$(perl -MSocket -e "print inet_ntoa(scalar(gethostbyname(\"redis-cluster-0.redis-cluster.${POD_NAMESPACE}.svc.cluster.local\")))")
       redis-cli cluster meet ${PEER_IP} 6379
-      sleep 1                                                                                                                               
-      #echo redis-cli --csv cluster slots                                                                                                   
-      #redis-cli --csv cluster slots                                                                                                        
-      # Become the slave of a random master node                                                                                            
-      # MASTER_ID=$(redis-cli --csv cluster slots | cut -d, -f 5 | sed -e 's/^"//'  -e 's/"$//')                                            
-      # redis-cli cluster replicate ${MASTER_ID}                                                                                            
-    fi                                                                                                                                      
-    wait                                                                                                                                    
----
+      sleep 1
+      #echo redis-cli --csv cluster slots
+      #redis-cli --csv cluster slots
+      # Become the slave of a random master node
+      # MASTER_ID=$(redis-cli --csv cluster slots | cut -d, -f 5 | sed -e 's/^"//'  -e 's/"$//')
+      # redis-cli cluster replicate ${MASTER_ID}
+    fi
+    wait
+  redis.conf: |
+    cluster-enabled yes
+    cluster-require-full-coverage no
+    cluster-node-timeout 15000
+    cluster-config-file /etc/globalconf/redis-cluster-{{POD_NUM}}.conf
+    cluster-migration-barrier 1
+    appendonly yes
+    # Other cluster members need to be able to connect
+    protected-mode no
+kind: ConfigMap
+metadata:
+  name: redis-cluster-config
+  namespace: redis
