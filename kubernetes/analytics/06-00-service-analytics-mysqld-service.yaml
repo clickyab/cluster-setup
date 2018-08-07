@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics-mysqld-service
+  namespace: analytics
+  labels:
+    k8s-app: analytics
+    service: mysqld
+    type: db
+    namespace: analytics
+spec:
+  selector:
+    service: mysqld
+  ports:
+    - name: mysqld
+      port: 3306
+      protocol: TCP

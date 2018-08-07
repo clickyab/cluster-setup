@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: analytics-mysqld-config
+  namespace: analytics
+data:
+  EMPTY_DB: "TRUE"
+  SOURCE_DB: "analytics"
+  USER: "root"
+  MYSQL_ROOT_PASSWORD: qIxUnir2HOdorY055Ke6OK2CEs9Jiak4
+  ONLY_SCHEMA: "False"
