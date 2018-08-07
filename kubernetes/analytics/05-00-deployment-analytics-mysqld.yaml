@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: analytics
+    namespace: analytics
+    service: mysqld
+    type: db
+  name: analytics-mysqld
+  namespace: analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics
+      service: mysqld
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: analytics
+        service: mysqld
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: analytics-mysqld-config
+        image: registry.clickyab.ae/clickyab/mysqld-staging
+        imagePullPolicy: Always
+        name: mysqld
+        ports:
+        - containerPort: 3306
+          name: msyqld
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regsecret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60
